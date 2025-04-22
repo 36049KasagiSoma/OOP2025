@@ -3,7 +3,29 @@
 namespace Exercise02 {
     internal class Program {
         static void Main(string[] args) {
-            PrintMeterToInch(1, 10);
+            Console.WriteLine("1:インチからメートル");
+            Console.WriteLine("2:メートルからインチ");
+            int type = GetInputInt(">", 1, 2);
+            int min = GetInputInt("はじめ：");
+            int max = GetInputInt("おわり：");
+            if (type == 1) {
+                PrintInchToMeter(min, max);
+            } else {
+                PrintMeterToInch(min, max);
+            }
+        }
+
+
+        private static int GetInputInt(string _printText) {
+            return GetInputInt(_printText, int.MinValue, int.MaxValue);
+        }
+        private static int GetInputInt(string _printText, int _min, int _max) {
+            while (true) {
+                Console.Write(_printText);
+                if (int.TryParse(Console.ReadLine(), out int inVal) && inVal >= _min && inVal <= _max) {
+                    return inVal;
+                }
+            }
         }
 
         /// <summary>インチからメートルの変換表を出力します。</summary>
