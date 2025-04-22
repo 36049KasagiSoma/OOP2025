@@ -10,12 +10,46 @@
             string type = args.Length > 0 ? args[0] : "-tom";
 
             if (type == "-tom") {
-                FeedConverter.FeetToMeter(min, max);
+                FeetToMeter(min, max);
             } else if (type == "-tof") {
-                FeedConverter.MeterToFeed(min, max);
+                MeterToFeed(min, max);
             } else {
                 Console.WriteLine($"不明なオプション：{args[0]}");
             }
+        }
+
+        /// <summary>メートル値をフィード値に変換し、一覧を出力します。</summary>
+        /// <param name="_min">変換最小値</param>
+        /// <param name="_max">変換最大値</param>
+        public static void MeterToFeed(int _min, int _max) {
+            for (int meter = _min; meter <= _max; meter++) {
+                int sp = _max.ToString().Length - meter.ToString().Length;
+                double feet = FeedConverter.MeterToFeet(meter);
+                Console.WriteLine($"{fillSpace(sp)}{meter}m = {feet:0.0000}fr");
+            }
+        }
+
+        /// <summary>フィード値をメートル値に変換し、一覧を出力します。</summary>
+        /// <param name="_min">変換最小値</param>
+        /// <param name="_max">変換最大値</param>
+        public static void FeetToMeter(int _min, int _max) {
+            for (int feet = _min; feet <= _max; feet++) {
+                int sp = _max.ToString().Length - feet.ToString().Length;
+                double meter = FeedConverter.FeetToMeter(feet);
+                Console.WriteLine($"{fillSpace(sp)}{feet}fr = {meter:0.0000}m");
+            }
+        }
+
+
+        /// <summary>任意文字数の空白文字列を作成します。</summary>
+        /// <param name="_length">文字数</param>
+        /// <returns>引数で指定した文字数のスペース文字列</returns>
+        private static string fillSpace(int _length) {
+            string rtn = "";
+            for (int i = 0; i < _length; i++) {
+                rtn += " ";
+            }
+            return rtn;
         }
 
         /// <summary>string型変数を数値に変換することを試みます。</summary>
