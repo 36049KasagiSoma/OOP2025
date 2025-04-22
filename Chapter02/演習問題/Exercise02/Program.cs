@@ -8,6 +8,11 @@ namespace Exercise02 {
             int type = GetInputInt(">", 1, 2);
             int min = GetInputInt("はじめ：");
             int max = GetInputInt("おわり：");
+            if (min > max) {
+                int tmp = min;
+                min = max;
+                max = tmp;
+            }
             if (type == 1) {
                 PrintInchToMeter(min, max);
             } else {
