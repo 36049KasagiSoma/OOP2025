@@ -6,12 +6,12 @@
             int min = args.Length >= 2 ? TryParceInt(args[1], 1) : 1;
             int max = args.Length >= 3 ? TryParceInt(args[2], 10) : 10;
 
-            //引数でモード分岐
+            //引数でモード分岐（未指定時:"-tom"）
             string type = args.Length > 0 ? args[0] : "-tom";
 
             switch (type) {
                 case "-tom":
-                    //単一変換か範囲変換か（コマンドライン引数が[モード 値]だったら単一）
+                    //単一変換か範囲変換か（コマンドライン引数が「モード 値」だったら単一）
                     if (args.Length == 2) FeetToMeter(min);
                     else FeetToMeter(min, max);
                     break;
@@ -34,7 +34,7 @@
         private static void MeterToFeet(int _min, int _max) {
             for (int meter = _min; meter <= _max; meter++) {
                 int sp = _max.ToString().Length - meter.ToString().Length;
-                double feet = FeetConverter.MeterToFeet(meter);
+                double feet = FeetConverter.FromMeter(meter);
                 Console.WriteLine($"{fillSpace(sp)}{meter}m = {feet:0.0000}fr");
             }
         }
@@ -45,7 +45,7 @@
         private static void FeetToMeter(int _min, int _max) {
             for (int feet = _min; feet <= _max; feet++) {
                 int sp = _max.ToString().Length - feet.ToString().Length;
-                double meter = FeetConverter.FeetToMeter(feet);
+                double meter = FeetConverter.ToMeter(feet);
                 Console.WriteLine($"{fillSpace(sp)}{feet}fr = {meter:0.0000}m");
             }
         }
@@ -56,7 +56,7 @@
         /// <summary>単一メートル値をフィート値に変換し、出力します。</summary>
         /// <param name="_val">変換元値</param>
         private static void MeterToFeet(int _val) {
-            double feet = FeetConverter.MeterToFeet(_val);
+            double feet = FeetConverter.FromMeter(_val);
             Console.WriteLine($"{_val}m = {feet:0.0000}fr");
 
         }
@@ -64,7 +64,7 @@
         /// <summary>単一フィート値をメートル値に変換し、出力します。</summary>
         /// <param name="_val">変換元値</param>
         private static void FeetToMeter(int _val) {
-            double meter = FeetConverter.FeetToMeter(_val);
+            double meter = FeetConverter.ToMeter(_val);
             Console.WriteLine($"{_val}fr = {meter:0.0000}m");
 
         }
