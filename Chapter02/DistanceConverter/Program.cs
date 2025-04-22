@@ -1,8 +1,6 @@
 ﻿namespace DistanceConverter {
     internal class Program {
         //コマンドライン引数で指定された範囲のフィート・メートル対応表を出力するやつ
-        static readonly double oneFeetToMeter = 0.3048;
-
         static void Main(string[] args) {
             //入力文字列の数値変換（失敗時は min=1,max=10）
             int min = args.Length >= 2 ? TryParceInt(args[1], 1) : 1;
@@ -23,7 +21,7 @@
         /// <summary>メートル値をフィート値に変換し、一覧を出力します。</summary>
         /// <param name="_min">変換最小値</param>
         /// <param name="_max">変換最大値</param>
-        public static void MeterToFeet(int _min, int _max) {
+        private static void MeterToFeet(int _min, int _max) {
             for (int meter = _min; meter <= _max; meter++) {
                 int sp = _max.ToString().Length - meter.ToString().Length;
                 double feet = FeetConverter.MeterToFeet(meter);
@@ -34,7 +32,7 @@
         /// <summary>フィート値をメートル値に変換し、一覧を出力します。</summary>
         /// <param name="_min">変換最小値</param>
         /// <param name="_max">変換最大値</param>
-        public static void FeetToMeter(int _min, int _max) {
+        private static void FeetToMeter(int _min, int _max) {
             for (int feet = _min; feet <= _max; feet++) {
                 int sp = _max.ToString().Length - feet.ToString().Length;
                 double meter = FeetConverter.FeetToMeter(feet);
