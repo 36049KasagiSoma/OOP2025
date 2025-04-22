@@ -15,5 +15,13 @@ namespace Exercise02 {
             double rtn = oneInchToMeter * _inch;
             return rtn;
         }
+
+        /// <summary>インチをメートルに変換します。</summary>
+        /// <param name="_meter">変換元インチ</param>
+        /// <returns>変換後メートル</returns>
+        public static double MeterToInch(int _meter) {
+            double rtn = _meter / oneInchToMeter;
+            return rtn;
+        }
     }
 }

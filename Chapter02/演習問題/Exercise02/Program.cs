@@ -3,12 +3,10 @@
 namespace Exercise02 {
     internal class Program {
         static void Main(string[] args) {
-            PrintInchToMeter(1, 10);
+            PrintMeterToInch(1, 10);
         }
 
-        /// <summary>
-        /// インチからメートルの変換表を出力します。
-        /// </summary>
+        /// <summary>インチからメートルの変換表を出力します。</summary>
         /// <param name="_min">変換最小値</param>
         /// <param name="_max">変換最大値</param>
         private static void PrintInchToMeter(int _min, int _max) {
@@ -20,7 +18,16 @@ namespace Exercise02 {
                 Console.WriteLine($"{FillSpace(sp)}{i}in = {m:0.0000}m");
             }
         }
-
+        /// <summary>メートルからインチの変換表を出力します。</summary>
+        /// <param name="_min">変換最小値</param>
+        /// <param name="_max">変換最大値</param>
+        private static void PrintMeterToInch(int _min, int _max) {
+            for (int i = _min; i <= _max; i++) {
+                double m = InchConverter.MeterToInch(i);
+                int sp = _max.ToString().Length - i.ToString().Length;
+                Console.WriteLine($"{FillSpace(sp)}{i}m = {m:0.0000}in");
+            }
+        }
 
         /// <summary>任意文字数の空白文字列を作成します。</summary>
         /// <param name="_length">文字数</param>
