@@ -28,7 +28,7 @@
 
         //以下、範囲変換メソッド
 
-        /// <summary>メートル値をフィート値に変換し、一覧を出力します。</summary>
+        /// <summary>指定された範囲のメートル値をフィート値に変換し、一覧を出力します。</summary>
         /// <param name="_min">変換最小値</param>
         /// <param name="_max">変換最大値</param>
         private static void MeterToFeet(int _min, int _max) {
@@ -39,7 +39,7 @@
             }
         }
       
-        /// <summary>フィート値をメートル値に変換し、一覧を出力します。</summary>
+        /// <summary>指定された範囲のフィート値をメートル値に変換し、一覧を出力します。</summary>
         /// <param name="_min">変換最小値</param>
         /// <param name="_max">変換最大値</param>
         private static void FeetToMeter(int _min, int _max) {
@@ -53,7 +53,7 @@
 
         //以下、単一変換メソッド
 
-        /// <summary>メートル値をフィート値に変換し、出力します。</summary>
+        /// <summary>単一メートル値をフィート値に変換し、出力します。</summary>
         /// <param name="_val">変換元値</param>
         private static void MeterToFeet(int _val) {
             double feet = FeetConverter.MeterToFeet(_val);
@@ -61,7 +61,7 @@
 
         }
 
-        /// <summary>フィート値をメートル値に変換し、出力します。</summary>
+        /// <summary>単一フィート値をメートル値に変換し、出力します。</summary>
         /// <param name="_val">変換元値</param>
         private static void FeetToMeter(int _val) {
             double meter = FeetConverter.FeetToMeter(_val);
