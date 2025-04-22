@@ -31,7 +31,7 @@
         }
 
         /// <summary>
-        /// メートル値をフェード値に変換し、一覧を出力します。
+        /// メートル値をフィード値に変換し、一覧を出力します。
         /// </summary>
         /// <param name="_min">変換最小値</param>
         /// <param name="_max">変換最大値</param>
@@ -44,7 +44,7 @@
         }
 
         /// <summary>
-        /// フェード値をメートル値に変換し、一覧を出力します。
+        /// フィード値をメートル値に変換し、一覧を出力します。
         /// </summary>
         /// <param name="_min">変換最小値</param>
         /// <param name="_max">変換最大値</param>
@@ -57,19 +57,19 @@
         }
 
         /// <summary>
-        /// フェード値をメートル値に変換します。
+        /// フィード値をメートル値に変換します。
         /// </summary>
-        /// <param name="_feet">変換元フェード値</param>
+        /// <param name="_feet">変換元フィード値</param>
         /// <returns>メートル値</returns>
         static double FeetToMeter(int _feet) {
             return _feet * oneFeedToMeter;
         }
 
         /// <summary>
-        /// メートル値をフェード値に変換します。
+        /// メートル値をフィード値に変換します。
         /// </summary>
         /// <param name="_meter">変換元メートル値</param>
-        /// <returns>フェード値</returns>
+        /// <returns>フィード値</returns>
         static double MeterToFeet(int _meter) {
             return _meter / oneFeedToMeter;
         }
