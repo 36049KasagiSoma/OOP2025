@@ -3,7 +3,8 @@
 namespace Exercise02 {
     internal class Program {
         static void Main(string[] args) {
-#if false
+#if false　
+            //機能追加①
             Console.WriteLine("1:インチからメートル");
             Console.WriteLine("2:メートルからインチ");
             Console.WriteLine("3:メートルからヤード");
@@ -22,6 +23,7 @@ namespace Exercise02 {
                 PrintMeterToInch(min, max);
             }
 #else
+            //機能追加②
             Console.WriteLine("1:ヤードからメートル");
             Console.WriteLine("2:メートルからヤード");
             int type = GetInputInt(">", 1, 2);
