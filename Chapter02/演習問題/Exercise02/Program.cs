@@ -3,9 +3,12 @@
 namespace Exercise02 {
     internal class Program {
         static void Main(string[] args) {
+#if false
             Console.WriteLine("1:インチからメートル");
             Console.WriteLine("2:メートルからインチ");
-            int type = GetInputInt(">", 1, 2);
+            Console.WriteLine("3:メートルからヤード");
+            Console.WriteLine("4:ヤードからメートル");
+            int type = GetInputInt(">", 1, 4);
             int min = GetInputInt("はじめ：");
             int max = GetInputInt("おわり：");
             if (min > max) {
@@ -18,6 +21,14 @@ namespace Exercise02 {
             } else {
                 PrintMeterToInch(min, max);
             }
+#else
+            Console.WriteLine("1:ヤードからメートル");
+            Console.WriteLine("2:メートルからヤード");
+            int type = GetInputInt(">", 1, 2);
+            int inVal = GetInputInt($"変換前({(type == 1 ? "ヤード" : "メートル")})：");
+            double outVal = type == 1 ? MerterConverter.YardToMeter(inVal) : MerterConverter.MeterToYard(inVal);
+            Console.WriteLine($"変換後({(type == 1 ? "メートル" : "ヤード")}):{outVal:0.0000}");
+#endif
         }
 
         /// <summary>キーボードからのint型整数値入力を受け付けます。</summary>
@@ -45,7 +56,7 @@ namespace Exercise02 {
         /// <param name="_max">変換最大値</param>
         private static void PrintInchToMeter(int _min, int _max) {
             for (int i = _min; i <= _max; i++) {
-                double m = InchConverter.InchToMeter(i);
+                double m = MerterConverter.InchToMeter(i);
                 int sp = _max.ToString().Length - i.ToString().Length;
                 //FillSpace(sp)は、左詰めしようと{i,sp}としたら、「spの部分は定数にしろ」
                 //...と怒られたため、無理やりスペース埋めで
@@ -57,7 +68,7 @@ namespace Exercise02 {
         /// <param name="_max">変換最大値</param>
         private static void PrintMeterToInch(int _min, int _max) {
             for (int i = _min; i <= _max; i++) {
-                double m = InchConverter.MeterToInch(i);
+                double m = MerterConverter.MeterToInch(i);
                 int sp = _max.ToString().Length - i.ToString().Length;
                 Console.WriteLine($"{FillSpace(sp)}{i}m = {m:0.0000}in");
             }
