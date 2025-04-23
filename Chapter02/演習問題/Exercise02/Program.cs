@@ -20,10 +20,17 @@ namespace Exercise02 {
             }
         }
 
-
+        /// <summary>キーボードからのint型整数値入力を受け付けます。</summary>
+        /// <param name="_printText">入力プロンプト文字列</param>
+        /// <returns>有効なint型数値</returns>
         private static int GetInputInt(string _printText) {
             return GetInputInt(_printText, int.MinValue, int.MaxValue);
         }
+        /// <summary>キーボードからのint型整数値入力を受け付けます。</summary>
+        /// <param name="_printText">入力プロンプト文字列</param>
+        /// <param name="_min">受付可能最小数値</param>
+        /// <param name="_max">受付可能最大数値</param>
+        /// <returns>有効なint型数値</returns>
         private static int GetInputInt(string _printText, int _min, int _max) {
             while (true) {
                 Console.Write(_printText);
