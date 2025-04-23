@@ -3,26 +3,6 @@
 namespace Exercise02 {
     internal class Program {
         static void Main(string[] args) {
-#if false　
-            //機能追加①
-            Console.WriteLine("1:インチからメートル");
-            Console.WriteLine("2:メートルからインチ");
-            Console.WriteLine("3:メートルからヤード");
-            Console.WriteLine("4:ヤードからメートル");
-            int type = GetInputInt(">", 1, 4);
-            int min = GetInputInt("はじめ：");
-            int max = GetInputInt("おわり：");
-            if (min > max) {
-                int tmp = min;
-                min = max;
-                max = tmp;
-            }
-            if (type == 1) {
-                PrintInchToMeter(min, max);
-            } else {
-                PrintMeterToInch(min, max);
-            }
-#else
             //機能追加②
             Console.WriteLine("1:ヤードからメートル");
             Console.WriteLine("2:メートルからヤード");
@@ -30,7 +10,6 @@ namespace Exercise02 {
             int inVal = GetInputInt($"変換前({(type == 1 ? "ヤード" : "メートル")})：");
             double outVal = type == 1 ? MerterConverter.YardToMeter(inVal) : MerterConverter.MeterToYard(inVal);
             Console.WriteLine($"変換後({(type == 1 ? "メートル" : "ヤード")}):{outVal:0.0000}");
-#endif
         }
 
         /// <summary>キーボードからのint型整数値入力を受け付けます。</summary>
