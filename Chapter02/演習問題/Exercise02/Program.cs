@@ -10,6 +10,7 @@ namespace Exercise02 {
             int inVal = GetInputInt($"変換前({(type == 1 ? "ヤード" : "メートル")})：");
             double outVal = type == 1 ? MerterConverter.YardToMeter(inVal) : MerterConverter.MeterToYard(inVal);
             Console.WriteLine($"変換後({(type == 1 ? "メートル" : "ヤード")}):{outVal:0.0000}");
+            //(条件式)?(trueの場合):(falseの場合)
         }
 
         /// <summary>キーボードからのint型整数値入力を受け付けます。</summary>
