@@ -1,8 +1,15 @@
-﻿namespace SalesCalculator {
+﻿using System.Diagnostics;
+
+namespace SalesCalculator {
     internal class Program {
         static void Main(string[] args) {
-            List<Sale> s = ReadSales(@"data\Sales.csv");
-            Console.WriteLine(s.Count);
+            SalesCounter sales = new SalesCounter(ReadSales(@"data\Sales.csv"));
+            Dictionary<string,int> amountsPerStore = sales.GetPerStoreSales();
+            
+            foreach(KeyValuePair<string,int> obj in amountsPerStore) {
+                Console.WriteLine($"{obj.Key} {obj.Value}");
+            }
+            
         }
 
         static List<Sale> ReadSales(string filePath) {
