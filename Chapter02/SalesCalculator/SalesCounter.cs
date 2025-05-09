@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace SalesCalculator {
     /// <summary>売り上げ集計クラス</summary>
     class SalesCounter {
-        private readonly List<Sale> _sales;
+        private readonly IEnumerable<Sale> _sales;
 
         //Listでもパスでも対応できるようオーバーライド
-        public SalesCounter(List<Sale> sales) {
+        public SalesCounter(IEnumerable<Sale> sales) {
             _sales = sales;
         }
         public SalesCounter(string filePath) {
             _sales = ReadSales(filePath);
         }
 
-        private List<Sale> ReadSales(string filePath) {
+        private IEnumerable<Sale> ReadSales(string filePath) {
             //売り上げリスト
             List<Sale> sales = new List<Sale>();
             string[] lines = File.ReadAllLines(filePath);
@@ -36,8 +36,8 @@ namespace SalesCalculator {
 
         /// <summary>店舗名ごとに集計</summary>
         /// <returns>店舗ごとの売り上げデータ</returns>
-        public Dictionary<string, int> GetPerStoreSales() {
-            Dictionary<string, int> dict = new Dictionary<string, int>();
+        public IDictionary<string, int> GetPerStoreSales() {
+            var dict = new SortedDictionary<string, int>();
             foreach (Sale sale in _sales) {
                 if (dict.ContainsKey(sale.ShopName)) {
                     dict[sale.ShopName] += sale.Amount;
@@ -50,7 +50,7 @@ namespace SalesCalculator {
 
         /// <summary>カテゴリーごとに集計</summary>
         /// <returns>カテゴリーごとの売り上げデータ</returns>
-        public Dictionary<string, int> GetPerProductCategory() {
+        public IDictionary<string, int> GetPerProductCategory() {
             Dictionary<string, int> dict = new Dictionary<string, int>();
             foreach (Sale sale in _sales) {
                 if (dict.ContainsKey(sale.ProductCategory)) {
