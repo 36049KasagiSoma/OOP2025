@@ -19,12 +19,12 @@ namespace SalesCalculator {
 
         private IEnumerable<Sale> ReadSales(string filePath) {
             //売り上げリスト
-            List<Sale> sales = new List<Sale>();
-            string[] lines = File.ReadAllLines(filePath);
+            var sales = new List<Sale>();
+            var lines = File.ReadAllLines(filePath);
             //各行をカンマ区切りで分割、Saleデータの作成、登録
-            foreach (string line in lines) {
-                string[] items = line.Split(',');
-                Sale sale = new Sale {
+            foreach (var line in lines) {
+                var items = line.Split(',');
+                var sale = new Sale {
                     ShopName = items[0],
                     ProductCategory = items[1],
                     Amount = int.Parse(items[2])
@@ -37,8 +37,8 @@ namespace SalesCalculator {
         /// <summary>店舗名ごとに集計</summary>
         /// <returns>店舗ごとの売り上げデータ</returns>
         public IDictionary<string, int> GetPerStoreSales() {
-            var dict = new SortedDictionary<string, int>();
-            foreach (Sale sale in _sales) {
+            var dict = new Dictionary<string, int>();
+            foreach (var sale in _sales) {
                 if (dict.ContainsKey(sale.ShopName)) {
                     dict[sale.ShopName] += sale.Amount;
                 } else {
@@ -51,8 +51,8 @@ namespace SalesCalculator {
         /// <summary>カテゴリーごとに集計</summary>
         /// <returns>カテゴリーごとの売り上げデータ</returns>
         public IDictionary<string, int> GetPerProductCategory() {
-            Dictionary<string, int> dict = new Dictionary<string, int>();
-            foreach (Sale sale in _sales) {
+            var dict = new Dictionary<string, int>();
+            foreach (var sale in _sales) {
                 if (dict.ContainsKey(sale.ProductCategory)) {
                     dict[sale.ProductCategory] += sale.Amount;
                 } else {
