@@ -26,7 +26,6 @@ namespace SalesCalculator {
                 };
                 sales.Add(sale);
             }
-
             return sales;
         }
     }
