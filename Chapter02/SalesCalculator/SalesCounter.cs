@@ -9,6 +9,7 @@ namespace SalesCalculator {
     class SalesCounter {
         private readonly List<Sale> _sales;
 
+        //Listでもパスでも対応できるようオーバーライド
         public SalesCounter(List<Sale> sales) {
             _sales = sales;
         }
@@ -16,7 +17,7 @@ namespace SalesCalculator {
             _sales = ReadSales(filePath);
         }
 
-        public static List<Sale> ReadSales(string filePath) {
+        private List<Sale> ReadSales(string filePath) {
             //売り上げリスト
             List<Sale> sales = new List<Sale>();
             string[] lines = File.ReadAllLines(filePath);
