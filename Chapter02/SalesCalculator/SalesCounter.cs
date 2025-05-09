@@ -13,6 +13,8 @@ namespace SalesCalculator {
             _sales = sales;
         }
 
+        /// <summary>店舗名ごとに集計</summary>
+        /// <returns>店舗ごとの売り上げデータ</returns>
         public Dictionary<string, int> GetPerStoreSales() {
             Dictionary<string, int> dict = new Dictionary<string, int>();
             foreach(Sale sale in _sales) {
@@ -20,6 +22,20 @@ namespace SalesCalculator {
                     dict[sale.ShopName] += sale.Amount;
                 } else {
                     dict[sale.ShopName] = sale.Amount;
+                }
+            }
+            return dict;
+        }
+
+        /// <summary>カテゴリーごとに集計</summary>
+        /// <returns>カテゴリーごとの売り上げデータ</returns>
+        public Dictionary<string, int> GetPerProductCategory() {
+            Dictionary<string, int> dict = new Dictionary<string, int>();
+            foreach (Sale sale in _sales) {
+                if (dict.ContainsKey(sale.ProductCategory)) {
+                    dict[sale.ProductCategory] += sale.Amount;
+                } else {
+                    dict[sale.ProductCategory] = sale.Amount;
                 }
             }
             return dict;
