@@ -14,7 +14,6 @@
             printSongs(songs);
         }
 
-        //2.1.4
         private static void printSongs(Song[] songs) {
             foreach (var song in songs) {
                 var ts = TimeSpan.FromSeconds(song.Length);
