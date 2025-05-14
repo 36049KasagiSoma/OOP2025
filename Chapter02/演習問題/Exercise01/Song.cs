@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace Exercise01 {
     public class Song {
         //2.1.1
-        public string Title { get; private set; }
-        public string ArtistName { get; private set; }
-        public int Length { get; private set; }
+        public string Title { get; set; } = String.Empty;
+        public string ArtistName { get; set; } = String.Empty;
+        public int Length { get; set; } = 0;
 
         //2.1.2
-        public Song(string title, string artistName, int length) {
-            Title = title;
-            ArtistName = artistName;
-            Length = length;
-        }
+        //public Song(string title, string artistName, int length) {
+        //    Title = title;
+        //    ArtistName = artistName;
+        //    Length = length;
+        //}
     }
 }

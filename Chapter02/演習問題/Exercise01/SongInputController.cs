@@ -26,7 +26,7 @@ namespace Exercise01 {
                 Console.Write("曲名:");
                 var songName = Console.ReadLine();
                 if (String.IsNullOrEmpty(songName)) continue;
-                if (songName.Equals("end")) break;
+                if (songName.ToLower().Equals("end")) break;
 
                 Console.Write("アーティスト名:");
                 var artistName = Console.ReadLine();
@@ -37,7 +37,11 @@ namespace Exercise01 {
                 int songLength;
                 if (String.IsNullOrEmpty(artistName) || !int.TryParse(songLengthStr, out songLength)) continue;
 
-                mySongs.Add(new Song(songName, artistName, songLength));
+                mySongs.Add(new Song() {
+                    Title = songName,
+                    ArtistName = artistName,
+                    Length = songLength
+                });
                 Console.WriteLine();
                 Console.WriteLine();
             }
@@ -50,6 +54,38 @@ namespace Exercise01 {
         /// <returns>入力された曲</returns>
         public Song[] GetMySongs() {
             return mySongs.ToArray();
+        }
+
+        /// <summary>
+        /// 入力された曲を出力します。
+        /// </summary>
+        /// <param name="songs"></param>
+        public void PrintSongs() {
+            Song[] songs = GetMySongs();
+            foreach (var song in songs) {
+                var ts = TimeSpan.FromSeconds(song.Length);
+                string title = PadRightMultibyte(song.Title, 30);
+                string artist = PadRightMultibyte(song.ArtistName, 20);
+                Console.WriteLine($"title:{title}artist:{artist}length:{ts.ToString(@"mm\:ss")}");
+            }
+        }
+
+        //以下、調べた。
+        private static string PadRightMultibyte(string input, int totalWidth) {
+            int width = 0;
+            foreach (char c in input) {
+                width += IsWideChar(c) ? 2 : 1;
+            }
+
+            int padLength = totalWidth - width;
+            if (padLength > 0) {
+                return input + new string(' ', padLength);
+            }
+            return input;
+        }
+
+        private static bool IsWideChar(char c) {
+            return c > 0xFF;
         }
     }
 }
