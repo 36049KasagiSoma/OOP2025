@@ -1,7 +1,7 @@
 ﻿namespace Exercise01 {
     public class Program {
         static void Main(string[] args) {
-            var inputMusic = new InputSongController();
+            var inputMusic = new SongInputController();
 
             inputMusic.StartInput();
 

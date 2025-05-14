@@ -5,15 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Exercise01 {
-    public class InputSongController {
+    /// <summary>
+    /// 曲の入力をコントロールします。
+    /// </summary>
+    public class SongInputController {
         private List<Song> mySongs;
-        public InputSongController() {
+
+        public SongInputController() {
             mySongs = new List<Song>();
         }
 
+        /// <summary>
+        /// 曲の入力を開始します。
+        /// </summary>
         public void StartInput() {
             Console.WriteLine("**** 曲の登録 *****");
-
+            Console.WriteLine("曲名「end」で終了");
+            Console.WriteLine();
             while (true) {
                 Console.Write("曲名:");
                 var songName = Console.ReadLine();
@@ -36,6 +44,10 @@ namespace Exercise01 {
             Console.WriteLine("*******************");
         }
 
+        /// <summary>
+        /// 入力された曲の配列を返します。
+        /// </summary>
+        /// <returns>入力された曲</returns>
         public Song[] GetMySongs() {
             return mySongs.ToArray();
         }
