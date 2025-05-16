@@ -45,6 +45,9 @@ namespace Exercise02 {
         }
 
         private static void Exercise2_4(List<string> cities) {
+            Console.WriteLine("\'B\'から始まる都市の文字数一覧");
+            var countList = cities.Where(s => s[0].Equals('B')).Select(s => s.Length).ToList();
+            countList.ForEach(Console.WriteLine);
         }
     }
 }
