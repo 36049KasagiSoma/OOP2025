@@ -34,11 +34,12 @@ namespace Exercise02 {
         }
 
         private static void Exercise2_2(List<string> cities) {
-          
+            Console.WriteLine("小文字の\'o\'が含まれている都市の数");
+            Console.WriteLine(cities.Count(s => s.Contains('o')));
         }
 
         private static void Exercise2_3(List<string> cities) {
-            
+
         }
 
         private static void Exercise2_4(List<string> cities) {
