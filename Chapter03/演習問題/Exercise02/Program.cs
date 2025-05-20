@@ -40,8 +40,8 @@ namespace Exercise02 {
 
         private static void Exercise2_3(List<string> cities) {
             Console.WriteLine("小文字の\'o\'が含まれている都市一覧");
-            var list = cities.Where(s => s.Contains('o')).ToList();
-            list.ForEach(Console.WriteLine);
+            var cityieList = cities.Where(s => s.Contains('o')).ToList();
+            cityieList.ForEach(Console.WriteLine);
         }
 
         private static void Exercise2_4(List<string> cities) {
