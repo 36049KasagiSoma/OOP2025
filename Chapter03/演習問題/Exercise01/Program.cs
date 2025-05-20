@@ -29,6 +29,8 @@ namespace Exercise01 {
         }
 
         private static void Exercise3(List<int> numbers) {
+            var tmp = numbers.Where(n => n >= 50);
+            tmp.ToList().ForEach(Console.WriteLine);
         }
 
         private static void Exercise4(List<int> numbers) {
