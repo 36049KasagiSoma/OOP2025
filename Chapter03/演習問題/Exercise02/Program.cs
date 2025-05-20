@@ -27,10 +27,10 @@ namespace Exercise02 {
         private static void Exercise2_1(List<string> cities) {
             Console.WriteLine("都市名検索（空行で終了）");
             var searchText = Console.ReadLine();
-            do {
+            while (!string.IsNullOrEmpty(searchText)) {
                 Console.WriteLine(cities.FindIndex(s => s.Equals(searchText)));
                 searchText = Console.ReadLine();
-            } while (!String.IsNullOrEmpty(searchText));
+            }
         }
 
         private static void Exercise2_2(List<string> cities) {
