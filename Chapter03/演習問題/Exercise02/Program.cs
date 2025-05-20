@@ -40,14 +40,19 @@ namespace Exercise02 {
 
         private static void Exercise2_3(List<string> cities) {
             Console.WriteLine("小文字の\'o\'が含まれている都市一覧");
-            var cityieList = cities.Where(s => s.Contains('o')).ToList();
-            cityieList.ForEach(Console.WriteLine);
+            var cityieList = cities.Where(s => s.Contains('o')).ToArray();
+            PrintArray(cityieList);
         }
 
         private static void Exercise2_4(List<string> cities) {
             Console.WriteLine("\'B\'から始まる都市の文字数一覧");
             var countList = cities.Where(s => s[0].Equals('B')).Select(s => s.Length).ToList();
             countList.ForEach(Console.WriteLine);
+        }
+
+        private static void PrintArray(object[] _array) {
+            List<object> list = _array.ToList();
+            list.ForEach(Console.WriteLine);
         }
     }
 }
