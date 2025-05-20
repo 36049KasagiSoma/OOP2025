@@ -34,7 +34,7 @@ namespace Exercise01 {
         }
 
         private static void Exercise4(List<int> numbers) {
-            List<int> tmp = numbers.Select(s => s * 2).ToList();
+            var tmp = numbers.Select(s => s * 2).ToList();
             tmp.ForEach(Console.WriteLine);
         }
     }
