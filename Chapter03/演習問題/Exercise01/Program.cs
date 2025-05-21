@@ -28,14 +28,12 @@ namespace Exercise01 {
             numbers.ForEach(n => Console.WriteLine(n / 2.0));
         }
 
-        private static void Exercise3(List<int> numbers) {
-            var tmp = numbers.Where(n => n >= 50);
-            tmp.ToList().ForEach(Console.WriteLine);
+        private static void Exercise3(List<int> numbers) {  //Where使え！っていう問題
+            numbers.Where(n => n >= 50).ToList().ForEach(Console.WriteLine);
         }
 
-        private static void Exercise4(List<int> numbers) {
-            var tmp = numbers.Select(s => s * 2).ToList();
-            tmp.ForEach(Console.WriteLine);
+        private static void Exercise4(List<int> numbers) {  //List<int>にいったん格納しろ！っていう問題
+            numbers.Select(s => s * 2).ToList().ForEach(Console.WriteLine);
         }
     }
 }
