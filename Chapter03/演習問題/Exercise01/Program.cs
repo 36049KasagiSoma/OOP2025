@@ -34,6 +34,7 @@ namespace Exercise01 {
 
         private static void Exercise4(List<int> numbers) {  //List<int>にいったん格納しろ！っていう問題
             numbers.Select(s => s * 2).ToList().ForEach(Console.WriteLine);
+
         }
 
         //---- memo ----------------------------------------------------------
@@ -42,7 +43,10 @@ namespace Exercise01 {
         //    Console.WriteLine(n);
         //}
 
-        //numbers.ForEach(n => {if (n >= 50) Console.WriteLine(n); });
+        //numbers.ForEach(n => {
+        //    if (n >= 50) Console.WriteLine(n); 
+        //});
+
         //--------------------------------------------------------------------
     }
 }
