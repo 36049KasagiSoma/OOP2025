@@ -19,23 +19,32 @@ namespace Exercise01 {
             foreach (var s in langs) {
                 if (s.Contains('S')) Console.WriteLine(s);
             }
+
+            Console.WriteLine();
             Console.WriteLine("= [for] ==============");
             for (int i = 0; i < langs.Count; i++) {
                 if (langs[i].Contains('S')) Console.WriteLine(langs[i]);
             }
+
+            Console.WriteLine();
             Console.WriteLine("= [while] ============");
             int index = 0;
             while (index < langs.Count) {
                 if (langs[index].Contains('S')) Console.WriteLine(langs[index]);
                 index++;
             }
+            Console.WriteLine();
         }
 
         private static void Exercise2(List<string> langs) {
             langs.ForEach(s => {
                 if (s.Contains('S')) Console.WriteLine(s);
             });
-            //langs.Where(s => s.Contains('S')).ToList().ForEach(Console.WriteLine);
+
+            Console.WriteLine();
+
+            //var filtedLangs = langs.Where(s => s.Contains('S'));
+            //foreach (var lang in filtedLangs) Console.WriteLine(lang);
         }
 
         private static void Exercise3(List<string> langs) {
