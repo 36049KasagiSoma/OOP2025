@@ -11,7 +11,7 @@ namespace Exercise02 {
         }
 
         private static void Exercise1() {
-            int value = GetinputInt("数値を入力:");
+            int value = GetInputInt("数値を入力:");
 
             if (value < 0) {
                 Console.WriteLine(value);
@@ -26,10 +26,11 @@ namespace Exercise02 {
         }
 
         private static void Exercise2() {
-            int value = GetinputInt("数値を入力:");
+            int value = GetInputInt("数値を入力:");
 
             switch (value) {
                 case < 0:
+                default:
                     Console.WriteLine(value);
                     break;
                 case < 100:
@@ -38,14 +39,11 @@ namespace Exercise02 {
                 case < 500:
                     Console.WriteLine(value * 3);
                     break;
-                default:
-                    Console.WriteLine(value);
-                    break;
             }
         }
 
         private static void Exercise3() {
-            int value = GetinputInt("数値を入力:");
+            int value = GetInputInt("数値を入力:");
 
             Console.WriteLine(value switch {
                 < 0 => value,
@@ -55,7 +53,7 @@ namespace Exercise02 {
             });
         }
 
-        private static int GetinputInt(string tips) {
+        private static int GetInputInt(string tips) {
             int value;
             string line;
             do {
