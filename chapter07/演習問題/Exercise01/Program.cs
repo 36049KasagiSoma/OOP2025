@@ -7,14 +7,22 @@ namespace Exercise01 {
             Console.WriteLine("--7.1.1----------");
             Exercise1(numbers);
 
+            Console.WriteLine();
+
             Console.WriteLine("--7.1.2----------");
             Exercise2(numbers);
+
+            Console.WriteLine();
 
             Console.WriteLine("--7.1.3----------");
             Exercise3(numbers);
 
+            Console.WriteLine();
+
             Console.WriteLine("--7.1.4----------");
             Exercise4(numbers);
+
+            Console.WriteLine(); Console.WriteLine();
 
             Console.WriteLine("--7.1.5----------");
             Exercise5(numbers);
@@ -33,7 +41,7 @@ namespace Exercise01 {
         }
 
         private static void Exercise3(int[] numbers) {
-            numbers.ToList().ForEach(n => Console.WriteLine(n.ToString("000")));
+            numbers.Select(n => n.ToString("000")).ToList().ForEach(Console.WriteLine);
         }
 
         private static void Exercise4(int[] numbers) {
