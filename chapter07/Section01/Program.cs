@@ -20,6 +20,9 @@
             Console.WriteLine("一番安い書籍");
             Console.WriteLine(books.OrderBy(b => b.Price).Select(b => b.Title + ", " + b.Price + "円").First());
 
+            //books.Where(d => d.Price == books.Min(d2 => d2.Price))
+            //    .Select(b => b.Title + ", " + b.Price + "円").ToList()
+            //    .ForEach(Console.WriteLine);
             Console.WriteLine();
 
             //ページが多い書籍名とページ
