@@ -55,14 +55,12 @@ namespace Exercise04 {
         /// <param name="line">検索文字列</param>
         /// <returns>含まれているキーの配列</returns>
         static string[] GetKeys(string line) {
-            var startindex = 0;
             List<string> keys = new List<string>();
-            do {
-                int endindex = line.IndexOf('=', startindex);
-                if (endindex < 0) break;
-                keys.Add(line.Substring(startindex, endindex - startindex));
-                startindex = line.IndexOf(';', endindex) + 1;
-            } while (startindex > 0);
+
+            var words = line.Split(';');
+            foreach(var word in words) {
+                keys.Add(word.Substring(0, word.IndexOf('=')));
+            }
 
             return keys.ToArray();
         }
