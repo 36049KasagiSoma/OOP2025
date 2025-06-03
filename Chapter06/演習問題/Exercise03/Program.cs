@@ -74,8 +74,9 @@ namespace Exercise03 {
         }
 
         private static void ExerciseEx(string text) {
+            string tmp = text.ToLower();
             for (char ch = 'a'; ch <= 'z'; ch++) {
-                Console.WriteLine($"{ch}:{text.ToLower().Count(c => c == ch)}");
+                Console.WriteLine($"{ch}:{tmp.Count(c => c == ch)}");
             }
         }
     }
