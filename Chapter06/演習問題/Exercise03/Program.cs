@@ -5,7 +5,7 @@ namespace Exercise03 {
     internal class Program {
         static void Main(string[] args) {
             var text = "Jackdaws love my big sphinx of quartz";
-#region
+            #region
             Console.WriteLine("=====6.3.1==========");
             Exercise1(text);
 
@@ -28,7 +28,7 @@ namespace Exercise03 {
 
             Console.WriteLine("=====6.3.5==========");
             Exercise5(text);
-#endregion
+            #endregion
 
         }
 
@@ -44,7 +44,19 @@ namespace Exercise03 {
         private static void Exercise3(string text) {
             Console.WriteLine("前" + text);
             var words = text.Split(" ");
-            Console.WriteLine("後" + new StringBuilder().AppendJoin(" ", words));
+            Console.WriteLine("後" + new StringBuilder().AppendJoin(' ', words) + ".");
+
+            ////stringばーじょん
+            //Console.WriteLine(string.Join(' ', words) + ".");
+
+            ////ちゃんとStringBuilderばーじょん
+            //var sb = new StringBuilder();
+            //for (int i = 0; i < words.Length; i++) {
+            //    sb.Append(words[i]);
+            //    if (i < words.Length - 1) sb.Append(' ');
+            //}
+            //sb.Append(".");
+            //Console.WriteLine(sb);
         }
 
         private static void Exercise4(string text) {
