@@ -59,6 +59,7 @@ namespace Exercise04 {
             List<string> keys = new List<string>();
             do {
                 int endindex = line.IndexOf('=', startindex);
+                if (endindex < 0) break;
                 keys.Add(endindex >= 0 ? line.Substring(startindex, endindex - startindex) : line.Substring(startindex));
                 startindex = line.IndexOf(';', endindex) + 1;
             } while (startindex > 0);
