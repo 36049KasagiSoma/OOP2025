@@ -28,6 +28,11 @@ namespace Exercise03 {
 
             Console.WriteLine("=====6.3.5==========");
             Exercise5(text);
+
+            Console.WriteLine();
+
+            Console.WriteLine("=====Ex=============");
+            ExerciseEx(text);
             #endregion
 
         }
@@ -66,6 +71,12 @@ namespace Exercise03 {
         private static void Exercise5(string text) {
             var filtedWords = text.Split(" ").Where(s => s.Length <= 4);
             filtedWords.ToList().ForEach(Console.WriteLine);
+        }
+
+        private static void ExerciseEx(string text) {
+            for (char ch = 'a'; ch <= 'z'; ch++) {
+                Console.WriteLine($"{ch}:{text.ToLower().Count(c => c == ch)}");
+            }
         }
     }
 }
