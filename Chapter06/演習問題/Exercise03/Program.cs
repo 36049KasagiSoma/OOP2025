@@ -5,7 +5,7 @@ namespace Exercise03 {
     internal class Program {
         static void Main(string[] args) {
             var text = "Jackdaws love my big sphinx of quartz";
-
+#region
             Console.WriteLine("=====6.3.1==========");
             Exercise1(text);
 
@@ -28,6 +28,7 @@ namespace Exercise03 {
 
             Console.WriteLine("=====6.3.5==========");
             Exercise5(text);
+#endregion
 
         }
 
