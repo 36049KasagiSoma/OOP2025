@@ -8,10 +8,11 @@ namespace Exercise04 {
             var keys = new string[] { "Novelist", "BestWork", "Born" };
 
             foreach (string key in keys) {
-                Console.WriteLine(ToJapanese(key) + ":" + Getitem(line, key));
+                Console.WriteLine($"{ToJapanese(key)} : {Getitem(line, key)}");
             }
 
         }
+
 
         /// <summary>
         /// 引数の単語を日本語へ変換します
@@ -19,16 +20,12 @@ namespace Exercise04 {
         /// <param name="key">"Novelist","BestWork","Born"</param>
         /// <returns>"「作家」,「代表作」,「誕生年」</returns>
         static string ToJapanese(string key) {
-
-            switch (key) {
-                case "Novelist":
-                    return "作家";
-                case "BestWork":
-                    return "代表作";
-                case "Born":
-                    return "誕生年";
-            }
-            return  "";
+            return key switch {
+                "Novelist" => "作家",
+                "BestWork" => "代表作",
+                "Born" => "誕生年",
+                _ => ""
+            };
         }
 
         static string Getitem(string line, string key) {
