@@ -1,4 +1,5 @@
 ﻿
+using System.Collections;
 using System.Text;
 
 namespace Exercise03 {
@@ -79,5 +80,6 @@ namespace Exercise03 {
                 Console.WriteLine($"{ch}:{tmp.Count(c => c == ch)}");
             }
         }
+
     }
 }
