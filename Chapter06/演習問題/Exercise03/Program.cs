@@ -31,8 +31,8 @@ namespace Exercise03 {
 
             Console.WriteLine();
 
-            Console.WriteLine("=====Ex=============");
-            ExerciseEx(text);
+            Console.WriteLine("=====6.3.99=========");
+            Exercise6(text);
             #endregion
 
         }
@@ -73,7 +73,7 @@ namespace Exercise03 {
             filtedWords.ToList().ForEach(Console.WriteLine);
         }
 
-        private static void ExerciseEx(string text) {
+        private static void Exercise6(string text) {
             string tmp = text.ToLower();
             for (char ch = 'a'; ch <= 'z'; ch++) {
                 Console.WriteLine($"{ch}:{tmp.Count(c => c == ch)}");
