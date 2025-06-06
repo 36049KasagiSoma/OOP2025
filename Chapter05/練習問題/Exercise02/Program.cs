@@ -41,6 +41,9 @@ namespace Exercise02 {
         }
 
         private static void Exercise5(YearMonth[] ymCollection) {
+            YearMonth[] newYm = ymCollection.Select(y => y.AddOneMonth()).ToArray();
+
+            Exercise2(newYm);
         }
     }
 }
