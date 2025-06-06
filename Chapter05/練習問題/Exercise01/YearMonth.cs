@@ -9,7 +9,7 @@ namespace Exercise01 {
         public readonly int Year;
         public readonly int Month;
 
-        public bool Is21Century() => Year > 2000 && Year <= 2100;
+        public bool Is21Century => Year > 2000 && Year <= 2100;
 
         public YearMonth(int year, int month) {
             Year = year;
