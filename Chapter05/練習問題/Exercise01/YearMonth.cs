@@ -20,5 +20,7 @@ namespace Exercise01 {
             bool isUp = Month == 12;
             return isUp ? new YearMonth(Year + 1, 1) : new YearMonth(Year, Month + 1);
         }
+
+        public override string ToString() => $"{Year}年{Month}月";
     }
 }
