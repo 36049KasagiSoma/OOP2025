@@ -16,6 +16,9 @@ namespace Exercise01 {
             Month = month;
         }
 
-        
+        public YearMonth AddOneMonth() {
+            bool isUp = Month == 12;
+            return isUp ? new YearMonth(Year + 1, 1) : new YearMonth(Year, Month + 1);
+        }
     }
 }
