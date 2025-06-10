@@ -47,6 +47,7 @@ namespace Exercise02 {
 
             //null合体演算子
             //Console.WriteLine(SafetyGetYear(y) ?? "21世紀のデータはありません");
+            //Console.WriteLine(y?.ToString() ?? "21世紀のデータはありません");
         }
 
         /// <summary>
