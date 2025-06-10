@@ -43,7 +43,7 @@ namespace Exercise02 {
 
         private static void Exercise4(YearMonth[] ymCollection) {
             YearMonth? y = FindFirst21C(ymCollection);
-            //Console.WriteLine(y is not null ? y.Year : "21世紀のデータはありません");
+            Console.WriteLine(y is not null ? y.Year : "21世紀のデータはありません");
 
             //null合体演算子
             //Console.WriteLine(SafetyGetYear(y) ?? "21世紀のデータはありません");
