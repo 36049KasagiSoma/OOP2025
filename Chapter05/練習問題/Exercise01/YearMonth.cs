@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Exercise01 {
-    public record YearMonth(int YYYY, int MM) {
-        public readonly int Year = YYYY;
-        public readonly int Month = MM;
+    public record YearMonth(int Y, int M) {
+        public readonly int Year = Y;
+        public readonly int Month = M;
 
         public bool Is21Century => Year > 2000 && Year <= 2100;
 
