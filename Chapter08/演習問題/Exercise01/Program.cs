@@ -32,6 +32,21 @@ namespace Exercise01 {
         }
 
         private static void Exercise2(string text) {
+            string work = text.ToUpper();
+            SortedDictionary<char, int> dict = new SortedDictionary<char, int>();
+            foreach (char c in work) {
+                if ('A' <= c && c <= 'Z') {
+                    if (dict.ContainsKey(c)) {
+                        dict[c]++;
+                    } else {
+                        dict[c] = 1;
+                    }
+                }
+            }
+
+            foreach (var pair in dict) {
+                Console.WriteLine($"\'{pair.Key}\':{pair.Value}");
+            }
         }
     }
 }
