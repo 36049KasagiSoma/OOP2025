@@ -16,7 +16,7 @@
         private static void Registration(string message) {
             string? pref, prefCaptalLocation;
 
-            Console.WriteLine("県庁所在地の登録【入力終了：Ctrl + 'Z'】");
+            Console.WriteLine(message);
             while (true) {
                 //①都道府県の入力
                 Console.Write("都道府県:");
