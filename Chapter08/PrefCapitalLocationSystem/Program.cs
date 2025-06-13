@@ -9,8 +9,6 @@
 
             //メニュー処理
             MenuEvents();
-
-
         }
 
         private static void Registration(string message) {
@@ -18,18 +16,15 @@
 
             Console.WriteLine(message);
             while (true) {
-                //①都道府県の入力
-                Console.Write("都道府県:");
+                Console.Write("都道府県:");  //①都道府県の入力
                 pref = Console.ReadLine();
 
                 if (pref is null) return;    //無限ループを抜ける(Ctrl + 'Z')
 
-                //県庁所在地の入力
-                Console.Write("県庁所在地:");
+                Console.Write("県庁所在地:");//県庁所在地の入力
                 prefCaptalLocation = Console.ReadLine();
 
                 //既に都道府県が登録されているか？
-                //ヒント：ContainsKeyを使用して調べる
                 if (prefOfficeDict.ContainsKey(pref)) {
 
                     //登録済みなら確認して上書き処理、上書きしない場合はもう一度都道府県の入力…①へ
@@ -38,7 +33,7 @@
                         Console.WriteLine();//改行
                         continue;
                     } else {
-                        Console.WriteLine($"要素{pref}を上書きしました。");
+                        Console.WriteLine($"要素[{pref}]を上書きしました。");
                     }
 
                 }
@@ -54,17 +49,14 @@
         private static void MenuEvents() {
             while (true) {
                 switch (menuDisp()) {
-                    case "1"://一覧出力処理
+                    case SelectNemu.ALL_DISP://一覧出力処理
                         allDisp();
                         break;
-
-
-                    case "2"://検索処理
+                    case SelectNemu.SEARCH://検索処理
                         searchPrefCaptalLocation();
                         break;
-
-
-                    case "9"://無限ループを抜ける
+                    case SelectNemu.EXIT://無限ループを抜ける
+                        Console.WriteLine("終了しました。");
                         return;
                 }
             }
@@ -84,14 +76,18 @@
         }
 
         //メニュー表示
-        private static string? menuDisp() {
+        private static SelectNemu menuDisp() {
             Console.WriteLine("\n**** メニュー ****");
             Console.WriteLine("1：一覧表示");
             Console.WriteLine("2：検索");
             Console.WriteLine("9：終了");
             Console.Write(">");
-            var menuSelect = Console.ReadLine();
-            return menuSelect;
+            try {
+                var menuSelect = (SelectNemu)int.Parse(Console.ReadLine());
+                return menuSelect;
+            } catch (Exception e) {
+                return SelectNemu.NONE;
+            }
         }
 
 
@@ -108,11 +104,16 @@
         private static void searchPrefCaptalLocation() {
             Console.Write("都道府県:");
             String? searchPref = Console.ReadLine();
-            if (searchPref != null && prefOfficeDict.ContainsKey(searchPref)) {
-                Console.WriteLine($"検索結果:{searchPref}:{prefOfficeDict[searchPref]}");
+            if (searchPref != null && prefOfficeDict.TryGetValue(searchPref, out string? value)) {
+                Console.WriteLine($"検索結果:{searchPref}:{value}");
             } else {
                 Console.WriteLine("検索結果:該当なし");
             }
         }
+
+        public enum SelectNemu {
+            ALL_DISP = 1, SEARCH = 2, EXIT = 9, NONE = -1,
+        }
+
     }
 }
