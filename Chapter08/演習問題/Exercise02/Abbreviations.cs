@@ -19,7 +19,7 @@ public class Abbreviations {
         _dict.ContainsKey(abbr) ? _dict[abbr] : null;
 
     //要素をすべて取得する
-    public IEnumerable<KeyValuePair<string, string>> Get() => _dict;
+    public IEnumerable<KeyValuePair<string, string>> GetAll() => _dict;
 
     // 日本語から対応する省略語を取り出す
     public string? ToAbbreviation(string japanese) =>
