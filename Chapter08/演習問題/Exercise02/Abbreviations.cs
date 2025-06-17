@@ -31,5 +31,9 @@ public class Abbreviations {
         }
     }
 
+    //要素の個数を返す
     public int Count => _dict.Count;
+
+    //要素を削除する
+    public bool Remove(string abbr) => _dict.Remove(abbr);
 }

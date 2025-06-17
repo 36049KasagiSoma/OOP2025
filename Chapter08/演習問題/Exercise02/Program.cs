@@ -40,6 +40,12 @@
             var cnt = abbrs.Count;
             Console.WriteLine($"用語の個数:{cnt}");
             Console.WriteLine();
+
+            //Removeメソッドの利用例
+            var removeKey = "WHO";
+            var result = abbrs.Remove(removeKey);
+            Console.WriteLine(removeKey + (result ? "を削除しました。" : "の削除に失敗しました。"));
+
         }
     }
 }
