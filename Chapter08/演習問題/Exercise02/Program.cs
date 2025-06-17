@@ -18,7 +18,7 @@
                     Console.WriteLine($"{name}={fullname}");
                 }
             }
-            Console.WriteLine();
+            Console.WriteLine("==========================");
 
             // ToAbbreviationメソッドの利用例
             var japanese = "東南アジア諸国連合";
@@ -28,23 +28,42 @@
             } else {
                 Console.WriteLine($"「{japanese}」の略語は {abbreviation} です");
             }
-            Console.WriteLine();
+            Console.WriteLine("==========================");
 
             // FindAllメソッドの利用例
             foreach (var (key, value) in abbrs.FindAll("国際")) {
                 Console.WriteLine($"{key}={value}");
             }
-            Console.WriteLine();
+            Console.WriteLine("==========================");
 
             //Countメソッドの利用例
             var cnt = abbrs.Count;
             Console.WriteLine($"用語の個数:{cnt}");
-            Console.WriteLine();
+            Console.WriteLine("==========================");
 
             //Removeメソッドの利用例
+            foreach (var name in names) {
+                var fullname = abbrs.Get(name);
+                if (fullname is null) {
+                    Console.WriteLine($"{name}は見つかりません");
+                } else {
+                    Console.WriteLine($"{name}={fullname}");
+                }
+            }
+            Console.WriteLine();
             var removeKey = "WHO";
             var result = abbrs.Remove(removeKey);
             Console.WriteLine(removeKey + (result ? "を削除しました。" : "の削除に失敗しました。"));
+            Console.WriteLine();
+            foreach (var name in names) {
+                var fullname = abbrs.Get(name);
+                if (fullname is null) {
+                    Console.WriteLine($"{name}は見つかりません");
+                } else {
+                    Console.WriteLine($"{name}={fullname}");
+                }
+            }
+            Console.WriteLine("==========================");
 
         }
     }
