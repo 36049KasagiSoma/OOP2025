@@ -18,6 +18,9 @@ public class Abbreviations {
     public string? Get(string abbr) =>
         _dict.ContainsKey(abbr) ? _dict[abbr] : null;
 
+    //要素をすべて取得する
+    public IEnumerable<KeyValuePair<string, string>> Get() => _dict;
+
     // 日本語から対応する省略語を取り出す
     public string? ToAbbreviation(string japanese) =>
         _dict.FirstOrDefault(x => x.Value == japanese).Key;
@@ -38,7 +41,7 @@ public class Abbreviations {
     public bool Remove(string abbr) => _dict.Remove(abbr);
 
     //要素を検索して取得する
-    public IDictionary<string,string> Search(Func<KeyValuePair<string,string>, bool> condition) {
+    public IDictionary<string, string> Search(Func<KeyValuePair<string, string>, bool> condition) {
         IDictionary<string, string> rtn = new Dictionary<string, string>();
         foreach (var keypair in _dict) {
             if (condition(keypair)) {

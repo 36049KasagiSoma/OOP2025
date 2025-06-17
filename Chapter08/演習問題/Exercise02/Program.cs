@@ -63,9 +63,13 @@
                     Console.WriteLine($"{name}={fullname}");
                 }
             }
+            Console.WriteLine();
+            removeKey = "FIFA";
+            removeResult = abbrs.Remove(removeKey);
+            Console.WriteLine(removeKey + (removeResult ? "を削除しました。" : "の削除に失敗しました。"));
             Console.WriteLine("==========================");
             //Searchメソッドの利用例
-            IDictionary<string, string> searchResult = abbrs.Search(kp => kp.Key.Length == 3);
+            var searchResult = abbrs.Get().Where(kp => kp.Key.Length == 3);
             Console.WriteLine("略語が3文字のもの");
             searchResult.ToList().ForEach(result => Console.WriteLine($"{result.Key}:{result.Value}"));
 
