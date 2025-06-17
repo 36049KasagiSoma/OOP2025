@@ -36,4 +36,15 @@ public class Abbreviations {
 
     //要素を削除する
     public bool Remove(string abbr) => _dict.Remove(abbr);
+
+    //要素を検索して取得する
+    public IDictionary<string,string> Search(Func<KeyValuePair<string,string>, bool> condition) {
+        IDictionary<string, string> rtn = new Dictionary<string, string>();
+        foreach (var keypair in _dict) {
+            if (condition(keypair)) {
+                rtn.Add(keypair.Key, keypair.Value);
+            }
+        }
+        return rtn;
+    }
 }

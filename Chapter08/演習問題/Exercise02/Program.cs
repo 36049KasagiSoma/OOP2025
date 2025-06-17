@@ -52,8 +52,8 @@
             }
             Console.WriteLine();
             var removeKey = "WHO";
-            var result = abbrs.Remove(removeKey);
-            Console.WriteLine(removeKey + (result ? "を削除しました。" : "の削除に失敗しました。"));
+            var removeResult = abbrs.Remove(removeKey);
+            Console.WriteLine(removeKey + (removeResult ? "を削除しました。" : "の削除に失敗しました。"));
             Console.WriteLine();
             foreach (var name in names) {
                 var fullname = abbrs.Get(name);
@@ -64,6 +64,10 @@
                 }
             }
             Console.WriteLine("==========================");
+            //Searchメソッドの利用例
+            IDictionary<string, string> searchResult = abbrs.Search(kp => kp.Key.Length == 3);
+            Console.WriteLine("略語が3文字のもの");
+            searchResult.ToList().ForEach(result => Console.WriteLine($"{result.Key}:{result.Value}"));
 
         }
     }
