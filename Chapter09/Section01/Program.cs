@@ -6,7 +6,7 @@ namespace Section01 {
         static void Main(string[] args) {
             var today = new DateTime(2025, 7, 12);
             var now = DateTime.Now;
-            Console.WriteLine($"Today:{today.Month}");
+            Console.WriteLine($"Today:{today}");
             Console.WriteLine($"Now:{now}");
 
             //自分の生年月日は何曜日?
@@ -26,18 +26,34 @@ namespace Section01 {
 
                 birthday = new DateTime(y, m, d);
 
-                Console.WriteLine();
+                Console.WriteLine("===============");
+
 
                 var cul = new CultureInfo("ja-JP");
                 cul.DateTimeFormat.Calendar = new JapaneseCalendar();
 
                 Console.WriteLine(birthday.ToString("ggyy年M月d日", cul) + "は" +
                     cul.DateTimeFormat.GetDayName(birthday.DayOfWeek) + "です。");
-                Console.WriteLine($"生まれてから{(now.Date - birthday.Date).Days}日です");
+                int totalDays = (now.Date - birthday.Date).Days;
+                Console.WriteLine($"生まれてから{totalDays}日です");
+                Console.WriteLine();
+
 
                 //閏年の判別
                 Console.WriteLine("===============");
-                Console.WriteLine(DateTime.IsLeapYear(birthday.Year) ? "閏年です" : "閏年ではありません");
+                Console.WriteLine(DateTime.IsLeapYear(birthday.Year) ? "閏年です。" : "平年です。");
+                Console.WriteLine();
+
+                Console.WriteLine("===============");
+
+                int work = now.Year - birthday.Year;
+                int age = work - (now < birthday.AddYears(work) ? 1 : 0);
+                Console.WriteLine($"あなたは{age}歳です。");
+                Console.WriteLine();
+
+                Console.WriteLine("===============");
+                Console.WriteLine($"今年の1月1日から、{now.DayOfYear}日です。");
+                Console.WriteLine();
             } catch (FormatException e) {
                 Console.WriteLine("--------------------------");
                 Console.WriteLine("変換エラー");
@@ -54,16 +70,28 @@ namespace Section01 {
             Console.WriteLine("===============");
 
 
-            string wara = "＼（^o^）／　(＾▽＾)　(￣▽￣)ノ　(＾_＾)／　(⌒▽⌒)／　＼(＾0＾)／　(＾◇＾)ノ";
 
-            while(true){
+            while (true) {
                 now = DateTime.Now;
-                Console.Write($"\r{wara}|  {now.ToString()}");
-                wara = wara.Substring(1) + wara.Substring(0, 1);
-                Thread.Sleep(100);
+                double s = (now - birthday).TotalSeconds;
+                int t = (int)(s * 10 % 10);
+                Console.Write($"\r|{createCounter(t, 9)}|  あなたが生まれてから、{(int)s}秒");
             }
 
         }
 
+        private static string createCounter(int cnt, int max) {
+            StringBuilder sb = new StringBuilder();
+            while (cnt > 0) {
+                sb.Append("X");
+                cnt--;
+                max--;
+            }
+            while (max > 0) {
+                sb.Append(" ");
+                max--;
+            }
+            return sb.ToString();
+        }
     }
 }
