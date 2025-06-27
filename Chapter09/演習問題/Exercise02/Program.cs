@@ -10,7 +10,7 @@ namespace Exercise02 {
         }
         // 9.2.1を呼び出すテスト用メソッド
         private static void Exercise1_1() {
-            var dt = new DateTime(2024, 7, 1);
+            var dt = DateTime.Today;
             foreach (var dayofweek in Enum.GetValues(typeof(DayOfWeek))) {
                 Console.Write("{0:yyyy/MM/dd}の次週の{1}: ", dt, (DayOfWeek)dayofweek);
                 Console.WriteLine("{0:yyyy/MM/dd(ddd)}", NextWeek(dt, (DayOfWeek)dayofweek));
