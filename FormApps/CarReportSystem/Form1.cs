@@ -1,5 +1,8 @@
 using System.ComponentModel;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace CarReportSystem {
     public partial class Form1 : Form {
@@ -14,7 +17,30 @@ namespace CarReportSystem {
             }
         }
 
+        private const string SETTING_FILE_PATH = "setting.xml";
+
         private void Form1_Load(object sender, EventArgs e) {
+            var sb = new StringBuilder();
+            using (var reader = XmlReader.Create(SETTING_FILE_PATH)) {
+                var ser = new XmlSerializer(Settings.GetInstans().GetType());
+                try {
+                    int cVal = ((ser.Deserialize(reader) as Settings) ?? Settings.GetInstans()).MainFormBackColor;
+                    BackColor = Color.FromArgb(cVal);
+                    Settings.GetInstans().MainFormBackColor = cVal;
+                } catch (Exception e2) {
+                    Console.Error.WriteLine("ファイル読み込みでエラー：" + e2.Message);
+                }
+            }
+        }
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+            try {
+                using (FileStream fs = File.Open(SETTING_FILE_PATH, FileMode.Create)) {
+                    var ser = new XmlSerializer(Settings.GetInstans().GetType());
+                    ser.Serialize(fs, Settings.GetInstans());
+                }
+            } catch (Exception e2) {
+                Console.Error.WriteLine("設定ファイルの書き出しに失敗：" + e2.Message);
+            }
 
         }
 
@@ -251,6 +277,7 @@ namespace CarReportSystem {
         private void tsmiColor_Click(object sender, EventArgs e) {
             if (cdColor.ShowDialog() == DialogResult.OK) {
                 this.BackColor = cdColor.Color;
+                Settings.GetInstans().MainFormBackColor = cdColor.Color.ToArgb();
             }
 
         }
@@ -273,7 +300,7 @@ namespace CarReportSystem {
         private BindingList<CarRecord> reportOpen() {
             if (ofdReportFileOpen.ShowDialog() == DialogResult.OK) {
                 try {
-                    using (FileStream fs = File.Open(ofdReportFileOpen.FileName, FileMode.Open,FileAccess.Read)) {
+                    using (FileStream fs = File.Open(ofdReportFileOpen.FileName, FileMode.Open, FileAccess.Read)) {
 #pragma warning disable SYSLIB0011
                         var bf = new BinaryFormatter();
 #pragma warning restore SYSLIB0011
@@ -297,6 +324,12 @@ namespace CarReportSystem {
             listCarRecords = reportOpen();
             dgvRecord.DataSource = listCarRecords;
             dgvRecord.Refresh();
+            foreach (var record in listCarRecords) {
+                addCbItem(cbAuthor, record.Author);
+                addCbItem(cbCarName, record.CarName);
+            }
         }
+
+
     }
 }
