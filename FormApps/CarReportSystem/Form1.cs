@@ -10,6 +10,8 @@ namespace CarReportSystem {
 
         public Form1() {
             InitializeComponent();
+
+            // セル内画像のリザイズ有効化
             dgvRecord.DataSource = listCarRecords;
             DataGridViewColumn column = dgvRecord.Columns["Picture"];
             if (column is DataGridViewImageColumn imageColumn) {
@@ -22,19 +24,31 @@ namespace CarReportSystem {
 
         // フォーム開始時処理
         private void Form1_Load(object sender, EventArgs e) {
+            // サイズ固定
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
+
+            // 設定読み込み
             var sb = new StringBuilder();
-            using (var reader = XmlReader.Create(SETTING_FILE_PATH)) {
-                var ser = new XmlSerializer(Settings.GetInstans().GetType());
-                try {
-                    int cVal = ((ser.Deserialize(reader) as Settings) ?? Settings.GetInstans()).MainFormBackColor;
-                    BackColor = Color.FromArgb(cVal);
-                    Settings.GetInstans().MainFormBackColor = cVal;
-                } catch (Exception e2) {
-                    Console.Error.WriteLine("ファイル読み込みでエラー：" + e2.Message);
+            if (File.Exists(SETTING_FILE_PATH)) {
+                using (var reader = XmlReader.Create(SETTING_FILE_PATH)) {
+                    var ser = new XmlSerializer(Settings.GetInstans().GetType());
+                    try {
+                        int cVal = ((ser.Deserialize(reader) as Settings) ?? Settings.GetInstans()).MainFormBackColor;
+                        BackColor = Color.FromArgb(cVal);
+                        Settings.GetInstans().MainFormBackColor = cVal;
+                    } catch (Exception e2) {
+                        Console.Error.WriteLine("ファイル読み込みでエラー：" + e2.Message);
+                    }
                 }
             }
+
+            // 時計
+            timer.Interval = 100; // Tick実行秒数指定
+            timer.Enabled = true;
+            tsslClock.Text = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
         }
-        
+
         // フォーム終了時処理
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
             try {
@@ -128,6 +142,11 @@ namespace CarReportSystem {
             }
         }
 
+        // 時計更新処理
+        private void timer_Tick(object sender, EventArgs e) {
+            tsslClock.Text = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+        }
+
         // メニューバー【終了】処理
         private void tsmiExit_Click(object sender, EventArgs e) {
             Application.Exit();
@@ -187,7 +206,7 @@ namespace CarReportSystem {
             addCbItem(cbAuthor, carRecode.Author);
             addCbItem(cbCarName, carRecode.CarName);
         }
-        
+
         // レポート削除
         private void deleteItem(int index) {
             if (index < 0 || index >= listCarRecords.Count) {
@@ -296,7 +315,7 @@ namespace CarReportSystem {
 
             }
         }
-        
+
         // 項目にデータが１つでも入力されているか
         private bool checkInStatus() {
             if (!cbAuthor.Text.Equals(string.Empty)) return true;

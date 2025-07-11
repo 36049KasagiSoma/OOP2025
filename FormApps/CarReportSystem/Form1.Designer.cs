@@ -23,6 +23,7 @@
         ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             label1 = new Label();
@@ -52,8 +53,6 @@
             dtRecodeDelete = new Button();
             ofdPicFileOpen = new OpenFileDialog();
             btNewRecord = new Button();
-            ssMessageArea = new StatusStrip();
-            tsslb = new ToolStripStatusLabel();
             menuStrip1 = new MenuStrip();
             ファイルFToolStripMenuItem = new ToolStripMenuItem();
             tsmiFileOpen = new ToolStripMenuItem();
@@ -66,11 +65,15 @@
             cdColor = new ColorDialog();
             sfdReportFileSave = new SaveFileDialog();
             ofdReportFileOpen = new OpenFileDialog();
+            tsslb = new ToolStripStatusLabel();
+            ssMessageArea = new StatusStrip();
+            tsslClock = new ToolStripStatusLabel();
+            timer = new System.Windows.Forms.Timer(components);
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecord).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbPicture).BeginInit();
-            ssMessageArea.SuspendLayout();
             menuStrip1.SuspendLayout();
+            ssMessageArea.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -364,20 +367,6 @@
             btNewRecord.UseVisualStyleBackColor = true;
             btNewRecord.Click += btNewRecord_Click;
             // 
-            // ssMessageArea
-            // 
-            ssMessageArea.Items.AddRange(new ToolStripItem[] { tsslb });
-            ssMessageArea.Location = new Point(0, 534);
-            ssMessageArea.Name = "ssMessageArea";
-            ssMessageArea.Size = new Size(800, 22);
-            ssMessageArea.TabIndex = 13;
-            ssMessageArea.Text = "statusStrip1";
-            // 
-            // tsslb
-            // 
-            tsslb.Name = "tsslb";
-            tsslb.Size = new Size(0, 17);
-            // 
             // menuStrip1
             // 
             menuStrip1.Items.AddRange(new ToolStripItem[] { ファイルFToolStripMenuItem, ヘルプHToolStripMenuItem });
@@ -397,26 +386,26 @@
             // tsmiFileOpen
             // 
             tsmiFileOpen.Name = "tsmiFileOpen";
-            tsmiFileOpen.Size = new Size(180, 22);
+            tsmiFileOpen.Size = new Size(140, 22);
             tsmiFileOpen.Text = "開く...";
             tsmiFileOpen.Click += tsmiFileOpen_Click;
             // 
             // tsmiFileSave
             // 
             tsmiFileSave.Name = "tsmiFileSave";
-            tsmiFileSave.Size = new Size(180, 22);
+            tsmiFileSave.Size = new Size(140, 22);
             tsmiFileSave.Text = "保存...";
             tsmiFileSave.Click += tsmiFileSave_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(177, 6);
+            toolStripSeparator1.Size = new Size(137, 6);
             // 
             // tsmiColor
             // 
             tsmiColor.Name = "tsmiColor";
-            tsmiColor.Size = new Size(180, 22);
+            tsmiColor.Size = new Size(140, 22);
             tsmiColor.Text = "色設定...";
             tsmiColor.Click += tsmiColor_Click;
             // 
@@ -424,7 +413,7 @@
             // 
             tsmiExit.Name = "tsmiExit";
             tsmiExit.ShortcutKeys = Keys.Alt | Keys.F4;
-            tsmiExit.Size = new Size(180, 22);
+            tsmiExit.Size = new Size(140, 22);
             tsmiExit.Text = "終了";
             tsmiExit.Click += tsmiExit_Click;
             // 
@@ -445,6 +434,32 @@
             // ofdReportFileOpen
             // 
             ofdReportFileOpen.FileName = "openFileDialog1";
+            // 
+            // tsslb
+            // 
+            tsslb.Name = "tsslb";
+            tsslb.Size = new Size(0, 17);
+            // 
+            // ssMessageArea
+            // 
+            ssMessageArea.Items.AddRange(new ToolStripItem[] { tsslb, tsslClock });
+            ssMessageArea.Location = new Point(0, 534);
+            ssMessageArea.Name = "ssMessageArea";
+            ssMessageArea.Size = new Size(800, 22);
+            ssMessageArea.TabIndex = 13;
+            ssMessageArea.Text = "statusStrip1";
+            // 
+            // tsslClock
+            // 
+            tsslClock.Name = "tsslClock";
+            tsslClock.Size = new Size(785, 17);
+            tsslClock.Spring = true;
+            tsslClock.Text = "時計";
+            tsslClock.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // timer
+            // 
+            timer.Tick += timer_Tick;
             // 
             // Form1
             // 
@@ -482,10 +497,10 @@
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecord).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbPicture).EndInit();
-            ssMessageArea.ResumeLayout(false);
-            ssMessageArea.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            ssMessageArea.ResumeLayout(false);
+            ssMessageArea.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -519,8 +534,6 @@
         private Button dtRecodeDelete;
         private OpenFileDialog ofdPicFileOpen;
         private Button btNewRecord;
-        private StatusStrip ssMessageArea;
-        private ToolStripStatusLabel tsslb;
         private MenuStrip menuStrip1;
         private ToolStripMenuItem ファイルFToolStripMenuItem;
         private ToolStripMenuItem ヘルプHToolStripMenuItem;
@@ -533,5 +546,9 @@
         private ColorDialog cdColor;
         private SaveFileDialog sfdReportFileSave;
         private OpenFileDialog ofdReportFileOpen;
+        private ToolStripStatusLabel tsslb;
+        private StatusStrip ssMessageArea;
+        private ToolStripStatusLabel tsslClock;
+        private System.Windows.Forms.Timer timer;
     }
 }
