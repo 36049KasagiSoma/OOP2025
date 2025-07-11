@@ -6,33 +6,28 @@ using System.Text.Encodings.Web;
 namespace Exercise01 {
     internal class Program {
         static void Main(string[] args) {
-            Employee employee = new Employee {
-                Id = 0,
-                Name = "Sota Yanagida",
-                HireDate = new DateTime(1051, 2, 3)
+            var emp = new Employee {
+                Id = 123,
+                Name = "山田太郎",
+                HireDate = new DateTime(2018, 10, 1),
             };
 
             // 1
-            saveSerializeObject<Employee>("q1.json", employee);
+            saveSerializeObject<Employee>("q1.json", emp);
 
 
-            Employee[] employees = new Employee[]{
-                new Employee{
-                    Id = 1,
-                    Name = "Alice Tanaka",
-                    HireDate = new DateTime(2020, 5, 1)
+            Employee[] employees = [
+                new () {
+                    Id = 123,
+                    Name = "山田太郎",
+                    HireDate = new DateTime(2018, 10, 1),
                 },
-                new Employee{
-                    Id = 2,
-                    Name = "Bob Yamada",
-                    HireDate = new DateTime(2019, 3, 15)
+                new () {
+                    Id = 198,
+                    Name = "田中華子",
+                    HireDate = new DateTime(2020, 4, 1),
                 },
-                new Employee{
-                    Id = 3,
-                    Name = "Charlie Suzuki",
-                    HireDate = new DateTime(2022, 11, 30)
-                }
-            };
+            ];
 
             // 2
             saveSerializeObject<Employee[]>("q2.json", employees);
@@ -56,7 +51,11 @@ namespace Exercise01 {
 
         private static T? loadDeserializeObject<T>(string path) {
             string jsonStr = File.ReadAllText(path);
-            return JsonSerializer.Deserialize<T>(jsonStr);
+            var opt = new JsonSerializerOptions {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            return JsonSerializer.Deserialize<T>(jsonStr,opt);
         }
     }
 }
