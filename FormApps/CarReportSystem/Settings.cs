@@ -8,15 +8,18 @@ namespace CarReportSystem {
     public class Settings {
         public int MainFormBackColor { get; set; }
 
+
+        // 以下、シングルトンのためのやつ
+
         private static Settings? instans;
 
         public static Settings GetInstans() {
-            if (instans == null) {
+            if (instans is null) {
                 instans = new Settings();
             }
             return instans;
         }
 
-        private Settings() { }// 外から呼ばれない
+        private Settings() { }  // 外から呼ばれない
     }
 }

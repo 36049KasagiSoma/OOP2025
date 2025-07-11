@@ -29,13 +29,13 @@ namespace CarReportSystem {
             this.MinimumSize = this.Size;
 
             // 設定読み込み
-            var sb = new StringBuilder();
             if (File.Exists(SETTING_FILE_PATH)) {
                 using (var reader = XmlReader.Create(SETTING_FILE_PATH)) {
                     var ser = new XmlSerializer(Settings.GetInstans().GetType());
                     try {
                         int cVal = ((ser.Deserialize(reader) as Settings) ?? Settings.GetInstans()).MainFormBackColor;
-                        BackColor = Color.FromArgb(cVal);
+                        this.BackColor = Color.FromArgb(cVal);
+                        ssMessageArea.BackColor = this.BackColor;
                         Settings.GetInstans().MainFormBackColor = cVal;
                     } catch (Exception e2) {
                         Console.Error.WriteLine("ファイル読み込みでエラー：" + e2.Message);
@@ -161,6 +161,7 @@ namespace CarReportSystem {
         private void tsmiColor_Click(object sender, EventArgs e) {
             if (cdColor.ShowDialog() == DialogResult.OK) {
                 this.BackColor = cdColor.Color;
+                ssMessageArea.BackColor = this.BackColor;
                 Settings.GetInstans().MainFormBackColor = cdColor.Color.ToArgb();
             }
 
