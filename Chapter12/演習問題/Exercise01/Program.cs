@@ -47,7 +47,8 @@ namespace Exercise01 {
         private static void saveSerializeObject<T>(string path, T obj) {
             var opt = new JsonSerializerOptions {
                 WriteIndented = true,
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             string jsonStr = JsonSerializer.Serialize(obj, opt);
             File.WriteAllText(path, jsonStr);
