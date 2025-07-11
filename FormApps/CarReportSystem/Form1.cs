@@ -17,8 +17,10 @@ namespace CarReportSystem {
             }
         }
 
+        // 設定ファイルの場所
         private const string SETTING_FILE_PATH = "setting.xml";
 
+        // フォーム開始時処理
         private void Form1_Load(object sender, EventArgs e) {
             var sb = new StringBuilder();
             using (var reader = XmlReader.Create(SETTING_FILE_PATH)) {
@@ -32,6 +34,8 @@ namespace CarReportSystem {
                 }
             }
         }
+        
+        // フォーム終了時処理
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
             try {
                 using (FileStream fs = File.Open(SETTING_FILE_PATH, FileMode.Create)) {
@@ -124,16 +128,44 @@ namespace CarReportSystem {
             }
         }
 
+        // メニューバー【終了】処理
         private void tsmiExit_Click(object sender, EventArgs e) {
             Application.Exit();
         }
 
+        // メニューバー【このアプリ】処理
         private void tsmiAbout_Click(object sender, EventArgs e) {
             new Version().ShowDialog();
         }
 
+        // メニューバー【色設定】処理
+        private void tsmiColor_Click(object sender, EventArgs e) {
+            if (cdColor.ShowDialog() == DialogResult.OK) {
+                this.BackColor = cdColor.Color;
+                Settings.GetInstans().MainFormBackColor = cdColor.Color.ToArgb();
+            }
+
+        }
+
+        // メニューバー【保存】処理
+        private void tsmiFileSave_Click(object sender, EventArgs e) {
+            reportSave();
+        }
+
+        // メニューバー【開く】処理
+        private void tsmiFileOpen_Click(object sender, EventArgs e) {
+            listCarRecords = reportOpen();
+            dgvRecord.DataSource = listCarRecords;
+            dgvRecord.Refresh();
+            foreach (var record in listCarRecords) {
+                addCbItem(cbAuthor, record.Author);
+                addCbItem(cbCarName, record.CarName);
+            }
+        }
+
+        // レポート新規追加
         private void addItem() {
-            if (!isCheckStatus()) return;
+            if (!checkStatus()) return;
             var carRecode = createCarRecode();
 
             listCarRecords.Add(carRecode);
@@ -142,8 +174,9 @@ namespace CarReportSystem {
             addCbItem(cbCarName, carRecode.CarName);
         }
 
+        // レポート上書き
         private void setItem(int index) {
-            if (!isCheckStatus()) return;
+            if (!checkStatus()) return;
             if (index < 0 || index >= listCarRecords.Count) {
                 Console.Error.WriteLine($"指定されたindex値が不正です。index={index}");
             }
@@ -154,8 +187,18 @@ namespace CarReportSystem {
             addCbItem(cbAuthor, carRecode.Author);
             addCbItem(cbCarName, carRecode.CarName);
         }
+        
+        // レポート削除
+        private void deleteItem(int index) {
+            if (index < 0 || index >= listCarRecords.Count) {
+                Console.Error.WriteLine($"指定されたindex値が不正です。index={index}");
+            }
 
-        private bool isCheckStatus() {
+            listCarRecords.RemoveAt(index);
+        }
+
+        // 必須項目入力チェック
+        private bool checkStatus() {
             if (string.IsNullOrEmpty(cbCarName.Text)) {
                 tsslb.Text = "車名が入力されていません。";
                 cbCarName.Focus();
@@ -170,14 +213,7 @@ namespace CarReportSystem {
             return true;
         }
 
-        private void deleteItem(int index) {
-            if (index < 0 || index >= listCarRecords.Count) {
-                Console.Error.WriteLine($"指定されたindex値が不正です。index={index}");
-            }
-
-            listCarRecords.RemoveAt(index);
-        }
-
+        // 入力データからのCarRecord生成
         private CarRecord createCarRecode() {
             return new CarRecord {
                 Date = dtpDate.Value.Date,
@@ -189,6 +225,7 @@ namespace CarReportSystem {
             };
         }
 
+        // コンボボックスにアイテム追加（重複なし）
         private void addCbItem(ComboBox comboBox, string item) {
             if (string.IsNullOrEmpty(item)) return;
             if (!comboBox.Items.Contains(item)) {
@@ -196,6 +233,7 @@ namespace CarReportSystem {
             }
         }
 
+        // 項目のクリア
         private void ClearForm() {
             dtpDate.Value = DateTime.Today;
             cbAuthor.Text = string.Empty;
@@ -214,6 +252,7 @@ namespace CarReportSystem {
 
         }
 
+        // 項目からのメーカー取得
         private MakerGroup GetMaker() {
             if (rbToyota.Checked) return MakerGroup.TOYOTA;
             if (rbNissan.Checked) return MakerGroup.NISSAN;
@@ -224,6 +263,7 @@ namespace CarReportSystem {
             return MakerGroup.NONE;
         }
 
+        // 項目にメーカーセット
         private void SetMaker(MakerGroup maker) {
             switch (maker) {
                 case MakerGroup.NONE:
@@ -256,7 +296,8 @@ namespace CarReportSystem {
 
             }
         }
-
+        
+        // 項目にデータが１つでも入力されているか
         private bool checkInStatus() {
             if (!cbAuthor.Text.Equals(string.Empty)) return true;
             if (!cbCarName.Text.Equals(string.Empty)) return true;
@@ -274,14 +315,7 @@ namespace CarReportSystem {
             return false;
         }
 
-        private void tsmiColor_Click(object sender, EventArgs e) {
-            if (cdColor.ShowDialog() == DialogResult.OK) {
-                this.BackColor = cdColor.Color;
-                Settings.GetInstans().MainFormBackColor = cdColor.Color.ToArgb();
-            }
-
-        }
-
+        // レポートのファイル出力
         private void reportSave() {
             if (sfdReportFileSave.ShowDialog() == DialogResult.OK) {
                 try {
@@ -297,6 +331,7 @@ namespace CarReportSystem {
             }
         }
 
+        // レポートファイルの読込
         private BindingList<CarRecord> reportOpen() {
             if (ofdReportFileOpen.ShowDialog() == DialogResult.OK) {
                 try {
@@ -315,21 +350,6 @@ namespace CarReportSystem {
             }
             return new BindingList<CarRecord>();
         }
-
-        private void tsmiFileSave_Click(object sender, EventArgs e) {
-            reportSave();
-        }
-
-        private void tsmiFileOpen_Click(object sender, EventArgs e) {
-            listCarRecords = reportOpen();
-            dgvRecord.DataSource = listCarRecords;
-            dgvRecord.Refresh();
-            foreach (var record in listCarRecords) {
-                addCbItem(cbAuthor, record.Author);
-                addCbItem(cbCarName, record.CarName);
-            }
-        }
-
 
     }
 }
