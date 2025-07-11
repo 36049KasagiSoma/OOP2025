@@ -15,6 +15,8 @@ namespace Exercise01 {
             // 1
             saveSerializeObject<Employee>("q1.json", emp);
 
+            Console.WriteLine(File.ReadAllText("q1.json"));
+            Console.WriteLine();
 
             Employee[] employees = [
                 new () {
@@ -46,6 +48,7 @@ namespace Exercise01 {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
             string jsonStr = JsonSerializer.Serialize(obj, opt);
+
             File.WriteAllText(path, jsonStr);
         }
 
@@ -55,6 +58,7 @@ namespace Exercise01 {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
+
             return JsonSerializer.Deserialize<T>(jsonStr,opt);
         }
     }
