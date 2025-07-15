@@ -33,6 +33,7 @@ namespace Exercise02 {
     public record Novelist {
         public int Id { get; init; }
         public string Name { get; init; } = string.Empty;
+        [JsonPropertyName("birth")]
         public DateTime Birthday { get; init; }
         public string[] Masterpieces { get; init; } = [];
     }
