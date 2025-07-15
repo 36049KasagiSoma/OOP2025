@@ -21,7 +21,7 @@ namespace Exercise02 {
             var opt = new JsonSerializerOptions {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                NumberHandling=
+                NumberHandling =
                 JsonNumberHandling.AllowNamedFloatingPointLiterals |
                 JsonNumberHandling.AllowReadingFromString,
             };
