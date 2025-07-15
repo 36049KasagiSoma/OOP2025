@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Exercise01 {
-    public class Employee {
+    public record Employee {
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime HireDate {  get; set; }

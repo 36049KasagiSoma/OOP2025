@@ -13,7 +13,7 @@ namespace Exercise01 {
             };
 
             // 1
-            saveSerializeObject<Employee>("q1.json", emp);
+            saveSerializeObject("q1.json", emp);
 
             Console.WriteLine(File.ReadAllText("q1.json"));
             Console.WriteLine();
@@ -32,16 +32,32 @@ namespace Exercise01 {
             ];
 
             // 2
-            saveSerializeObject<Employee[]>("q2.json", employees);
+            saveSerializeObject("q2.json", employees);
 
             // 3
             Employee[]? loadObj = loadDeserializeObject<Employee[]>("q2.json");
             loadObj?.ToList().ForEach(Console.WriteLine);
         }
 
+        //add
+        //remove
+        //index
+        //count
+        //sum (SoUMa）KsgSum
+        //some
+        //summon
+        //remember いや、わすれろ
+        //forget フォア側にボールをゲット
+        //beautiful
+        //public
+        //private
+        //protected
+        //extends
+        //infomation
+        //
 
 
-        private static void saveSerializeObject<T>(string path, T obj) {
+        private static void saveSerializeObject(string path, object obj) {
             var opt = new JsonSerializerOptions {
                 WriteIndented = true,
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
