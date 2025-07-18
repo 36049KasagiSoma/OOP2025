@@ -105,12 +105,9 @@ namespace RssReader {
         }
 
         private void webView21_SourceChanged(object sender, Microsoft.Web.WebView2.Core.CoreWebView2SourceChangedEventArgs e) {
-            if (webView21.CanGoBack) {
-                btWebBack.Enabled = true;
-            } else {
-                btWebBack.Enabled = false;
-            }
-                tbWebUrl.Text = webView21.Source.ToString();
+            btWebBack.Enabled = webView21.CanGoBack;
+            btWebForward.Enabled = webView21.CanGoForward;
+            tbWebUrl.Text = webView21.Source.ToString();
         }
 
         private void btRssFavorite_Click(object sender, EventArgs e) {
@@ -153,6 +150,7 @@ namespace RssReader {
                 upDateCbItems();
             }
             btWebBack.Enabled = false;
+            btWebForward.Enabled = false;
         }
 
         private void upDateCbItems() {
