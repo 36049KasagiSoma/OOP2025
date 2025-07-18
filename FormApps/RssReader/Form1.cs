@@ -1,4 +1,8 @@
+using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.Net;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -28,12 +32,21 @@ namespace RssReader {
 
                     XDocument xdoc = XDocument.Parse(urlStr);
 
+#pragma warning disable CS8602 // null 参照の可能性があるものの逆参照です。
                     items = xdoc.Root.Descendants("item")
                         .Select(x =>
                             new ItemData {
-                                Title = (string)x.Element("title"),
+                                Title = x.Element("title").Value,
+                                Link = x.Element("link").Value,
+                                PubDate = DateTime.ParseExact(
+                                    x.Element("pubDate").Value,
+                                    "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                                    CultureInfo.InvariantCulture
+                                ),
                             }
                         ).ToList();
+#pragma warning restore CS8602 // null 参照の可能性があるものの逆参照です。
+
                     lbTitles.DataSource = items;
                     lbTitles.Refresh();
                 }
@@ -47,6 +60,18 @@ namespace RssReader {
                 MessageBoxIcon.Error);
             } finally {
                 btRssGet.Enabled = true;
+            }
+        }
+
+        private void lbTitles_DoubleClick(object sender, EventArgs e) {
+            if (lbTitles.SelectedItems is null) return;
+            var obj = lbTitles.SelectedItem;
+            if (obj is ItemData data) {
+                Process.Start(
+                    new ProcessStartInfo(data.Link) {
+                        UseShellExecute = true
+                    }
+                );
             }
         }
     }

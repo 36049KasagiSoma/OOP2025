@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 namespace RssReader {
     public class ItemData {
         public required string Title { get; set; }
+        public required string Link { get; set; }
+        public required DateTime PubDate { get; set; }
 
         public override string ToString() {
-            return Title;
+            return $"[{PubDate.ToString("yyyy/MM/dd HH:mm:dd")}] {Title}";
         }
 
     }

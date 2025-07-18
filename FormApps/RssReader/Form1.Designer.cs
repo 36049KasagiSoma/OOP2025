@@ -70,6 +70,7 @@
             lbTitles.Name = "lbTitles";
             lbTitles.Size = new Size(482, 382);
             lbTitles.TabIndex = 3;
+            lbTitles.DoubleClick += lbTitles_DoubleClick;
             // 
             // Form1
             // 
