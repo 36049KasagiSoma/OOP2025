@@ -92,12 +92,12 @@
             // webView21
             // 
             webView21.AllowExternalDrop = true;
+            webView21.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             webView21.CreationProperties = null;
             webView21.DefaultBackgroundColor = Color.White;
-            webView21.Dock = DockStyle.Fill;
-            webView21.Location = new Point(0, 0);
+            webView21.Location = new Point(0, 27);
             webView21.Name = "webView21";
-            webView21.Size = new Size(287, 396);
+            webView21.Size = new Size(287, 369);
             webView21.TabIndex = 4;
             webView21.ZoomFactor = 1D;
             webView21.SourceChanged += webView21_SourceChanged;
@@ -122,11 +122,11 @@
             // 
             // panel1
             // 
+            panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             panel1.Controls.Add(tbWebUrl);
             panel1.Controls.Add(btReload);
             panel1.Controls.Add(btWebForward);
             panel1.Controls.Add(btWebBack);
-            panel1.Dock = DockStyle.Top;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(287, 23);

@@ -94,7 +94,8 @@ namespace RssReader {
         }
 
         private void btReload_Click(object sender, EventArgs e) {
-            webView21.Reload();
+            if (webView21.Source != null)
+                webView21.Reload();
         }
 
         private void tbWebUrl_KeyDown(object sender, KeyEventArgs e) {
@@ -104,7 +105,12 @@ namespace RssReader {
         }
 
         private void webView21_SourceChanged(object sender, Microsoft.Web.WebView2.Core.CoreWebView2SourceChangedEventArgs e) {
-            tbWebUrl.Text = webView21.Source.ToString();
+            if (webView21.CanGoBack) {
+                btWebBack.Enabled = true;
+            } else {
+                btWebBack.Enabled = false;
+            }
+                tbWebUrl.Text = webView21.Source.ToString();
         }
 
         private void btRssFavorite_Click(object sender, EventArgs e) {
@@ -146,6 +152,7 @@ namespace RssReader {
                 favoriteItems.AddRange(items);
                 upDateCbItems();
             }
+            btWebBack.Enabled = false;
         }
 
         private void upDateCbItems() {
@@ -158,11 +165,11 @@ namespace RssReader {
             if (favoriteItems.Where(x => cbUrl.Text.Contains(x.Itemname)).Count() == 0) {
                 return;
             }
-            if (MessageBox.Show("["+cbUrl.Text + "]をお気に入りから削除しますか?",
+            if (MessageBox.Show("[" + cbUrl.Text + "]をお気に入りから削除しますか?",
                 "確認", MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 favoriteItems.RemoveAll(x => x.Itemname == cbUrl.Text);
                 upDateCbItems();
-                cbUrl.Text= string.Empty;
+                cbUrl.Text = string.Empty;
             }
         }
 
