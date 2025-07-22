@@ -17,7 +17,6 @@ namespace RssReader {
 
         private List<FavoriteItem> favoriteItems;
 
-
         public Form1() {
             InitializeComponent();
         }
@@ -100,7 +99,15 @@ namespace RssReader {
 
         private void tbWebUrl_KeyDown(object sender, KeyEventArgs e) {
             if (e.KeyCode == Keys.Enter) {
-                webView21.Source = new Uri(tbWebUrl.Text);
+                try {
+                    webView21.Source = new Uri(tbWebUrl.Text);
+                } catch (Exception ex) {
+                    MessageBox.Show(ex.Message, ex.GetType().ToString(),
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                    tbWebUrl.Text = string.Empty;
+                    tbWebUrl.Focus();
+                }
             }
         }
 
