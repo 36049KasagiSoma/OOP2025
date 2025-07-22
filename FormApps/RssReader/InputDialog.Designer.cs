@@ -57,9 +57,9 @@
             label3.Font = new Font("Yu Gothic UI", 12F);
             label3.Location = new Point(12, 147);
             label3.Name = "label3";
-            label3.Size = new Size(58, 21);
+            label3.Size = new Size(94, 21);
             label3.TabIndex = 0;
-            label3.Text = "保存名";
+            label3.Text = "お気に入り名";
             // 
             // tbInput
             // 
@@ -91,7 +91,7 @@
             btCancel.UseVisualStyleBackColor = true;
             btCancel.Click += btCancel_Click;
             // 
-            // Form2
+            // InputDialog
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -102,7 +102,7 @@
             Controls.Add(lbUrl);
             Controls.Add(label3);
             Controls.Add(label1);
-            Name = "Form2";
+            Name = "InputDialog";
             Text = "保存名の入力";
             Load += Form2_Load;
             ResumeLayout(false);

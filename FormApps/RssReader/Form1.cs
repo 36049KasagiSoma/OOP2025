@@ -163,8 +163,10 @@ namespace RssReader {
 
         }
 
-        private void button1_Click(object sender, EventArgs e) {
+        private void btRssFavoriteRemove_Click(object sender, EventArgs e) {
             if (favoriteItems.Where(x => cbUrl.Text.Contains(x.Itemname)).Count() == 0) {
+                MessageBox.Show("削除するお気に入りを選択してください。",
+                    "入力エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             if (MessageBox.Show("[" + cbUrl.Text + "]をお気に入りから削除しますか?",

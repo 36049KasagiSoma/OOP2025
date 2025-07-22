@@ -20,7 +20,7 @@ namespace RssReader {
 
         private void btOk_Click(object sender, EventArgs e) {
             if (string.IsNullOrEmpty(tbInput.Text)) {
-                MessageBox.Show("保存名の項目は必須です。",
+                MessageBox.Show("お気に入り名の項目は必須です。",
                     "入力エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 tbInput.Focus();
                 return;

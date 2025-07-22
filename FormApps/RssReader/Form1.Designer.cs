@@ -23,6 +23,8 @@
         ///  the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             cbUrl = new ComboBox();
             btRssGet = new Button();
             label1 = new Label();
@@ -35,7 +37,8 @@
             btWebForward = new Button();
             btWebBack = new Button();
             btRssFavorite = new Button();
-            button1 = new Button();
+            btRssFavoriteRemove = new Button();
+            toolTip = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -50,18 +53,20 @@
             cbUrl.Font = new Font("Yu Gothic UI", 12F);
             cbUrl.Location = new Point(60, 6);
             cbUrl.Name = "cbUrl";
-            cbUrl.Size = new Size(272, 29);
+            cbUrl.Size = new Size(373, 29);
             cbUrl.TabIndex = 0;
+            toolTip.SetToolTip(cbUrl, "対象のURLまたはお気に入り名を入力してください。");
             // 
             // btRssGet
             // 
             btRssGet.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssGet.Font = new Font("Yu Gothic UI", 12F);
-            btRssGet.Location = new Point(338, 4);
+            btRssGet.Location = new Point(439, 4);
             btRssGet.Name = "btRssGet";
             btRssGet.Size = new Size(60, 30);
             btRssGet.TabIndex = 1;
             btRssGet.Text = "取得";
+            toolTip.SetToolTip(btRssGet, "入力されたURLから、記事を取得します。");
             btRssGet.UseVisualStyleBackColor = true;
             btRssGet.Click += btRssGet_Click;
             // 
@@ -85,7 +90,7 @@
             lbTitles.Location = new Point(0, 0);
             lbTitles.Name = "lbTitles";
             lbTitles.RightToLeft = RightToLeft.No;
-            lbTitles.Size = new Size(191, 396);
+            lbTitles.Size = new Size(231, 396);
             lbTitles.TabIndex = 3;
             lbTitles.DoubleClick += lbTitles_DoubleClick;
             // 
@@ -97,7 +102,7 @@
             webView21.DefaultBackgroundColor = Color.White;
             webView21.Location = new Point(0, 27);
             webView21.Name = "webView21";
-            webView21.Size = new Size(287, 369);
+            webView21.Size = new Size(348, 369);
             webView21.TabIndex = 4;
             webView21.ZoomFactor = 1D;
             webView21.SourceChanged += webView21_SourceChanged;
@@ -116,8 +121,8 @@
             // 
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(webView21);
-            splitContainer1.Size = new Size(482, 396);
-            splitContainer1.SplitterDistance = 191;
+            splitContainer1.Size = new Size(583, 396);
+            splitContainer1.SplitterDistance = 231;
             splitContainer1.TabIndex = 5;
             // 
             // panel1
@@ -129,7 +134,7 @@
             panel1.Controls.Add(btWebBack);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(287, 23);
+            panel1.Size = new Size(348, 23);
             panel1.TabIndex = 6;
             // 
             // tbWebUrl
@@ -138,7 +143,7 @@
             tbWebUrl.Font = new Font("Yu Gothic UI", 7F);
             tbWebUrl.Location = new Point(138, 1);
             tbWebUrl.Name = "tbWebUrl";
-            tbWebUrl.Size = new Size(146, 20);
+            tbWebUrl.Size = new Size(207, 20);
             tbWebUrl.TabIndex = 2;
             tbWebUrl.KeyDown += tbWebUrl_KeyDown;
             // 
@@ -176,37 +181,40 @@
             // 
             btRssFavorite.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssFavorite.Font = new Font("Yu Gothic UI", 12F);
-            btRssFavorite.Location = new Point(404, 5);
+            btRssFavorite.Image = (Image)resources.GetObject("btRssFavorite.Image");
+            btRssFavorite.Location = new Point(505, 4);
             btRssFavorite.Name = "btRssFavorite";
-            btRssFavorite.Size = new Size(42, 31);
+            btRssFavorite.Size = new Size(42, 30);
             btRssFavorite.TabIndex = 1;
-            btRssFavorite.Text = "★";
+            toolTip.SetToolTip(btRssFavorite, "入力されたURLを名前を付けてお気に入り登録します。");
             btRssFavorite.UseVisualStyleBackColor = true;
             btRssFavorite.Click += btRssFavorite_Click;
             // 
-            // button1
+            // btRssFavoriteRemove
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Font = new Font("Yu Gothic UI", 12F);
-            button1.Location = new Point(452, 5);
-            button1.Name = "button1";
-            button1.Size = new Size(42, 31);
-            button1.TabIndex = 1;
-            button1.Text = "―";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btRssFavoriteRemove.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btRssFavoriteRemove.Font = new Font("Yu Gothic UI", 12F);
+            btRssFavoriteRemove.Image = (Image)resources.GetObject("btRssFavoriteRemove.Image");
+            btRssFavoriteRemove.Location = new Point(553, 4);
+            btRssFavoriteRemove.Name = "btRssFavoriteRemove";
+            btRssFavoriteRemove.Size = new Size(42, 30);
+            btRssFavoriteRemove.TabIndex = 1;
+            toolTip.SetToolTip(btRssFavoriteRemove, "入力されたお気に入り名から、お気に入りを削除します。");
+            btRssFavoriteRemove.UseVisualStyleBackColor = true;
+            btRssFavoriteRemove.Click += btRssFavoriteRemove_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(506, 450);
+            ClientSize = new Size(607, 450);
             Controls.Add(splitContainer1);
-            Controls.Add(button1);
+            Controls.Add(btRssFavoriteRemove);
             Controls.Add(btRssFavorite);
             Controls.Add(btRssGet);
             Controls.Add(cbUrl);
             Controls.Add(label1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "RSSリーダー";
             Load += Form1_Load;
@@ -235,6 +243,7 @@
         private Button btReload;
         private Button btRssFavorite;
         private TextBox tbWebUrl;
-        private Button button1;
+        private Button btRssFavoriteRemove;
+        private ToolTip toolTip;
     }
 }
