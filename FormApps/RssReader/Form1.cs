@@ -111,11 +111,15 @@ namespace RssReader {
         }
 
         private void btRssFavorite_Click(object sender, EventArgs e) {
-            InputDialog dlg = new InputDialog(cbUrl.Text);
+            if (string.IsNullOrEmpty(cbUrl.Text)) {
+                MessageBox.Show("保存するURLを入力してください。",
+                    "入力エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbUrl.Focus();
+                return;
+            }
+            InputDialog dlg = new InputDialog(cbUrl.Text, favoriteItems.Select(x => x.Itemname).ToList());
             if (dlg.ShowDialog() == DialogResult.OK) {
-                if (!addComboItems(dlg.Input, cbUrl.Text)) {
-                    MessageBox.Show("この名前は既に使用されています。", "重複エラー");
-                }
+                addComboItems(dlg.Input, cbUrl.Text);
             }
         }
 

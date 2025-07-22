@@ -11,12 +11,26 @@ using System.Windows.Forms;
 namespace RssReader {
     public partial class InputDialog : Form {
         public string Input = "";
-        public InputDialog(string url) {
+        private List<string> items;
+        public InputDialog(string url, List<string> items   ) {
             InitializeComponent();
             lbUrl.Text = url;
+            this.items = items;
         }
 
         private void btOk_Click(object sender, EventArgs e) {
+            if (string.IsNullOrEmpty(tbInput.Text)) {
+                MessageBox.Show("保存名の項目は必須です。",
+                    "入力エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                tbInput.Focus();
+                return;
+            }
+            if (items.Contains(tbInput.Text)) {
+                MessageBox.Show("この名前は既に使用されています。",
+                    "重複エラー",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                tbInput.Focus();
+                return;
+            }
             Input = tbInput.Text;
             this.DialogResult = DialogResult.OK;
             this.Close();
