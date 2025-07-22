@@ -1,3 +1,4 @@
+ï»¿using RssReader.Properties;
 using System;
 using System.Diagnostics;
 using System.Globalization;
@@ -16,13 +17,14 @@ namespace RssReader {
         private List<ItemData> items;
 
         private List<FavoriteItem> favoriteItems;
+        private bool isLoading = false;
 
         public Form1() {
             InitializeComponent();
         }
 
         private async void btRssGet_Click(object sender, EventArgs e) {
-            // ˆ—’†‚ÌÄ‰Ÿ‰º–h~
+            // å‡¦ç†ä¸­ã®å†æŠ¼ä¸‹é˜²æ­¢
             btRssGet.Enabled = false;
             try {
                 using (var hc = new HttpClient()) {
@@ -30,17 +32,17 @@ namespace RssReader {
                     var tmp = favoriteItems.Where(x => x.Itemname == cbUrl.Text).ToList();
                     string cbText = tmp.Count() > 0 ? tmp[0].ItemUrl : cbUrl.Text;
 
-                    // ƒŒƒXƒ|ƒ“ƒX
+                    // ãƒ¬ã‚¹ãƒãƒ³ã‚¹
                     var res = await hc.GetAsync(cbText);
 
-                    // æ“¾‚Å‚«‚È‚¯‚ê‚Î’†’f
+                    // å–å¾—ã§ããªã‘ã‚Œã°ä¸­æ–­
                     res.EnsureSuccessStatusCode();
 
                     var xmlStr = await res.Content.ReadAsStringAsync();
 
                     XDocument xdoc = XDocument.Parse(xmlStr);
 
-#pragma warning disable CS8602 // null QÆ‚Ì‰Â”\«‚ª‚ ‚é‚à‚Ì‚Ì‹tQÆ‚Å‚·B
+#pragma warning disable CS8602 // null å‚ç…§ã®å¯èƒ½æ€§ãŒã‚ã‚‹ã‚‚ã®ã®é€†å‚ç…§ã§ã™ã€‚
                     items = xdoc.Root.Descendants("item")
                         .Select(x =>
                             new ItemData {
@@ -53,21 +55,21 @@ namespace RssReader {
                                 ),
                             }
                         ).ToList();
-#pragma warning restore CS8602 // null QÆ‚Ì‰Â”\«‚ª‚ ‚é‚à‚Ì‚Ì‹tQÆ‚Å‚·B
+#pragma warning restore CS8602 // null å‚ç…§ã®å¯èƒ½æ€§ãŒã‚ã‚‹ã‚‚ã®ã®é€†å‚ç…§ã§ã™ã€‚
 
                     lbTitles.DataSource = items;
                     lbTitles.Refresh();
                 }
             } catch (XmlException) {
-                MessageBox.Show("XML‚ğ•ÏŠ·‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B", "ƒGƒ‰[",
+                MessageBox.Show("XMLã‚’å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚", "ã‚¨ãƒ©ãƒ¼",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             } catch (Exception ex) when (ex is HttpRequestException || ex is InvalidOperationException) {
-                MessageBox.Show("ƒf[ƒ^‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½B", "ƒGƒ‰[",
+                MessageBox.Show("ãƒ‡ãƒ¼ã‚¿ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", "ã‚¨ãƒ©ãƒ¼",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             } catch (Exception) {
-                MessageBox.Show("•s–¾‚ÈƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B", "ƒGƒ‰[",
+                MessageBox.Show("ä¸æ˜ãªã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", "ã‚¨ãƒ©ãƒ¼",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             } finally {
@@ -93,8 +95,13 @@ namespace RssReader {
         }
 
         private void btReload_Click(object sender, EventArgs e) {
-            if (webView21.Source != null)
-                webView21.Reload();
+            if (webView21.Source != null) {
+                if (isLoading) {
+                    webView21.Stop();
+                } else {
+                    webView21.Reload();
+                }
+            }
         }
 
         private void tbWebUrl_KeyDown(object sender, KeyEventArgs e) {
@@ -119,8 +126,8 @@ namespace RssReader {
 
         private void btRssFavorite_Click(object sender, EventArgs e) {
             if (string.IsNullOrEmpty(cbUrl.Text)) {
-                MessageBox.Show("•Û‘¶‚·‚éURL‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B",
-                    "“ü—ÍƒGƒ‰[", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("ä¿å­˜ã™ã‚‹URLã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚",
+                    "å…¥åŠ›ã‚¨ãƒ©ãƒ¼", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 cbUrl.Focus();
                 return;
             }
@@ -153,7 +160,8 @@ namespace RssReader {
             System.IO.File.WriteAllText(filePath, jsonText);
         }
 
-        private void Form1_Load(object sender, EventArgs e) {
+        private async void Form1_Load(object sender, EventArgs e) {
+            await webView21.EnsureCoreWebView2Async(null);
             favoriteItems = new List<FavoriteItem>();
             var items = loadItem<List<FavoriteItem>>("cmbItem.json");
             if (items is not null) {
@@ -162,6 +170,7 @@ namespace RssReader {
             }
             btWebBack.Enabled = false;
             btWebForward.Enabled = false;
+            loadImageEnable(false);
         }
 
         private void upDateCbItems() {
@@ -172,16 +181,31 @@ namespace RssReader {
 
         private void btRssFavoriteRemove_Click(object sender, EventArgs e) {
             if (favoriteItems.Where(x => cbUrl.Text.Contains(x.Itemname)).Count() == 0) {
-                MessageBox.Show("íœ‚·‚é‚¨‹C‚É“ü‚è‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B",
-                    "“ü—ÍƒGƒ‰[", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("å‰Šé™¤ã™ã‚‹ãŠæ°—ã«å…¥ã‚Šã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚",
+                    "å…¥åŠ›ã‚¨ãƒ©ãƒ¼", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (MessageBox.Show("[" + cbUrl.Text + "]‚ğ‚¨‹C‚É“ü‚è‚©‚çíœ‚µ‚Ü‚·‚©?",
-                "Šm”F", MessageBoxButtons.YesNo) == DialogResult.Yes) {
+            if (MessageBox.Show("[" + cbUrl.Text + "]ã‚’ãŠæ°—ã«å…¥ã‚Šã‹ã‚‰å‰Šé™¤ã—ã¾ã™ã‹?",
+                "ç¢ºèª", MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 favoriteItems.RemoveAll(x => x.Itemname == cbUrl.Text);
                 upDateCbItems();
                 cbUrl.Text = string.Empty;
             }
+        }
+
+        private void webView21_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e) {
+            isLoading = true;
+            loadImageEnable(isLoading);
+        }
+
+        private void webView21_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e) {
+            isLoading = false;
+            loadImageEnable(isLoading);
+        }
+
+        private void loadImageEnable(bool isEnable) {
+            loadImage.Visible = isEnable;
+            btReload.Text = isEnable ? "Ã—" : "â†»";
         }
 
         private T? loadItem<T>(string filePath) {

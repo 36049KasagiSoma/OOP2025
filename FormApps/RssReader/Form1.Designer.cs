@@ -4,6 +4,7 @@
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
+        System.ComponentModel.ComponentResourceManager resources;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -24,7 +25,7 @@
         /// </summary>
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             cbUrl = new ComboBox();
             btRssGet = new Button();
             label1 = new Label();
@@ -32,6 +33,7 @@
             webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             splitContainer1 = new SplitContainer();
             panel1 = new Panel();
+            loadImage = new PictureBox();
             tbWebUrl = new TextBox();
             btReload = new Button();
             btWebForward = new Button();
@@ -45,6 +47,7 @@
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)loadImage).BeginInit();
             SuspendLayout();
             // 
             // cbUrl
@@ -105,7 +108,10 @@
             webView21.Size = new Size(348, 369);
             webView21.TabIndex = 4;
             webView21.ZoomFactor = 1D;
+            webView21.NavigationStarting += webView21_NavigationStarting;
+            webView21.NavigationCompleted += webView21_NavigationCompleted;
             webView21.SourceChanged += webView21_SourceChanged;
+
             // 
             // splitContainer1
             // 
@@ -128,6 +134,7 @@
             // panel1
             // 
             panel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panel1.Controls.Add(loadImage);
             panel1.Controls.Add(tbWebUrl);
             panel1.Controls.Add(btReload);
             panel1.Controls.Add(btWebForward);
@@ -137,13 +144,24 @@
             panel1.Size = new Size(348, 23);
             panel1.TabIndex = 6;
             // 
+            // loadImage
+            // 
+            loadImage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            loadImage.Image = (Image)resources.GetObject("loadImage.Image");
+            loadImage.Location = new Point(328, 3);
+            loadImage.Name = "loadImage";
+            loadImage.Size = new Size(17, 17);
+            loadImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            loadImage.TabIndex = 3;
+            loadImage.TabStop = false;
+            // 
             // tbWebUrl
             // 
             tbWebUrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             tbWebUrl.Font = new Font("Yu Gothic UI", 7F);
             tbWebUrl.Location = new Point(138, 1);
             tbWebUrl.Name = "tbWebUrl";
-            tbWebUrl.Size = new Size(207, 20);
+            tbWebUrl.Size = new Size(184, 20);
             tbWebUrl.TabIndex = 2;
             tbWebUrl.KeyDown += tbWebUrl_KeyDown;
             // 
@@ -225,6 +243,7 @@
             splitContainer1.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)loadImage).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -245,5 +264,6 @@
         private TextBox tbWebUrl;
         private Button btRssFavoriteRemove;
         private ToolTip toolTip;
+        private PictureBox loadImage;
     }
 }
