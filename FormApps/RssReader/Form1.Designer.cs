@@ -25,7 +25,7 @@
         /// </summary>
         private void InitializeComponent() {
             components = new System.ComponentModel.Container();
-            resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             cbUrl = new ComboBox();
             btRssGet = new Button();
             label1 = new Label();
@@ -54,9 +54,9 @@
             // 
             cbUrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cbUrl.Font = new Font("Yu Gothic UI", 12F);
-            cbUrl.Location = new Point(60, 6);
+            cbUrl.Location = new Point(176, 6);
             cbUrl.Name = "cbUrl";
-            cbUrl.Size = new Size(373, 29);
+            cbUrl.Size = new Size(257, 29);
             cbUrl.TabIndex = 0;
             toolTip.SetToolTip(cbUrl, "対象のURLまたはお気に入り名を入力してください。");
             // 
@@ -79,9 +79,9 @@
             label1.Font = new Font("Yu Gothic UI", 12F);
             label1.Location = new Point(12, 11);
             label1.Name = "label1";
-            label1.Size = new Size(42, 21);
+            label1.Size = new Size(158, 21);
             label1.TabIndex = 2;
-            label1.Text = "URL:";
+            label1.Text = "URL（お気に入り名）:";
             // 
             // lbTitles
             // 
@@ -111,7 +111,6 @@
             webView21.NavigationStarting += webView21_NavigationStarting;
             webView21.NavigationCompleted += webView21_NavigationCompleted;
             webView21.SourceChanged += webView21_SourceChanged;
-
             // 
             // splitContainer1
             // 

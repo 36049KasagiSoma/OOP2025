@@ -5,7 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security.Policy;
+using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Unicode;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -131,6 +133,12 @@ namespace RssReader {
                 cbUrl.Focus();
                 return;
             }
+            if (!IsValidUrl(cbUrl.Text)) {
+                MessageBox.Show("有効なURLを入力してください。",
+                    "入力エラー", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                cbUrl.Focus();
+                return;
+            }
             InputDialog dlg = new InputDialog(cbUrl.Text, favoriteItems.Select(x => x.Itemname).ToList());
             if (dlg.ShowDialog() == DialogResult.OK) {
                 addComboItems(dlg.Input, cbUrl.Text);
@@ -155,13 +163,13 @@ namespace RssReader {
         private void saveItem(string filePath, object item) {
             string jsonText = JsonSerializer.Serialize(item,
                 new JsonSerializerOptions {
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                     WriteIndented = true
                 });
             System.IO.File.WriteAllText(filePath, jsonText);
         }
 
         private async void Form1_Load(object sender, EventArgs e) {
-            await webView21.EnsureCoreWebView2Async(null);
             favoriteItems = new List<FavoriteItem>();
             var items = loadItem<List<FavoriteItem>>("cmbItem.json");
             if (items is not null) {
@@ -171,6 +179,12 @@ namespace RssReader {
             btWebBack.Enabled = false;
             btWebForward.Enabled = false;
             loadImageEnable(false);
+            try {
+                loadImageEnable(true);
+                await webView21.EnsureCoreWebView2Async(null);
+                loadImageEnable(false);
+            } catch (Exception) {
+            }
         }
 
         private void upDateCbItems() {
@@ -212,9 +226,23 @@ namespace RssReader {
         private T? loadItem<T>(string filePath) {
             if (System.IO.File.Exists(filePath)) {
                 string jsonText = System.IO.File.ReadAllText(filePath);
-                return JsonSerializer.Deserialize<T>(jsonText);
+                return JsonSerializer.Deserialize<T>(jsonText,
+                    new JsonSerializerOptions {
+                        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                    }
+                );
             }
             return default(T);
+        }
+
+        public static bool IsValidUrl(string url) {
+            if (string.IsNullOrWhiteSpace(url))
+                return false;
+
+#pragma warning disable CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+            return Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
+                && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+#pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
         }
     }
 }
