@@ -37,6 +37,9 @@ namespace RssReader {
                     var tmp = favoriteItems.Where(x => x.Itemname == cbUrl.Text).ToList();
                     string cbText = tmp.Count() > 0 ? tmp[0].ItemUrl : cbUrl.Text;
 
+                    if (!IsValidUrl(cbText)) { // URLが間違っていたらthrow
+                        throw new HttpRequestException();
+                    }
                     // レスポンス
                     var res = await hc.GetAsync(cbText);
 
