@@ -225,7 +225,7 @@ namespace RssReader {
                 "確認", MessageBoxButtons.YesNo) == DialogResult.Yes) {
                 favoriteItems.RemoveAll(x => x.Itemname == cbUrl.Text);
                 upDateCbItems();
-                saveItem("cmbItem.json", favoriteItems);
+                StaticEvent.SaveItem("cmbItem.json", favoriteItems);
                 cbUrl.Text = string.Empty;
             }
         }

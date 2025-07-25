@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingDialog));
             button1 = new Button();
             button2 = new Button();
             label1 = new Label();
@@ -48,7 +49,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(239, 194);
+            button1.Location = new Point(239, 212);
             button1.Name = "button1";
             button1.Size = new Size(89, 33);
             button1.TabIndex = 0;
@@ -58,7 +59,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(144, 194);
+            button2.Location = new Point(144, 212);
             button2.Name = "button2";
             button2.Size = new Size(89, 33);
             button2.TabIndex = 0;
@@ -186,7 +187,7 @@
             // 
             // button3
             // 
-            button3.Location = new Point(4, 194);
+            button3.Location = new Point(6, 212);
             button3.Name = "button3";
             button3.Size = new Size(89, 33);
             button3.TabIndex = 0;
@@ -225,7 +226,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(334, 231);
+            ClientSize = new Size(334, 251);
             Controls.Add(timeoutValue);
             Controls.Add(Tbutton);
             Controls.Add(Bbutton);
@@ -245,8 +246,9 @@
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
-            MaximumSize = new Size(350, 270);
-            MinimumSize = new Size(350, 270);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximumSize = new Size(350, 290);
+            MinimumSize = new Size(350, 290);
             Name = "SettingDialog";
             Text = "設定";
             Load += SettingDialog_Load;
