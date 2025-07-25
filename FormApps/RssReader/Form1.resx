@@ -121,6 +121,15 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btListFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAALhJREFUSEvt
+        lLEOgzAQQxkZOzKd/Xdd2fppfAYjI5/B2CpSEp0sFLhSdeJJGYidc3RJ6LqbbyH5ALAAeLuxkqR6wwCY
+        pLCOSdecxhc3s6fX0velEJJDKZBapHqCZO88g+pNUo/zzl+qecxszCGrak3KznR+j4i3ElkU8VYiiyLe
+        CoA5n8GomiedUQ6YVWsit6hXPSG3aNfTJPAONq+FOPGSt8shuV36L1pKW34ScsQdEuJvITp3c8gH4WZ9
+        E6HVT14AAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="loadImage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         R0lGODlhgACAAPUWACIiIjExMUFBQUJCQlJSUlNTU2NjY2RkZHV1dXZ2doiIiImJiZubm5ycnK6urq+v
@@ -360,6 +369,9 @@
         3ADJh/qV4qUHSN71fkbJAtj1PujiDduIik1wuLSSAAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>108, 17</value>
+  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAGBgAAAEAIACICQAAFgAAACgAAAAYAAAAMAAAAAEAIAAAAAAAAAkAAAAAAAAAAAAAAAAAAAAA

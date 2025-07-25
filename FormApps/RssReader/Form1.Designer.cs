@@ -32,6 +32,9 @@
             lbTitles = new ListBox();
             webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             splitContainer1 = new SplitContainer();
+            panel2 = new Panel();
+            tbListFilter = new TextBox();
+            btListFilter = new Button();
             panel1 = new Panel();
             loadImage = new PictureBox();
             tbWebUrl = new TextBox();
@@ -41,13 +44,18 @@
             btRssFavorite = new Button();
             btRssFavoriteRemove = new Button();
             toolTip = new ToolTip(components);
+            statusStrip1 = new StatusStrip();
+            statusLabel = new ToolStripStatusLabel();
+            filtedLabel = new ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
+            panel2.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)loadImage).BeginInit();
+            statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // cbUrl
@@ -56,7 +64,7 @@
             cbUrl.Font = new Font("Yu Gothic UI", 12F);
             cbUrl.Location = new Point(176, 6);
             cbUrl.Name = "cbUrl";
-            cbUrl.Size = new Size(257, 29);
+            cbUrl.Size = new Size(349, 29);
             cbUrl.TabIndex = 0;
             toolTip.SetToolTip(cbUrl, "対象のURLまたはお気に入り名を入力してください。");
             // 
@@ -64,7 +72,7 @@
             // 
             btRssGet.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssGet.Font = new Font("Yu Gothic UI", 12F);
-            btRssGet.Location = new Point(439, 4);
+            btRssGet.Location = new Point(531, 4);
             btRssGet.Name = "btRssGet";
             btRssGet.Size = new Size(60, 30);
             btRssGet.TabIndex = 1;
@@ -85,15 +93,15 @@
             // 
             // lbTitles
             // 
-            lbTitles.Dock = DockStyle.Fill;
+            lbTitles.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             lbTitles.Font = new Font("Yu Gothic UI", 12F);
             lbTitles.FormattingEnabled = true;
             lbTitles.HorizontalScrollbar = true;
             lbTitles.ItemHeight = 21;
-            lbTitles.Location = new Point(0, 0);
+            lbTitles.Location = new Point(0, 31);
             lbTitles.Name = "lbTitles";
             lbTitles.RightToLeft = RightToLeft.No;
-            lbTitles.Size = new Size(231, 396);
+            lbTitles.Size = new Size(267, 361);
             lbTitles.TabIndex = 3;
             lbTitles.DoubleClick += lbTitles_DoubleClick;
             // 
@@ -105,7 +113,7 @@
             webView21.DefaultBackgroundColor = Color.White;
             webView21.Location = new Point(0, 27);
             webView21.Name = "webView21";
-            webView21.Size = new Size(348, 369);
+            webView21.Size = new Size(404, 368);
             webView21.TabIndex = 4;
             webView21.ZoomFactor = 1D;
             webView21.NavigationStarting += webView21_NavigationStarting;
@@ -120,15 +128,48 @@
             // 
             // splitContainer1.Panel1
             // 
+            splitContainer1.Panel1.Controls.Add(panel2);
             splitContainer1.Panel1.Controls.Add(lbTitles);
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(webView21);
-            splitContainer1.Size = new Size(583, 396);
-            splitContainer1.SplitterDistance = 231;
+            splitContainer1.Size = new Size(675, 408);
+            splitContainer1.SplitterDistance = 267;
             splitContainer1.TabIndex = 5;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(tbListFilter);
+            panel2.Controls.Add(btListFilter);
+            panel2.Dock = DockStyle.Top;
+            panel2.Location = new Point(0, 0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(267, 31);
+            panel2.TabIndex = 7;
+            // 
+            // tbListFilter
+            // 
+            tbListFilter.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            tbListFilter.Font = new Font("Yu Gothic UI", 12F);
+            tbListFilter.Location = new Point(2, 1);
+            tbListFilter.Name = "tbListFilter";
+            tbListFilter.Size = new Size(231, 29);
+            tbListFilter.TabIndex = 2;
+            tbListFilter.KeyDown += tbListFilter_KeyDown;
+            // 
+            // btListFilter
+            // 
+            btListFilter.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btListFilter.Image = (Image)resources.GetObject("btListFilter.Image");
+            btListFilter.Location = new Point(234, 0);
+            btListFilter.Name = "btListFilter";
+            btListFilter.Size = new Size(33, 30);
+            btListFilter.TabIndex = 0;
+            toolTip.SetToolTip(btListFilter, "フィルター");
+            btListFilter.UseVisualStyleBackColor = true;
+            btListFilter.Click += btListFilter_Click;
             // 
             // panel1
             // 
@@ -140,14 +181,14 @@
             panel1.Controls.Add(btWebBack);
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(348, 23);
+            panel1.Size = new Size(404, 23);
             panel1.TabIndex = 6;
             // 
             // loadImage
             // 
             loadImage.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             loadImage.Image = (Image)resources.GetObject("loadImage.Image");
-            loadImage.Location = new Point(328, 3);
+            loadImage.Location = new Point(384, 3);
             loadImage.Name = "loadImage";
             loadImage.Size = new Size(17, 17);
             loadImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -160,7 +201,7 @@
             tbWebUrl.Font = new Font("Yu Gothic UI", 7F);
             tbWebUrl.Location = new Point(138, 1);
             tbWebUrl.Name = "tbWebUrl";
-            tbWebUrl.Size = new Size(184, 20);
+            tbWebUrl.Size = new Size(240, 20);
             tbWebUrl.TabIndex = 2;
             tbWebUrl.KeyDown += tbWebUrl_KeyDown;
             // 
@@ -171,6 +212,7 @@
             btReload.Size = new Size(40, 23);
             btReload.TabIndex = 1;
             btReload.Text = "↻";
+            toolTip.SetToolTip(btReload, "ページの再読み込み");
             btReload.UseVisualStyleBackColor = true;
             btReload.Click += btReload_Click;
             // 
@@ -181,6 +223,7 @@
             btWebForward.Size = new Size(40, 23);
             btWebForward.TabIndex = 1;
             btWebForward.Text = "→";
+            toolTip.SetToolTip(btWebForward, "次へ");
             btWebForward.UseVisualStyleBackColor = true;
             btWebForward.Click += btWebForward_Click;
             // 
@@ -191,6 +234,7 @@
             btWebBack.Size = new Size(40, 23);
             btWebBack.TabIndex = 0;
             btWebBack.Text = "←";
+            toolTip.SetToolTip(btWebBack, "前へ");
             btWebBack.UseVisualStyleBackColor = true;
             btWebBack.Click += btWebBack_Click;
             // 
@@ -199,7 +243,7 @@
             btRssFavorite.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssFavorite.Font = new Font("Yu Gothic UI", 12F);
             btRssFavorite.Image = (Image)resources.GetObject("btRssFavorite.Image");
-            btRssFavorite.Location = new Point(505, 4);
+            btRssFavorite.Location = new Point(597, 4);
             btRssFavorite.Name = "btRssFavorite";
             btRssFavorite.Size = new Size(42, 30);
             btRssFavorite.TabIndex = 1;
@@ -212,7 +256,7 @@
             btRssFavoriteRemove.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssFavoriteRemove.Font = new Font("Yu Gothic UI", 12F);
             btRssFavoriteRemove.Image = (Image)resources.GetObject("btRssFavoriteRemove.Image");
-            btRssFavoriteRemove.Location = new Point(553, 4);
+            btRssFavoriteRemove.Location = new Point(645, 4);
             btRssFavoriteRemove.Name = "btRssFavoriteRemove";
             btRssFavoriteRemove.Size = new Size(42, 30);
             btRssFavoriteRemove.TabIndex = 1;
@@ -220,11 +264,31 @@
             btRssFavoriteRemove.UseVisualStyleBackColor = true;
             btRssFavoriteRemove.Click += btRssFavoriteRemove_Click;
             // 
+            // statusStrip1
+            // 
+            statusStrip1.Items.AddRange(new ToolStripItem[] { statusLabel, filtedLabel });
+            statusStrip1.Location = new Point(0, 440);
+            statusStrip1.Name = "statusStrip1";
+            statusStrip1.Size = new Size(699, 22);
+            statusStrip1.TabIndex = 6;
+            statusStrip1.Text = "statusStrip1";
+            // 
+            // statusLabel
+            // 
+            statusLabel.Name = "statusLabel";
+            statusLabel.Size = new Size(0, 17);
+            // 
+            // filtedLabel
+            // 
+            filtedLabel.Name = "filtedLabel";
+            filtedLabel.Size = new Size(0, 17);
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(607, 450);
+            ClientSize = new Size(699, 462);
+            Controls.Add(statusStrip1);
             Controls.Add(splitContainer1);
             Controls.Add(btRssFavoriteRemove);
             Controls.Add(btRssFavorite);
@@ -232,6 +296,7 @@
             Controls.Add(cbUrl);
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MinimumSize = new Size(400, 250);
             Name = "Form1";
             Text = "RSSリーダー";
             Load += Form1_Load;
@@ -240,9 +305,13 @@
             splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)loadImage).EndInit();
+            statusStrip1.ResumeLayout(false);
+            statusStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -264,5 +333,11 @@
         private Button btRssFavoriteRemove;
         private ToolTip toolTip;
         private PictureBox loadImage;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel statusLabel;
+        private TextBox tbListFilter;
+        private Button btListFilter;
+        private Panel panel2;
+        private ToolStripStatusLabel filtedLabel;
     }
 }

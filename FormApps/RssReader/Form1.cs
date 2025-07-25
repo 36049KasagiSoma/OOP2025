@@ -28,8 +28,11 @@ namespace RssReader {
         private async void btRssGet_Click(object sender, EventArgs e) {
             // 処理中の再押下防止
             btRssGet.Enabled = false;
+            statusLabel.Text = "XMLを取得中...";
             try {
                 using (var hc = new HttpClient()) {
+
+                    hc.Timeout = TimeSpan.FromSeconds(60); // 1分でタイムアウト
 
                     var tmp = favoriteItems.Where(x => x.Itemname == cbUrl.Text).ToList();
                     string cbText = tmp.Count() > 0 ? tmp[0].ItemUrl : cbUrl.Text;
@@ -61,9 +64,15 @@ namespace RssReader {
 
                     lbTitles.DataSource = items;
                     lbTitles.Refresh();
+                    filtedLabel.Text = "";
+                    tbListFilter.Text = "";
                 }
             } catch (XmlException) {
                 MessageBox.Show("XMLを変換できませんでした。", "エラー",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            } catch (TaskCanceledException) {
+                MessageBox.Show("接続がタイムアウトしました。", "エラー",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             } catch (Exception ex) when (ex is HttpRequestException || ex is InvalidOperationException) {
@@ -76,6 +85,7 @@ namespace RssReader {
                     MessageBoxIcon.Error);
             } finally {
                 btRssGet.Enabled = true;
+                statusLabel.Text = "";
             }
 
         }
@@ -143,6 +153,7 @@ namespace RssReader {
             if (dlg.ShowDialog() == DialogResult.OK) {
                 addComboItems(dlg.Input, cbUrl.Text);
             }
+
         }
 
         private bool addComboItems(string additem, string addurl) {
@@ -243,6 +254,35 @@ namespace RssReader {
             return Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult)
                 && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
 #pragma warning restore CS8600 // Null リテラルまたは Null の可能性がある値を Null 非許容型に変換しています。
+        }
+
+        private void btListFilter_Click(object sender, EventArgs e) {
+            if (string.IsNullOrEmpty(tbListFilter.Text)) {
+                lbTitles.DataSource = items;
+                lbTitles.Refresh();
+                filtedLabel.Text = "";
+                return;
+            }
+            string tmp = tbListFilter.Text.Replace("　", " ").Replace("&", " ");
+            string[] words = tmp.Split(" ");
+            List<ItemData> filtedList = new List<ItemData>();
+            foreach (ItemData item in items) {
+                foreach (string word in words) {
+                    if (item.ToString().ToLower().Contains(word.ToLower())) {
+                        filtedList.Add(item);
+                        break;
+                    }
+                }
+            }
+            lbTitles.DataSource = filtedList;
+            lbTitles.Refresh();
+            filtedLabel.Text = $"フィルター表示中 >> {items.Count} 件中 {filtedList.Count} 件";
+        }
+
+        private void tbListFilter_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Enter) {
+                btListFilter_Click(sender, new EventArgs());
+            }
         }
     }
 }
