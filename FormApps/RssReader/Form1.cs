@@ -287,5 +287,30 @@ namespace RssReader {
                 btListFilter_Click(sender, new EventArgs());
             }
         }
+
+        private void lbTitles_DrawItem(object sender, DrawItemEventArgs e) {
+            // 背景描画
+            e.DrawBackground();
+            // 描画許可判定
+            if (e.Index < 0) {
+                return;
+            }
+            // 描画用変数設定
+            Brush NdClrWd = new SolidBrush(e.ForeColor);
+            string NdWord = ((ListBox)sender).Items[e.Index].ToString()??"";
+            // 奇数行の場合は背景色を変更し、縞々に見えるようにする
+            Color backcolor;
+            if (e.Index % 2 == 0) {
+                backcolor = Color.FromArgb(220, 220, 220);
+            } else {
+                backcolor = Color.FromArgb(255, 255, 255);
+            }
+            // ノード作成
+            e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, e.State, e.ForeColor, backcolor);
+            e.DrawBackground();
+            e.Graphics.DrawString(NdWord, e.Font, NdClrWd, e.Bounds, StringFormat.GenericDefault);
+            NdClrWd.Dispose();
+            e.DrawFocusRectangle();
+        }
     }
 }

@@ -94,6 +94,7 @@
             // lbTitles
             // 
             lbTitles.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            lbTitles.DrawMode = DrawMode.OwnerDrawFixed;
             lbTitles.Font = new Font("Yu Gothic UI", 12F);
             lbTitles.FormattingEnabled = true;
             lbTitles.HorizontalScrollbar = true;
@@ -103,6 +104,7 @@
             lbTitles.RightToLeft = RightToLeft.No;
             lbTitles.Size = new Size(267, 361);
             lbTitles.TabIndex = 3;
+            lbTitles.DrawItem += lbTitles_DrawItem;
             lbTitles.DoubleClick += lbTitles_DoubleClick;
             // 
             // webView21
