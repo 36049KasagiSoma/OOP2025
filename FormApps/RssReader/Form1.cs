@@ -22,6 +22,8 @@ namespace RssReader {
         private bool isLoading = false;
 
         public Form1() {
+            items = new List<ItemData>();
+            favoriteItems = new List<FavoriteItem>();
             InitializeComponent();
         }
 
@@ -32,7 +34,7 @@ namespace RssReader {
             try {
                 using (var hc = new HttpClient()) {
 
-                    hc.Timeout = TimeSpan.FromSeconds(60); // 1分でタイムアウト
+                    hc.Timeout = TimeSpan.FromSeconds(SettingData.GetInstance().GetTimeOutValue()); // タイムアウト
 
                     var tmp = favoriteItems.Where(x => x.Itemname == cbUrl.Text).ToList();
                     string cbText = tmp.Count() > 0 ? tmp[0].ItemUrl : cbUrl.Text;
@@ -170,22 +172,28 @@ namespace RssReader {
 
             favoriteItems.Add(item);
             upDateCbItems();
-            saveItem("cmbItem.json", favoriteItems);
+            StaticEvent.SaveItem("cmbItem.json", favoriteItems);
             return true;
         }
 
-        private void saveItem(string filePath, object item) {
-            string jsonText = JsonSerializer.Serialize(item,
-                new JsonSerializerOptions {
-                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                    WriteIndented = true
-                });
-            System.IO.File.WriteAllText(filePath, jsonText);
+      
+
+        private void setBackColor() {
+            this.BackColor = SettingData.GetInstance().GetBackColor()[2];
+            menuStrip1.BackColor = this.BackColor;
+            statusStrip1.BackColor = this.BackColor;
+            menuStrip1.ForeColor = SettingData.GetInstance().GetBackColor()[3];
+            statusStrip1.ForeColor = SettingData.GetInstance().GetBackColor()[3];
+            lbTitles.Refresh();
+            foreach (Label label in StaticEvent.GetAllLabels(this)) {
+                label.ForeColor = SettingData.GetInstance().GetBackColor()[3];
+            }
         }
 
         private async void Form1_Load(object sender, EventArgs e) {
+            setBackColor();
             favoriteItems = new List<FavoriteItem>();
-            var items = loadItem<List<FavoriteItem>>("cmbItem.json");
+            var items = StaticEvent.LoadItem<List<FavoriteItem>>("cmbItem.json");
             if (items is not null) {
                 favoriteItems.AddRange(items);
                 upDateCbItems();
@@ -237,17 +245,7 @@ namespace RssReader {
             btReload.Text = isEnable ? "×" : "↻";
         }
 
-        private T? loadItem<T>(string filePath) {
-            if (System.IO.File.Exists(filePath)) {
-                string jsonText = System.IO.File.ReadAllText(filePath);
-                return JsonSerializer.Deserialize<T>(jsonText,
-                    new JsonSerializerOptions {
-                        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                    }
-                );
-            }
-            return default(T);
-        }
+       
 
         public static bool IsValidUrl(string url) {
             if (string.IsNullOrWhiteSpace(url))
@@ -293,26 +291,40 @@ namespace RssReader {
 
             // 背景描画
             e.DrawBackground();
+
             // 描画許可判定
             if (e.Index < 0) {
                 return;
             }
             // 描画用変数設定
             Brush NdClrWd = new SolidBrush(e.ForeColor);
-            string NdWord = ((ListBox)sender).Items[e.Index].ToString()??"";
+            string NdWord = ((ListBox)sender).Items[e.Index].ToString() ?? "";
             // 奇数行の場合は背景色を変更し、縞々に見えるようにする
             Color backcolor;
             if (e.Index % 2 == 0) {
-                backcolor = Color.FromArgb(220, 220, 220);
+                backcolor = SettingData.GetInstance().GetBackColor()[1];
             } else {
-                backcolor = Color.FromArgb(255, 255, 255);
+                backcolor = SettingData.GetInstance().GetBackColor()[0];
             }
             // ノード作成
             e = new DrawItemEventArgs(e.Graphics, e.Font, e.Bounds, e.Index, e.State, e.ForeColor, backcolor);
             e.DrawBackground();
-            e.Graphics.DrawString(NdWord, e.Font, NdClrWd, e.Bounds, StringFormat.GenericDefault);
+            e.Graphics.DrawString(NdWord, e.Font ?? new Font(new FontFamily("ＭＳ ゴシック"), 12f), NdClrWd, e.Bounds, StringFormat.GenericDefault);
             NdClrWd.Dispose();
             e.DrawFocusRectangle();
+        }
+
+        private void tsmiSetting_Click(object sender, EventArgs e) {
+            new SettingDialog().ShowDialog();
+            setBackColor();
+        }
+
+        private void ExitXToolStripMenuItem_Click(object sender, EventArgs e) {
+            Application.Exit();
+        }
+
+        private void AbToolStripMenuItem_Click(object sender, EventArgs e) {
+            new Version().ShowDialog();
         }
     }
 }

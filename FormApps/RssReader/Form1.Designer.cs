@@ -47,6 +47,13 @@
             statusStrip1 = new StatusStrip();
             statusLabel = new ToolStripStatusLabel();
             filtedLabel = new ToolStripStatusLabel();
+            menuStrip1 = new MenuStrip();
+            FileToolStripMenuItem = new ToolStripMenuItem();
+            tsmiSetting = new ToolStripMenuItem();
+            tsmiExit = new ToolStripMenuItem();
+            HelpToolStripMenuItem = new ToolStripMenuItem();
+            tsmiAbout = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)webView21).BeginInit();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -56,13 +63,14 @@
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)loadImage).BeginInit();
             statusStrip1.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // cbUrl
             // 
             cbUrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             cbUrl.Font = new Font("Yu Gothic UI", 12F);
-            cbUrl.Location = new Point(176, 6);
+            cbUrl.Location = new Point(176, 27);
             cbUrl.Name = "cbUrl";
             cbUrl.Size = new Size(349, 29);
             cbUrl.TabIndex = 0;
@@ -72,7 +80,7 @@
             // 
             btRssGet.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssGet.Font = new Font("Yu Gothic UI", 12F);
-            btRssGet.Location = new Point(531, 4);
+            btRssGet.Location = new Point(531, 25);
             btRssGet.Name = "btRssGet";
             btRssGet.Size = new Size(60, 30);
             btRssGet.TabIndex = 1;
@@ -85,7 +93,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Yu Gothic UI", 12F);
-            label1.Location = new Point(12, 11);
+            label1.Location = new Point(12, 32);
             label1.Name = "label1";
             label1.Size = new Size(158, 21);
             label1.TabIndex = 2;
@@ -115,7 +123,7 @@
             webView21.DefaultBackgroundColor = Color.White;
             webView21.Location = new Point(0, 27);
             webView21.Name = "webView21";
-            webView21.Size = new Size(404, 368);
+            webView21.Size = new Size(404, 363);
             webView21.TabIndex = 4;
             webView21.ZoomFactor = 1D;
             webView21.NavigationStarting += webView21_NavigationStarting;
@@ -125,7 +133,7 @@
             // splitContainer1
             // 
             splitContainer1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            splitContainer1.Location = new Point(12, 42);
+            splitContainer1.Location = new Point(12, 61);
             splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -137,7 +145,7 @@
             // 
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Panel2.Controls.Add(webView21);
-            splitContainer1.Size = new Size(675, 408);
+            splitContainer1.Size = new Size(675, 403);
             splitContainer1.SplitterDistance = 267;
             splitContainer1.TabIndex = 5;
             // 
@@ -245,7 +253,7 @@
             btRssFavorite.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssFavorite.Font = new Font("Yu Gothic UI", 12F);
             btRssFavorite.Image = (Image)resources.GetObject("btRssFavorite.Image");
-            btRssFavorite.Location = new Point(597, 4);
+            btRssFavorite.Location = new Point(597, 25);
             btRssFavorite.Name = "btRssFavorite";
             btRssFavorite.Size = new Size(42, 30);
             btRssFavorite.TabIndex = 1;
@@ -258,7 +266,7 @@
             btRssFavoriteRemove.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btRssFavoriteRemove.Font = new Font("Yu Gothic UI", 12F);
             btRssFavoriteRemove.Image = (Image)resources.GetObject("btRssFavoriteRemove.Image");
-            btRssFavoriteRemove.Location = new Point(645, 4);
+            btRssFavoriteRemove.Location = new Point(645, 25);
             btRssFavoriteRemove.Name = "btRssFavoriteRemove";
             btRssFavoriteRemove.Size = new Size(42, 30);
             btRssFavoriteRemove.TabIndex = 1;
@@ -269,7 +277,7 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { statusLabel, filtedLabel });
-            statusStrip1.Location = new Point(0, 440);
+            statusStrip1.Location = new Point(0, 454);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(699, 22);
             statusStrip1.TabIndex = 6;
@@ -285,12 +293,63 @@
             filtedLabel.Name = "filtedLabel";
             filtedLabel.Size = new Size(0, 17);
             // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { FileToolStripMenuItem, HelpToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(699, 24);
+            menuStrip1.TabIndex = 7;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // FileToolStripMenuItem
+            // 
+            FileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmiSetting, toolStripSeparator1, tsmiExit });
+            FileToolStripMenuItem.Name = "FileToolStripMenuItem";
+            FileToolStripMenuItem.Size = new Size(67, 20);
+            FileToolStripMenuItem.Text = "ファイル(&F)";
+            // 
+            // tsmiSetting
+            // 
+            tsmiSetting.Name = "tsmiSetting";
+            tsmiSetting.Size = new Size(155, 22);
+            tsmiSetting.Text = "設定(&O)...";
+            tsmiSetting.Click += tsmiSetting_Click;
+            // 
+            // tsmiExit
+            // 
+            tsmiExit.Name = "tsmiExit";
+            tsmiExit.ShortcutKeys = Keys.Alt | Keys.F4;
+            tsmiExit.Size = new Size(155, 22);
+            tsmiExit.Text = "終了(&X)";
+            tsmiExit.Click += ExitXToolStripMenuItem_Click;
+            // 
+            // HelpToolStripMenuItem
+            // 
+            HelpToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmiAbout });
+            HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
+            HelpToolStripMenuItem.Size = new Size(65, 20);
+            HelpToolStripMenuItem.Text = "ヘルプ(&H)";
+            // 
+            // tsmiAbout
+            // 
+            tsmiAbout.Name = "tsmiAbout";
+            tsmiAbout.Size = new Size(214, 22);
+            tsmiAbout.Text = "このアプリケーションについて(&A)";
+            tsmiAbout.Click += AbToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(152, 6);
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(699, 462);
+            ClientSize = new Size(699, 476);
             Controls.Add(statusStrip1);
+            Controls.Add(menuStrip1);
             Controls.Add(splitContainer1);
             Controls.Add(btRssFavoriteRemove);
             Controls.Add(btRssFavorite);
@@ -298,6 +357,7 @@
             Controls.Add(cbUrl);
             Controls.Add(label1);
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MainMenuStrip = menuStrip1;
             MinimumSize = new Size(400, 250);
             Name = "Form1";
             Text = "RSSリーダー";
@@ -314,6 +374,8 @@
             ((System.ComponentModel.ISupportInitialize)loadImage).EndInit();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -341,5 +403,12 @@
         private Button btListFilter;
         private Panel panel2;
         private ToolStripStatusLabel filtedLabel;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem FileToolStripMenuItem;
+        private ToolStripMenuItem tsmiSetting;
+        private ToolStripMenuItem tsmiExit;
+        private ToolStripMenuItem HelpToolStripMenuItem;
+        private ToolStripMenuItem tsmiAbout;
+        private ToolStripSeparator toolStripSeparator1;
     }
 }

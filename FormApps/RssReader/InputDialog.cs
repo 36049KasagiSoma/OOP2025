@@ -16,6 +16,10 @@ namespace RssReader {
             InitializeComponent();
             lbUrl.Text = url;
             this.items = items;
+            this.BackColor = SettingData.GetInstance().GetBackColor()[2];
+            foreach (Label label in StaticEvent.GetAllLabels(this)) {
+                label.ForeColor = SettingData.GetInstance().GetBackColor()[3];
+            }
         }
 
         private void btOk_Click(object sender, EventArgs e) {
