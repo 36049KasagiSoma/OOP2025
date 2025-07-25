@@ -11,7 +11,7 @@ namespace RssReader {
         public required DateTime PubDate { get; set; }
 
         public override string ToString() {
-            return $"[{PubDate.ToString("yyyy/MM/dd HH:mm:dd")}] {Title}";
+            return $"[{PubDate.ToString("yyyy/MM/dd HH:mm:ss")}] {Title}";
         }
 
     }
