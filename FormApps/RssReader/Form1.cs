@@ -289,6 +289,8 @@ namespace RssReader {
         }
 
         private void lbTitles_DrawItem(object sender, DrawItemEventArgs e) {
+            //参考:https://apuridasuo.hatenablog.com/entry/2020/07/29/135006
+
             // 背景描画
             e.DrawBackground();
             // 描画許可判定
