@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RssReader {
     public class StaticEvent {
-    private StaticEvent() { }
+        private StaticEvent() { }
 
         /// <summary>
         /// コントロール内のラベルを取得します。
