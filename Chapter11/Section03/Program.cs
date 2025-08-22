@@ -14,6 +14,22 @@ namespace Section03 {
             foreach (Match m in matches) {
                 Console.WriteLine($"Index = {m.Index,-6}, Length = {m.Length,-3}, Value = {m.Value}");
             }
+
+            Console.WriteLine("===================================");
+
+
+            var text2 = "private List<string> result = new List<string>();";
+
+            var matches2 = Regex.Matches(text2, @"\b[a-z]+\b").Cast<Match>()
+                .OrderBy(m=>m.Length);
+
+            foreach(Match m in matches2) {
+                Console.WriteLine($"Index = {m.Index,-6}, Length = {m.Length,-3}, Value = {m.Value}");
+            }
+
+
+
+
         }
 
         static string text = "私は、その男の写真を三葉、見たことがある。\r\n" +
