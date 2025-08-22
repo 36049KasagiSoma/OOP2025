@@ -15,6 +15,7 @@ namespace Section03 {
                 Console.WriteLine($"Index = {m.Index,-6}, Length = {m.Length,-3}, Value = {m.Value}");
             }
         }
+
         static string text = "私は、その男の写真を三葉、見たことがある。\r\n" +
             "一葉は、その男の、幼年時代、とでも言うべきであろうか、" +
             "十歳前後かと推定される頃の写真であって、その子供が大勢の女のひとに取りかこまれ、" +

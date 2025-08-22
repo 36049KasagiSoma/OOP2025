@@ -6,11 +6,12 @@ namespace Exercise02 {
         static void Main(string[] args) {
             string filePath = "sample.txt";
             Pickup3DigitNumber(filePath);
+
         }
 
         private static void Pickup3DigitNumber(string filePath) {
             string text = File.ReadAllText(filePath);
-            var matches = Regex.Matches(text, @"\d{3,}");
+            var matches = Regex.Matches(text, @"\b\d{3,}\b");
             foreach (Match m in matches) {
                 Console.WriteLine($"Index = {m.Index,-6}, Length = {m.Length,-3}, Value = {m.Value}");
             }
