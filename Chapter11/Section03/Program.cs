@@ -21,9 +21,9 @@ namespace Section03 {
             var text2 = "private List<string> result = new List<string>();";
 
             var matches2 = Regex.Matches(text2, @"\b[a-z]+\b").Cast<Match>()
-                .OrderBy(m=>m.Length);
+                .OrderBy(m => m.Length);
 
-            foreach(Match m in matches2) {
+            foreach (Match m in matches2) {
                 Console.WriteLine($"Index = {m.Index,-6}, Length = {m.Length,-3}, Value = {m.Value}");
             }
 
@@ -32,7 +32,7 @@ namespace Section03 {
 
         }
 
-        static string text = "私は、その男の写真を三葉、見たことがある。\r\n" +
+        static readonly string text = "私は、その男の写真を三葉、見たことがある。\r\n" +
             "一葉は、その男の、幼年時代、とでも言うべきであろうか、" +
             "十歳前後かと推定される頃の写真であって、その子供が大勢の女のひとに取りかこまれ、" +
             "（それは、その子供の姉たち、妹たち、それから、従姉妹いとこたちかと想像される）" +
