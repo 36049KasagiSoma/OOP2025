@@ -6,16 +6,18 @@ namespace Exercise05 {
         static void Main(string[] args) {
             string text = File.ReadAllText("sample.html");
 
-            var tags = Regex.Matches(text, @"(</?[^>\s]*)(>|\s[^>]*)");
+            // メモ
+            // 1,置き換え元
+            // 2,タグ名を取り出す正規表現
+            // （「<」から始まり、「/」が0～1文字で、「>」「 」が出るまで)
+            // 3,ラムダで、Matchを受け取り、それをLow化
+            string newText = Regex.Replace(
+                text,
+                @"</?[^>\s]+",
+                m => m.Value.ToLower()
+            );
 
-            string work = text;
-            foreach (Match m in tags) {
-                work = work.Substring(0, m.Index)
-                    + m.Groups[1].Value.ToLower() + m.Groups[2].Value
-                    + work.Substring(m.Index + m.Length, work.Length - (m.Index + m.Length));
-            }
-
-            File.WriteAllText("sampleOut.html", work);
+            File.WriteAllText("sampleOut.html", newText);
 
         }
     }
