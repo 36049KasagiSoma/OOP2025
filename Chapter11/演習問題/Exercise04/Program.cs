@@ -5,8 +5,9 @@ namespace Exercise04 {
         static void Main(string[] args) {
             string text = File.ReadAllText("sample.txt");
             string newText = Regex.Replace(text,
-                @"(V|v)ersion\s*=\s*""v4.0""",
+                @"[vV]ersion\s*=\s*""v4.0""",
                 @"version=""v5.0""");
+            Console.WriteLine(newText);
             File.WriteAllText("sample.txt", newText);
         }
     }
