@@ -4,3 +4,17 @@
         <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" />
     </startup>
 </configuration>
+
+<Applications>
+  <!-- これは置換対象 -->
+  <Application name="App1" version="v4.0" />
+
+  <!-- これも置換対象（大文字V） -->
+  <Application name="App2" Version="v4.0" />
+
+  <!-- これは対象外（v3.5なので置換されない） -->
+  <Application name="App3" version="v3.5" />
+
+  <!-- version 属性なし -->
+  <Application name="App4" />
+</Applications>
