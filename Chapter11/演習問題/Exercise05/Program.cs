@@ -5,7 +5,9 @@ namespace Exercise05 {
     internal class Program {
         static void Main(string[] args) {
             string text = File.ReadAllText("sample.html");
-
+            //
+            // XMLが正しいことを前提とする。
+            //
             // メモ
             // 1,置き換え元
             // 2,タグ名を取り出す正規表現
