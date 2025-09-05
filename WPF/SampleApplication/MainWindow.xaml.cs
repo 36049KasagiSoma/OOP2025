@@ -48,11 +48,11 @@ namespace SampleApplication {
         }
 
         private void checkBox_Checked(object sender, RoutedEventArgs e) {
-            chackbocTextBlock.Text = "チェックON";
+            chackbocTextBlock.Text = "チェック済み";
         }
 
         private void checkBox_Unchecked(object sender, RoutedEventArgs e) {
-            chackbocTextBlock.Text = "チェックOFF";
+            chackbocTextBlock.Text = "未チェック";
         }
     }
 }
