@@ -12,7 +12,18 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel x:Name="colorPreview" Grid.Column="0" Margin="10"/>
+        
+        <Grid  Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="colorPreview" Grid.Row="0" Margin="10"/>
+            <TextBox x:Name="color10code" Grid.Row="1" Margin="5,5,5,2.5" IsReadOnly="True"/>
+            <TextBox x:Name="color16code" Grid.Row="2" Margin="5,2.5,5,5" IsReadOnly="True"/>
+        </Grid>
+        
         <Grid Grid.Column="1" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

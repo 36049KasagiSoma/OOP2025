@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,34 +26,53 @@ namespace ColorChecker {
             setupPreview();
         }
 
-        List<Border> stackPanels;           // Preview用のBorderリスト
+        List<Border> stockBorder;           // Preview用のBorderリスト
         private bool isUpdating = false;    // コンボボックス更新中フラグ
-
+        private Border selectedBorder;      // 選択中のBorder
 
         private void setupPreview() {
-            stackPanels = new List<Border>();
+            stockBorder = new List<Border>();
             for (int i = 0; i < stockGrid.RowDefinitions.Count; i++) {
                 for (int j = 0; j < stockGrid.ColumnDefinitions.Count; j++) {
                     Border border = new Border();
                     border.Margin = new Thickness(3);
                     border.BorderBrush = Brushes.Gray;
                     border.BorderThickness = new Thickness(1);
-                    border.Background = null;
+                    border.ToolTip = $"R:255,G:255,B:255";  // 初期ToolTip
+                    //border.Background = null;
+                    border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                     Grid.SetRow(border, i);
                     Grid.SetColumn(border, j);
                     border.MouseLeftButtonDown += (s, e) => {
-                        if (e.ClickCount == 2 && this.Background != null) {
+                        Color color = ((SolidColorBrush)this.Background).Color;
+                        if (e.ClickCount == 2) {
                             colorComboBox.SelectedIndex = -1;
                             colorPreview.Background = border.Background;
                             SolidColorBrush brush = (SolidColorBrush)border.Background;
                             redSlider.Value = brush.Color.R;
                             greenSlider.Value = brush.Color.G;
                             blueSlider.Value = brush.Color.B;
+                            updateTextBox();
+                        } else if (e.ClickCount == 1) {
+                            updateSelectBorder(border);
                         }
                     };
 
                     stockGrid.Children.Add(border);
-                    stackPanels.Add(border);
+                    stockBorder.Add(border);
+                }
+            }
+        }
+
+        private void updateSelectBorder(Border highlight) {
+            foreach (Border b in stockBorder) {
+                if (b == highlight) {
+                    b.BorderBrush = Brushes.Red;
+                    b.BorderThickness = new Thickness(2);
+                    selectedBorder = b;
+                } else {
+                    b.BorderBrush = Brushes.Gray;
+                    b.BorderThickness = new Thickness(1);
                 }
             }
         }
@@ -60,26 +80,37 @@ namespace ColorChecker {
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             Color color = Color.FromRgb((byte)redSlider.Value, (byte)greenSlider.Value, (byte)blueSlider.Value);
             colorPreview.Background = new SolidColorBrush(color);
-            if(!isUpdating) {
+            if (!isUpdating) {
                 colorComboBox.SelectedIndex = -1;
             }
+            updateTextBox();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
-            shiftPanel();
-            stackPanels[0].Background = colorPreview.Background;
+            //shiftPanel();
+            if (selectedBorder == null) return;
+            selectedBorder.Background = colorPreview.Background;
+            SolidColorBrush brush = (SolidColorBrush)selectedBorder.Background;
+            selectedBorder.ToolTip = $"R:{brush.Color.R},G:{brush.Color.G},B:{brush.Color.B}";
 
         }
-        private void shiftPanel() {
-            for (int i = stackPanels.Count - 1; i > 0; i--) {
-                Border c = stackPanels[i];
-                Border p = stackPanels[i - 1];
-                c.Background = p.Background;
-            }
+        //private void shiftPanel() {
+        //    for (int i = stockBorder.Count - 1; i > 0; i--) {
+        //        Border c = stockBorder[i];
+        //        Border p = stockBorder[i - 1];
+        //        c.Background = p.Background;
+        //    }
+        //}
+
+        private void updateTextBox() {
+            SolidColorBrush brush = (SolidColorBrush)colorPreview.Background;
+            Color mycolor = brush.Color;
+            color10code.Text = $"{mycolor.R},{mycolor.G},{mycolor.B}";
+            color16code.Text = $"#{mycolor.R:X2}{mycolor.G:X2}{mycolor.B:X2}";
         }
 
         private void colorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if(colorComboBox.SelectedItem == null) return;
+            if (colorComboBox.SelectedItem == null) return;
             isUpdating = true;
             var selectItem = (KeyValuePair<string, Brush>)((ComboBox)sender).SelectedItem;
             SolidColorBrush brush = (SolidColorBrush)selectItem.Value;
@@ -88,6 +119,7 @@ namespace ColorChecker {
             redSlider.Value = mycolor.R;
             greenSlider.Value = mycolor.G;
             blueSlider.Value = mycolor.B;
+            updateTextBox();
             isUpdating = false;
         }
 
@@ -105,6 +137,10 @@ namespace ColorChecker {
                 }
             }
             return dict;
+        }
+
+        private void color10code_KeyDown(object sender, KeyEventArgs e) {
+
         }
     }
 }
