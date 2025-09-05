@@ -40,9 +40,9 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Text="G" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Text="B" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <Slider x:Name="redSlider" Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="255" VerticalAlignment="Center" ValueChanged="slider_ValueChanged"/>
-            <Slider x:Name="greenSlider" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" VerticalAlignment="Center" ValueChanged="slider_ValueChanged"/>
-            <Slider x:Name="blueSlider" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" VerticalAlignment="Center" ValueChanged="slider_ValueChanged"/>
+            <Slider x:Name="redSlider" Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="255" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="slider_ValueChanged"/>
+            <Slider x:Name="greenSlider" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="255" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="slider_ValueChanged"/>
+            <Slider x:Name="blueSlider" Grid.Row="2" Grid.Column="1" Minimum="0" Maximum="255" VerticalAlignment="Center" IsSnapToTickEnabled="True" ValueChanged="slider_ValueChanged"/>
 
             <TextBox Name="redTextBox" 
                      Margin="5"
