@@ -61,6 +61,7 @@ namespace ColorChecker {
                     MenuItem item_copy_10code = new MenuItem { Header = "10進コード" };
                     MenuItem item_copy_16code = new MenuItem { Header = "16進コード" };
                     MenuItem item_clear = new MenuItem { Header = "クリア" };
+                    MenuItem item_clearAll = new MenuItem { Header = "すべてクリア" };
                     item_select.Icon = new Image {
                         Source = new BitmapImage(new Uri("pack://application:,,,/ColorChecker;component/Image/selectIcon.png", UriKind.Absolute)),
                         Width = 16,
@@ -78,6 +79,11 @@ namespace ColorChecker {
                     };
                     item_clear.Icon = new Image {
                         Source = new BitmapImage(new Uri("pack://application:,,,/ColorChecker;component/Image/clearIcon.png", UriKind.Absolute)),
+                        Width = 16,
+                        Height = 16
+                    };
+                    item_clearAll.Icon = new Image {
+                        Source = new BitmapImage(new Uri("pack://application:,,,/ColorChecker;component/Image/clearAllIcon.png", UriKind.Absolute)),
                         Width = 16,
                         Height = 16
                     };
@@ -101,6 +107,18 @@ namespace ColorChecker {
                         border.BorderBrush = Brushes.Gray;
                         border.BorderThickness = new Thickness(1);
                     };
+                    item_clearAll.Click += (s, e) => {
+                        if( MessageBox.Show("すべての色をクリアします。よろしいですか？",
+                            "確認", MessageBoxButton.YesNo, MessageBoxImage.Question)
+                        != MessageBoxResult.Yes) return;
+                        foreach (Border b in stockBorder) {
+                            b.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+                            b.ToolTip = $"R:255,G:255,B:255";
+                            if (selectedBorder == b) selectedBorder = null;
+                            b.BorderBrush = Brushes.Gray;
+                            b.BorderThickness = new Thickness(1);
+                        }
+                    };
 
                     contextMenu.Items.Add(item_select);
                     contextMenu.Items.Add(item_reflection);
@@ -109,6 +127,7 @@ namespace ColorChecker {
                     item_copy.Items.Add(item_copy_16code);
                     contextMenu.Items.Add(new Separator());
                     contextMenu.Items.Add(item_clear);
+                    contextMenu.Items.Add(item_clearAll);
                     border.ContextMenu = contextMenu;
 
 
