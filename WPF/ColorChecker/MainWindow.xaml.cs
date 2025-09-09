@@ -221,6 +221,9 @@ namespace ColorChecker {
             color16code.Text = $"#{mycolor.R:X2}{mycolor.G:X2}{mycolor.B:X2}";
         }
 
+        /// <summary>
+        /// ColorからBrushesクラスの名前を取得します。
+        /// </summary>
         private string getColorName(Color color) {
             foreach (var item in MakeBrushesDictionary()) {
                 SolidColorBrush brush = (SolidColorBrush)item.Value;
