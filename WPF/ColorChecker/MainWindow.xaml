@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ColorChecker"
         mc:Ignorable="d"
+        Closed="Window_Closed"
         Title="ColorChecker" Height="300" Width="700" MinHeight="300" MinWidth="700">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -12,18 +13,28 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid  Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Border x:Name="colorPreview" Grid.Row="0" Margin="10"/>
-            <TextBox x:Name="color10code" Grid.Row="1" Margin="5,5,5,2.5" IsReadOnly="True"/>
-            <TextBox x:Name="color16code" Grid.Row="2" Margin="5,2.5,5,5" IsReadOnly="True"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="colorPreview" Grid.Row="0" Grid.ColumnSpan="2" Margin="5"/>
+            <TextBox x:Name="color10code" Grid.Row="1" Grid.Column="0" Margin="5,5,0,2.5" VerticalContentAlignment="Center" PreviewKeyDown ="color10code_PreviewKeyDown"/>
+            <TextBox x:Name="color16code" Grid.Row="2" Grid.Column="0" Margin="5,2.5,0,5" VerticalContentAlignment="Center" PreviewKeyDown="color16code_PreviewKeyDown"/>
+            <Button Grid.Row="1" Grid.Column="1" Margin="0,5,5,2.5" Click="Button_10Code_Copy_Click" VerticalContentAlignment="Center">
+                <Image Height="14" Source="/ColorChecker;component/Image/copyIcon.png" Stretch="Fill" Width="14"/>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="1" Margin="0,2.5,5,5" Click="Button_16Code_Copy_Click" VerticalContentAlignment="Center">
+                <Image Height="14" Source="/ColorChecker;component/Image/copyIcon.png" Stretch="Fill" Width="14"/>
+            </Button>
         </Grid>
-        
+
         <Grid Grid.Column="1" Margin="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
