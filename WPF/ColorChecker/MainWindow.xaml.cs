@@ -61,6 +61,26 @@ namespace ColorChecker {
                     MenuItem item_copy_10code = new MenuItem { Header = "10進コード" };
                     MenuItem item_copy_16code = new MenuItem { Header = "16進コード" };
                     MenuItem item_clear = new MenuItem { Header = "クリア" };
+                    item_select.Icon = new Image {
+                        Source = new BitmapImage(new Uri("pack://application:,,,/ColorChecker;component/Image/selectIcon.png", UriKind.Absolute)),
+                        Width = 16,
+                        Height = 16
+                    };
+                    item_reflection.Icon = new Image {
+                        Source = new BitmapImage(new Uri("pack://application:,,,/ColorChecker;component/Image/checkIcon.png", UriKind.Absolute)),
+                        Width = 16,
+                        Height = 16
+                    };
+                    item_copy.Icon = new Image {
+                        Source = new BitmapImage(new Uri("pack://application:,,,/ColorChecker;component/Image/copyIcon.png", UriKind.Absolute)),
+                        Width = 16,
+                        Height = 16
+                    };
+                    item_clear.Icon = new Image {
+                        Source = new BitmapImage(new Uri("pack://application:,,,/ColorChecker;component/Image/clearIcon.png", UriKind.Absolute)),
+                        Width = 16,
+                        Height = 16
+                    };
                     item_select.Click += (s, e) => updateSelectBorder(border);
                     item_reflection.Click += (s, e) => {
                         updateSelectBorder(border);         // 選択して
@@ -68,7 +88,7 @@ namespace ColorChecker {
                     };
                     item_copy_10code.Click += (s, e) => {
                         Color color = ((SolidColorBrush)border.Background).Color;
-                        Clipboard.SetText($"{color.R}, {color.G}, {color.B}");
+                        Clipboard.SetText($"{color.R},{color.G},{color.B}");
                     };
                     item_copy_16code.Click += (s, e) => {
                         Color color = ((SolidColorBrush)border.Background).Color;
@@ -193,7 +213,11 @@ namespace ColorChecker {
         private void color10code_PreviewKeyDown(object sender, KeyEventArgs e) {
             if (e.Key == Key.Enter) {
                 string[] rgb = color10code.Text.Split(',');
-                if (rgb.Length != 3) return;
+                if (rgb.Length != 3) {
+                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
                 if (byte.TryParse(rgb[0], out byte r) &&
                     byte.TryParse(rgb[1], out byte g) &&
                     byte.TryParse(rgb[2], out byte b)) {
@@ -204,6 +228,8 @@ namespace ColorChecker {
                     blueSlider.Value = b;
                     colorComboBox.SelectedIndex = -1;
                     isUpdating = false;
+                } else {
+                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -215,7 +241,10 @@ namespace ColorChecker {
                     color16code.Text = "#" + hex;
                     hex = "#" + hex;
                 }
-                if (!Regex.IsMatch(hex, @"^#[0-9a-fA-F]{6}$")) return;
+                if (!Regex.IsMatch(hex, @"^#[0-9a-fA-F]{6}$")) {
+                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 isUpdating = true;
                 object obj = ColorConverter.ConvertFromString(hex);
                 var color = (Color)obj;

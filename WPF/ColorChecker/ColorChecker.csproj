@@ -129,11 +129,19 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="selectIcon.png" />
+    <Resource Include="Image\selectIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Image\copyIcon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Image\checkIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\clearIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image\mainIcon.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

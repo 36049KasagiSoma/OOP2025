@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ColorChecker"
         mc:Ignorable="d"
+        Icon="/ColorChecker;component/Image/mainIcon.png"
         Closed="Window_Closed"
         Title="ColorChecker" Height="300" Width="700" MinHeight="300" MinWidth="700">
     <Grid>
