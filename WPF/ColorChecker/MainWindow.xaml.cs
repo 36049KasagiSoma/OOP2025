@@ -51,7 +51,8 @@ namespace ColorChecker {
                 if (brush != null) {
                     for (int i = 0; i < brush.Length && i < stockBorder.Count; i++) {
                         stockBorder[i].Background = new SolidColorBrush(brush[i]);
-                        stockBorder[i].ToolTip = $"R:{brush[i].R},G:{brush[i].G},B:{brush[i].B}";
+                        string colorName = getColorName(brush[i]);
+                        stockBorder[i].ToolTip = $"R:{brush[i].R},G:{brush[i].G},B:{brush[i].B}{getColorName(brush[i])}";
                     }
                 }
             }
@@ -65,7 +66,7 @@ namespace ColorChecker {
             border.Margin = new Thickness(3);
             border.BorderBrush = Brushes.Gray;
             border.BorderThickness = new Thickness(1);
-            border.ToolTip = $"R:255,G:255,B:255";  // 初期ToolTip
+            border.ToolTip = $"R:255,G:255,B:255{getColorName(Color.FromRgb(255,255,255))}";  // 初期ToolTip
 
             border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 
@@ -149,7 +150,7 @@ namespace ColorChecker {
             };
             item_clear.Click += (s, e) => {
                 border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                border.ToolTip = $"R:255,G:255,B:255";
+                border.ToolTip = $"R:255,G:255,B:255{getColorName(Color.FromRgb(255,255,255))}";
                 if (selectedBorder == border) selectedBorder = null;
                 border.BorderBrush = Brushes.Gray;
                 border.BorderThickness = new Thickness(1);
@@ -160,7 +161,7 @@ namespace ColorChecker {
                 != MessageBoxResult.Yes) return;
                 foreach (Border b in stockBorder) {
                     b.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                    b.ToolTip = $"R:255,G:255,B:255";
+                    b.ToolTip = $"R:255,G:255,B:255{getColorName(Color.FromRgb(255, 255, 255))}";
                     if (selectedBorder == b) selectedBorder = null;
                     b.BorderBrush = Brushes.Gray;
                     b.BorderThickness = new Thickness(1);
@@ -220,6 +221,16 @@ namespace ColorChecker {
             color16code.Text = $"#{mycolor.R:X2}{mycolor.G:X2}{mycolor.B:X2}";
         }
 
+        private string getColorName(Color color) {
+            foreach (var item in MakeBrushesDictionary()) {
+                SolidColorBrush brush = (SolidColorBrush)item.Value;
+                if (brush.Color == color) {
+                    return " "+item.Key;
+                }
+            }
+            return "";
+        }
+
         // カラースライダーの値変化時のイベント
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             Color color = Color.FromRgb((byte)redSlider.Value, (byte)greenSlider.Value, (byte)blueSlider.Value);
@@ -238,7 +249,7 @@ namespace ColorChecker {
             }
             selectedBorder.Background = colorPreview.Background;
             SolidColorBrush brush = (SolidColorBrush)selectedBorder.Background;
-            selectedBorder.ToolTip = $"R:{brush.Color.R},G:{brush.Color.G},B:{brush.Color.B}";
+            selectedBorder.ToolTip = $"R:{brush.Color.R},G:{brush.Color.G},B:{brush.Color.B}{getColorName(brush.Color)}";
 
         }
 
