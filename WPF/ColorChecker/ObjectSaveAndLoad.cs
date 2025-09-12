@@ -11,7 +11,7 @@ namespace ColorChecker {
     public class ObjectSaveAndLoad {
         private ObjectSaveAndLoad() { }
 
-        // 仮置き
+        // 仮置き(鍵をべた書きするのは本来非推奨)
         private static string key = "XsjysrbhHip6L4dp";
 
         /// <summary>
