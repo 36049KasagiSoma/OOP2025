@@ -139,6 +139,7 @@ namespace ColorChecker {
                         // ドロップ完了後に枠線を元に戻す
                         border.BorderBrush = Brushes.Gray;
                         border.BorderThickness = new Thickness(1);
+                        updateSelectBorder(selectedBorder);
                     }
                 }
             };
