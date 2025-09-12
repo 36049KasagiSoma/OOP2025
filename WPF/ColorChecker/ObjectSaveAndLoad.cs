@@ -15,7 +15,7 @@ namespace ColorChecker {
         private static string key = "XsjysrbhHip6L4dp";
 
         /// <summary>
-        /// Jsonで保存します。
+        /// バイナリで保存します。
         /// </summary>
         public static T LoadItem<T>(string filePath) {
             if (System.IO.File.Exists(filePath)) {
@@ -30,7 +30,7 @@ namespace ColorChecker {
         }
 
         /// <summary>
-        /// Jsonを読み込みます。
+        /// バイナリを読み込みます。
         /// </summary>
         public static void SaveItem(string filePath, object item) {
             string jsonText = JsonSerializer.Serialize(item,
