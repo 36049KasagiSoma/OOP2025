@@ -22,6 +22,7 @@ namespace ColorChecker {
     /// </summary>
     public partial class MainWindow : Window {
         public MainWindow() {
+            LoadSaveData();
             InitializeComponent();
             slider_ValueChanged(null, null);
             colorComboBox.ItemsSource = MakeBrushesDictionary();
@@ -31,9 +32,29 @@ namespace ColorChecker {
         List<Border> stockBorder;           // Preview用のBorderリスト
         private bool isUpdating = false;    // コンボボックス更新中フラグ
         private Border selectedBorder;      // 選択中のBorder
+        private int rowCount = 6;           // Borderの行数
+        private int columnCount = 5;        // Borderの列数
+        private SettingData settingData;    // 設定データ
+
+        /// <summary>
+        /// 設定データを読み込みます。
+        /// </summary>
+        private void LoadSaveData(){
+            settingData = JsonEvent.LoadItem<SettingData>("setting.json");
+            if (settingData != null) {
+                rowCount = settingData.RowCount;
+                columnCount = settingData.ColCount;
+            }
+        }
 
         // Preview用のBorderを生成
-        private void setupPreview() { 
+        private void setupPreview() {
+            for(int i = 0; i < rowCount; i++) {
+                stockGrid.RowDefinitions.Add(new RowDefinition());
+            }
+            for(int j = 0; j < columnCount; j++) {
+                stockGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            }
             stockBorder = new List<Border>();
             for (int i = 0; i < stockGrid.RowDefinitions.Count; i++) {
                 for (int j = 0; j < stockGrid.ColumnDefinitions.Count; j++) {
@@ -52,7 +73,7 @@ namespace ColorChecker {
                     for (int i = 0; i < brush.Length && i < stockBorder.Count; i++) {
                         stockBorder[i].Background = new SolidColorBrush(brush[i]);
                         string colorName = getColorName(brush[i]);
-                        stockBorder[i].ToolTip = $"R:{brush[i].R},G:{brush[i].G},B:{brush[i].B}{getColorName(brush[i])}";
+                        updateBorderToolTip(stockBorder[i]);
                     }
                 }
             }
@@ -66,10 +87,11 @@ namespace ColorChecker {
             border.Margin = new Thickness(3);
             border.BorderBrush = Brushes.Gray;
             border.BorderThickness = new Thickness(1);
-            border.ToolTip = $"R:255,G:255,B:255{getColorName(Color.FromRgb(255,255,255))}";  // 初期ToolTip
+            updateBorderToolTip(border);
 
             border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 
+            // 左クリック時
             border.MouseLeftButtonDown += (s, e) => {
                 Color color = ((SolidColorBrush)this.Background).Color;
                 if (e.ClickCount == 2) {
@@ -79,8 +101,65 @@ namespace ColorChecker {
                 }
             };
 
+            // ドラッグオーバー時
+            border.DragEnter += (s, e) => {
+                if (e.Data.GetDataPresent(typeof(Border))) {
+                    Border sender = (Border)e.Data.GetData(typeof(Border));
+                    if(sender == border) return;
+                    border.BorderBrush = Brushes.Orange;
+                    border.BorderThickness = new Thickness(3);
+                }
+            };
+
+            // ドラッグリーブ時(ドラッグが外れたとき)
+            border.DragLeave += (s, e) => {
+                Border sender = (Border)e.Data.GetData(typeof(Border));
+                if (sender == border) return;
+                border.BorderBrush = Brushes.Gray;
+                border.BorderThickness = new Thickness(1);
+            };
+
+            // ドラッグ開始時
+            border.MouseMove += (s, e) => {
+                if (e.LeftButton == MouseButtonState.Pressed) {
+                    if (border.Background is SolidColorBrush brush) {
+                        border.BorderBrush = Brushes.Blue;
+                        border.BorderThickness = new Thickness(2);
+                        DragDrop.DoDragDrop(border, border, DragDropEffects.Copy);
+                        border.BorderBrush = Brushes.Gray;
+                        border.BorderThickness = new Thickness(1);
+                    }
+                }
+            };
+
+            // ドロップ受け入れ設定
+            border.AllowDrop = true;
+            border.Drop += (s, e) => {
+                if (e.Data.GetDataPresent(typeof(Border))) {
+                    Border sender = (Border)e.Data.GetData(typeof(Border));
+                    Color newColor = ((SolidColorBrush)sender.Background).Color;
+                    Color oldColor = ((SolidColorBrush)border.Background).Color;
+                    border.Background = new SolidColorBrush(newColor);
+                    sender.Background = new SolidColorBrush(oldColor);
+                    updateBorderToolTip(border);
+                    updateBorderToolTip(sender);
+                    selectedBorder = border;
+                    updateSelectBorder(border);
+                }
+            };
+
             setupBorderContextMenu(border);
             return border;
+        }
+
+        /// <summary>
+        /// 指定されたBorderのツールチップを更新します。
+        /// </summary>
+        private void updateBorderToolTip(Border border) {
+            if (border.Background is SolidColorBrush brush) {
+                Color color = brush.Color;
+                border.ToolTip = $"R:{color.R},G:{color.G},B:{color.B}{getColorName(color)}";
+            }
         }
 
         /// <summary>
@@ -150,7 +229,7 @@ namespace ColorChecker {
             };
             item_clear.Click += (s, e) => {
                 border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                border.ToolTip = $"R:255,G:255,B:255{getColorName(Color.FromRgb(255,255,255))}";
+                updateBorderToolTip(border);
                 if (selectedBorder == border) selectedBorder = null;
                 border.BorderBrush = Brushes.Gray;
                 border.BorderThickness = new Thickness(1);
@@ -161,7 +240,7 @@ namespace ColorChecker {
                 != MessageBoxResult.Yes) return;
                 foreach (Border b in stockBorder) {
                     b.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-                    b.ToolTip = $"R:255,G:255,B:255{getColorName(Color.FromRgb(255, 255, 255))}";
+                    updateBorderToolTip(b);
                     if (selectedBorder == b) selectedBorder = null;
                     b.BorderBrush = Brushes.Gray;
                     b.BorderThickness = new Thickness(1);
@@ -228,7 +307,7 @@ namespace ColorChecker {
             foreach (var item in MakeBrushesDictionary()) {
                 SolidColorBrush brush = (SolidColorBrush)item.Value;
                 if (brush.Color == color) {
-                    return " "+item.Key;
+                    return " " + item.Key;
                 }
             }
             return "";
@@ -252,7 +331,7 @@ namespace ColorChecker {
             }
             selectedBorder.Background = colorPreview.Background;
             SolidColorBrush brush = (SolidColorBrush)selectedBorder.Background;
-            selectedBorder.ToolTip = $"R:{brush.Color.R},G:{brush.Color.G},B:{brush.Color.B}{getColorName(brush.Color)}";
+            updateBorderToolTip(selectedBorder);
 
         }
 
@@ -349,6 +428,28 @@ namespace ColorChecker {
         private void Window_Closed(object sender, EventArgs e) {
             Color[] brush = stockBorder.Select(b => ((SolidColorBrush)b.Background).Color).ToArray();
             JsonEvent.SaveItem("stocks.json", brush);
+        }
+
+        // 色のファイル保存
+        private void SaveColors() {
+            Color[] brush = stockBorder.Select(b => ((SolidColorBrush)b.Background).Color).ToArray();
+            JsonEvent.SaveItem("stocks.json", brush);
+        }
+
+        // メニューイベント（About、Setting）
+        private void About_MenuItem_Click(object sender, RoutedEventArgs e) {
+            Window about = new AboutWindow();
+            about.ShowDialog();
+        }
+        private void Setting_MenuItem_Click(object sender, RoutedEventArgs e) {
+            Window setting = new SettingWindow();
+            setting.ShowDialog();
+            LoadSaveData();
+            SaveColors();
+            stockGrid.Children.Clear();
+            stockGrid.RowDefinitions.Clear();
+            stockGrid.ColumnDefinitions.Clear();
+            setupPreview();
         }
     }
 }
