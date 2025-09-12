@@ -35,12 +35,14 @@ namespace ColorChecker {
         private int rowCount = 6;           // Borderの行数
         private int columnCount = 5;        // Borderの列数
         private SettingData settingData;    // 設定データ
+        public const string settingFilePath = "setting.bin"; // 設定ファイルのパス
+        private static string stockFilePath = "stocks.bin";  // ストックデータのパス
 
         /// <summary>
         /// 設定データを読み込みます。
         /// </summary>
         private void LoadSaveData(){
-            settingData = JsonEvent.LoadItem<SettingData>("setting.json");
+            settingData = ObjectSaveAndLoad.LoadItem<SettingData>(settingFilePath);
             if (settingData != null) {
                 rowCount = settingData.RowCount;
                 columnCount = settingData.ColCount;
@@ -71,8 +73,8 @@ namespace ColorChecker {
             }
 
             //Jsonから保存データを読み込み
-            if (File.Exists("stocks.json")) {
-                Color[] brush = JsonEvent.LoadItem<Color[]>("stocks.json");
+            if (File.Exists(stockFilePath)) {
+                Color[] brush = ObjectSaveAndLoad.LoadItem<Color[]>(stockFilePath);
                 if (brush != null) {
                     for (int i = 0; i < brush.Length && i < stockBorder.Count; i++) {
                         stockBorder[i].Background = new SolidColorBrush(brush[i]);
@@ -471,9 +473,9 @@ namespace ColorChecker {
 
         // 色のファイル保存
         private void SaveColors() {
-            // Borderの色をColor配列に変換して保存
+            // Borderの色をColor配列に変換して保存  
             Color[] brush = stockBorder.Select(b => ((SolidColorBrush)b.Background).Color).ToArray();
-            JsonEvent.SaveItem("stocks.json", brush);
+            ObjectSaveAndLoad.SaveItem(stockFilePath, brush);
         }
 
         // メニューイベント（About、Setting）

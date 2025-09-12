@@ -19,7 +19,7 @@ namespace ColorChecker {
     public partial class SettingWindow : Window {
         public SettingWindow() {
             InitializeComponent();
-            SettingData setting = JsonEvent.LoadItem<SettingData>("setting.json");
+            SettingData setting = ObjectSaveAndLoad.LoadItem<SettingData>(MainWindow.settingFilePath);
             if (setting != null) {
                 rowSlider.Value = setting.RowCount;
                 columnSlider.Value = setting.ColCount;
@@ -27,7 +27,7 @@ namespace ColorChecker {
         }
 
         private void OK_Button_Click(object sender, RoutedEventArgs e) {
-            JsonEvent.SaveItem("setting.json", new SettingData() {
+            ObjectSaveAndLoad.SaveItem(MainWindow.settingFilePath, new SettingData() {
                 RowCount = (int)rowSlider.Value,
                 ColCount = (int)columnSlider.Value
             });

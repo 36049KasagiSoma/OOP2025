@@ -8,15 +8,18 @@ using System.Text.Unicode;
 using System.Threading.Tasks;
 
 namespace ColorChecker {
-    public class JsonEvent {
-        private JsonEvent() { }
+    public class ObjectSaveAndLoad {
+        private ObjectSaveAndLoad() { }
+
+        // 仮置き
+        private static string key = "XsjysrbhHip6L4dp";
 
         /// <summary>
         /// Jsonで保存します。
         /// </summary>
         public static T LoadItem<T>(string filePath) {
             if (System.IO.File.Exists(filePath)) {
-                string jsonText = System.IO.File.ReadAllText(filePath);
+                string jsonText = Encryption.DecryptString(System.IO.File.ReadAllText(filePath),key);
                 return JsonSerializer.Deserialize<T>(jsonText,
                     new JsonSerializerOptions {
                         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
@@ -35,7 +38,7 @@ namespace ColorChecker {
                     Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                     WriteIndented = true
                 });
-            System.IO.File.WriteAllText(filePath, jsonText);
+            System.IO.File.WriteAllText(filePath, Encryption.EncryptString(jsonText,key));
         }
     }
 }
