@@ -36,7 +36,7 @@ namespace ColorChecker {
         private int columnCount = 5;        // Borderの列数
         private SettingData settingData;    // 設定データ
         public const string settingFilePath = "setting.bin"; // 設定ファイルのパス
-        private static string stockFilePath = "stocks.bin";  // ストックデータのパス
+        private static string stockFilePath = "stocks.bin";  // ストックデータファイルのパス
 
         /// <summary>
         /// 設定データを読み込みます。
