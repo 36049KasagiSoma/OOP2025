@@ -72,7 +72,7 @@ namespace ColorChecker {
                 }
             }
 
-            //Jsonから保存データを読み込み
+            // 保存データを読み込み
             if (File.Exists(stockFilePath)) {
                 Color[] brush = ObjectSaveAndLoad.LoadItem<Color[]>(stockFilePath);
                 if (brush != null) {
