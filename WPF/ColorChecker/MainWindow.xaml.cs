@@ -49,12 +49,16 @@ namespace ColorChecker {
 
         // Preview用のBorderを生成
         private void setupPreview() {
-            for(int i = 0; i < rowCount; i++) {
+
+            // Gridの行列を設定
+            for (int i = 0; i < rowCount; i++) {
                 stockGrid.RowDefinitions.Add(new RowDefinition());
             }
             for(int j = 0; j < columnCount; j++) {
                 stockGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
+
+            // Borderを生成してGridに追加
             stockBorder = new List<Border>();
             for (int i = 0; i < stockGrid.RowDefinitions.Count; i++) {
                 for (int j = 0; j < stockGrid.ColumnDefinitions.Count; j++) {
@@ -83,16 +87,19 @@ namespace ColorChecker {
         /// ストック用のBorderを生成します。
         /// </summary>
         private Border setupBorder() {
+            // Borderの基本設定
             Border border = new Border();
             border.Margin = new Thickness(3);
             border.BorderBrush = Brushes.Gray;
             border.BorderThickness = new Thickness(1);
             updateBorderToolTip(border);
 
+            // 初期色:白
             border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 
             // 左クリック時
             border.MouseLeftButtonDown += (s, e) => {
+                // シングルクリックは選択、ダブルクリックはプレビューに反映
                 Color color = ((SolidColorBrush)this.Background).Color;
                 if (e.ClickCount == 2) {
                     updatePreviewFromBorder(border);
@@ -104,6 +111,7 @@ namespace ColorChecker {
             // ドラッグオーバー時
             border.DragEnter += (s, e) => {
                 if (e.Data.GetDataPresent(typeof(Border))) {
+                    // ドラッグ時に枠線をオレンジにする
                     Border sender = (Border)e.Data.GetData(typeof(Border));
                     if(sender == border) return;
                     border.BorderBrush = Brushes.Orange;
@@ -113,6 +121,7 @@ namespace ColorChecker {
 
             // ドラッグリーブ時(ドラッグが外れたとき)
             border.DragLeave += (s, e) => {
+                // 枠線を元に戻す
                 Border sender = (Border)e.Data.GetData(typeof(Border));
                 if (sender == border) return;
                 border.BorderBrush = Brushes.Gray;
@@ -123,9 +132,11 @@ namespace ColorChecker {
             border.MouseMove += (s, e) => {
                 if (e.LeftButton == MouseButtonState.Pressed) {
                     if (border.Background is SolidColorBrush brush) {
+                        // ドラッグBorderの枠線を青にしてドラッグ開始
                         border.BorderBrush = Brushes.Blue;
-                        border.BorderThickness = new Thickness(2);
+                        border.BorderThickness = new Thickness(3);
                         DragDrop.DoDragDrop(border, border, DragDropEffects.Copy);
+                        // ドロップ完了後に枠線を元に戻す
                         border.BorderBrush = Brushes.Gray;
                         border.BorderThickness = new Thickness(1);
                     }
@@ -136,11 +147,13 @@ namespace ColorChecker {
             border.AllowDrop = true;
             border.Drop += (s, e) => {
                 if (e.Data.GetDataPresent(typeof(Border))) {
+                    // ドロップされたBorderの色を入れ替える
                     Border sender = (Border)e.Data.GetData(typeof(Border));
                     Color newColor = ((SolidColorBrush)sender.Background).Color;
                     Color oldColor = ((SolidColorBrush)border.Background).Color;
                     border.Background = new SolidColorBrush(newColor);
                     sender.Background = new SolidColorBrush(oldColor);
+                    // ツールチップと選択状態を更新
                     updateBorderToolTip(border);
                     updateBorderToolTip(sender);
                     selectedBorder = border;
@@ -221,16 +234,21 @@ namespace ColorChecker {
             };
             item_copy_10code.Click += (s, e) => {
                 Color color = ((SolidColorBrush)border.Background).Color;
+                // 10進コードをクリップボードにコピー
                 Clipboard.SetText($"{color.R},{color.G},{color.B}");
             };
             item_copy_16code.Click += (s, e) => {
                 Color color = ((SolidColorBrush)border.Background).Color;
+                // 16進コードをクリップボードにコピー
                 Clipboard.SetText($"#{color.R:X2}{color.G:X2}{color.B:X2}");
             };
             item_clear.Click += (s, e) => {
+                // 色を白に戻す
                 border.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                 updateBorderToolTip(border);
+                // 選択状態を解除
                 if (selectedBorder == border) selectedBorder = null;
+                // 枠線を元に戻す
                 border.BorderBrush = Brushes.Gray;
                 border.BorderThickness = new Thickness(1);
             };
@@ -238,10 +256,13 @@ namespace ColorChecker {
                 if (MessageBox.Show("すべての色をクリアします。よろしいですか？",
                     "確認", MessageBoxButton.YesNo, MessageBoxImage.Question)
                 != MessageBoxResult.Yes) return;
+                // すべての色を白に戻す
                 foreach (Border b in stockBorder) {
                     b.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
                     updateBorderToolTip(b);
+                    // 選択状態を解除
                     if (selectedBorder == b) selectedBorder = null;
+                    // 枠線を元に戻す
                     b.BorderBrush = Brushes.Gray;
                     b.BorderThickness = new Thickness(1);
                 }
@@ -264,12 +285,16 @@ namespace ColorChecker {
         /// </summary>
         /// <param name="border"></param>
         private void updatePreviewFromBorder(Border border) {
+            // コンボボックスの選択を解除
             colorComboBox.SelectedIndex = -1;
+            // プレビューの色を更新
             colorPreview.Background = border.Background;
             SolidColorBrush brush = (SolidColorBrush)border.Background;
+            // スライダーの値を更新
             redSlider.Value = brush.Color.R;
             greenSlider.Value = brush.Color.G;
             blueSlider.Value = brush.Color.B;
+            // テキストボックス(10進・16進)を更新
             updateTextBox();
         }
 
@@ -279,6 +304,7 @@ namespace ColorChecker {
         /// <param name="highlight">選択状態にするBorder</param>
         private void updateSelectBorder(Border highlight) {
             foreach (Border b in stockBorder) {
+                // 選択されたBorderの枠線を赤に、それ以外は灰色にする
                 if (b == highlight) {
                     b.BorderBrush = Brushes.Red;
                     b.BorderThickness = new Thickness(2);
@@ -296,6 +322,7 @@ namespace ColorChecker {
         private void updateTextBox() {
             SolidColorBrush brush = (SolidColorBrush)colorPreview.Background;
             Color mycolor = brush.Color;
+            // 10進数コードと16進数コードを更新
             color10code.Text = $"{mycolor.R},{mycolor.G},{mycolor.B}";
             color16code.Text = $"#{mycolor.R:X2}{mycolor.G:X2}{mycolor.B:X2}";
         }
@@ -307,6 +334,7 @@ namespace ColorChecker {
             foreach (var item in MakeBrushesDictionary()) {
                 SolidColorBrush brush = (SolidColorBrush)item.Value;
                 if (brush.Color == color) {
+                    // 連結用に先頭にスペースを付与して返す
                     return " " + item.Key;
                 }
             }
@@ -317,7 +345,7 @@ namespace ColorChecker {
         private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             Color color = Color.FromRgb((byte)redSlider.Value, (byte)greenSlider.Value, (byte)blueSlider.Value);
             colorPreview.Background = new SolidColorBrush(color);
-            if (!isUpdating) {
+            if (!isUpdating) { // コンボボックスの更新中は選択解除しない
                 colorComboBox.SelectedIndex = -1;
             }
             updateTextBox();
@@ -337,17 +365,20 @@ namespace ColorChecker {
 
         // コンボボックスの選択変更時のイベント
         private void colorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (colorComboBox.SelectedItem == null) return;
-            isUpdating = true;
+            if (colorComboBox.SelectedItem == null) return; // 選択解除時は何もしない
+
+            isUpdating = true; // スライダーのイベントで選択解除されないようにロックする。
+            // 選択された色をプレビューに反映
             var selectItem = (KeyValuePair<string, Brush>)((ComboBox)sender).SelectedItem;
             SolidColorBrush brush = (SolidColorBrush)selectItem.Value;
             Color mycolor = brush.Color;
             colorPreview.Background = new SolidColorBrush(mycolor);
+            // スライダーの値を更新
             redSlider.Value = mycolor.R;
             greenSlider.Value = mycolor.G;
             blueSlider.Value = mycolor.B;
             updateTextBox();
-            isUpdating = false;
+            isUpdating = false; // ロックの解除
         }
 
         /// <summary>
@@ -373,11 +404,15 @@ namespace ColorChecker {
         private void color10code_PreviewKeyDown(object sender, KeyEventArgs e) {
             if (e.Key == Key.Enter) {
                 string[] rgb = color10code.Text.Split(',');
+
+                // 3つに分割できなかった場合はエラー
                 if (rgb.Length != 3) {
                     MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
 
                     return;
                 }
+
+                // それぞれの値をbyte(0～255)に変換できなかった場合はエラー
                 if (byte.TryParse(rgb[0], out byte r) &&
                     byte.TryParse(rgb[1], out byte g) &&
                     byte.TryParse(rgb[2], out byte b)) {
@@ -398,15 +433,19 @@ namespace ColorChecker {
         private void color16code_PreviewKeyDown(object sender, KeyEventArgs e) {
             if (e.Key == Key.Enter) {
                 string hex = color16code.Text.Trim();
+                // 先頭に#がなければ付与
                 if (!hex.StartsWith("#")) {
                     color16code.Text = "#" + hex;
                     hex = "#" + hex;
                 }
+
+                // #RRGGBB形式でなければエラー
                 if (!Regex.IsMatch(hex, @"^#[0-9a-fA-F]{6}$")) {
                     MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
                 isUpdating = true;
+                // 16進数コードをColorに変換してプレビューに反映
                 object obj = ColorConverter.ConvertFromString(hex);
                 var color = (Color)obj;
                 colorPreview.Background = new SolidColorBrush(color);
@@ -426,12 +465,12 @@ namespace ColorChecker {
 
         // ウィンドウ終了時のイベント
         private void Window_Closed(object sender, EventArgs e) {
-            Color[] brush = stockBorder.Select(b => ((SolidColorBrush)b.Background).Color).ToArray();
-            JsonEvent.SaveItem("stocks.json", brush);
+            SaveColors();
         }
 
         // 色のファイル保存
         private void SaveColors() {
+            // Borderの色をColor配列に変換して保存
             Color[] brush = stockBorder.Select(b => ((SolidColorBrush)b.Background).Color).ToArray();
             JsonEvent.SaveItem("stocks.json", brush);
         }
