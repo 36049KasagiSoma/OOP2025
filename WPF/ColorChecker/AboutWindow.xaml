@@ -17,7 +17,7 @@
             </InlineUIContainer>
                 <Run Text="ColorChecker" BaselineAlignment="Center"/>
             </TextBlock>
-            <TextBlock TextWrapping="Wrap" Margin="10" FontSize="16">
+            <TextBlock TextWrapping="Wrap" Margin="10" FontSize="14">
             <Run Text="Version 1.0.0"/>
             <LineBreak/>
             <LineBreak/>
