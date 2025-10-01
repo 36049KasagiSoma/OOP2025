@@ -31,6 +31,7 @@ namespace ColorChecker {
 
         List<Border> stockBorder;           // Preview用のBorderリスト
         private bool isUpdating = false;    // コンボボックス更新中フラグ
+        private bool activeComboBoxEvent = true;    // コンボボックスイベント有効フラグ
         private Border selectedBorder;      // 選択中のBorder
         private int rowCount = 6;           // Borderの行数
         private int columnCount = 5;        // Borderの列数
@@ -350,6 +351,7 @@ namespace ColorChecker {
             colorPreview.Background = new SolidColorBrush(color);
             if (!isUpdating) { // コンボボックスの更新中は選択解除しない
                 colorComboBox.SelectedIndex = -1;
+                colorComboBox_SetColor(color);
             }
             updateTextBox();
         }
@@ -369,7 +371,7 @@ namespace ColorChecker {
         // コンボボックスの選択変更時のイベント
         private void colorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (colorComboBox.SelectedItem == null) return; // 選択解除時は何もしない
-
+            if (!activeComboBoxEvent) return; // イベント無効時は何もしない
             isUpdating = true; // スライダーのイベントで選択解除されないようにロックする。
             // 選択された色をプレビューに反映
             var selectItem = (KeyValuePair<string, Brush>)((ComboBox)sender).SelectedItem;
@@ -382,6 +384,18 @@ namespace ColorChecker {
             blueSlider.Value = mycolor.B;
             updateTextBox();
             isUpdating = false; // ロックの解除
+        }
+
+        private void colorComboBox_SetColor(Color color) {
+            string colorName = getColorName(color);
+            if (colorName != "") {
+                
+                activeComboBoxEvent = false;
+                colorComboBox.SelectedItem = MakeBrushesDictionary().FirstOrDefault(x => x.Key == colorName.Trim());
+                activeComboBoxEvent = true;
+            } else {
+                colorComboBox.SelectedIndex = -1;
+            }
         }
 
         /// <summary>
