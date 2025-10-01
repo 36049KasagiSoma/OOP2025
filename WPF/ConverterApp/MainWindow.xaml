@@ -8,15 +8,21 @@
         Title="Converter" SizeToContent="WidthAndHeight">
     <StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBox x:Name="MetricValue" Width="100" Margin="4"/>
+            <TextBox x:Name="MetricValue" Width="100" Margin="4"
+                InputMethod.IsInputMethodEnabled="False"
+                PreviewTextInput="textBoxPrice_PreviewTextInput"
+                CommandManager.PreviewExecuted="textBoxPrice_PreviewExecuted"/>
             <ComboBox x:Name="MetricUnit" Width="100" Margin="4"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="ImperialUnitToMetric" Width="40" Content="▲" Margin="4"/>
-            <Button x:Name="MetricImperialUnit" Width="40" Content="▼" Margin="4"/>
+            <Button x:Name="ImperialUnitToMetric" Width="40" Content="▲" Margin="4" Click="ImperialUnitToMetric_Click"/>
+            <Button x:Name="MetricImperialUnit" Width="40" Content="▼" Margin="4" Click="MetricImperialUnit_Click"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal">
-            <TextBox x:Name="ImperialValue" Width="100" Margin="4"/>
+            <TextBox x:Name="ImperialValue" Width="100" Margin="4"
+                InputMethod.IsInputMethodEnabled="False"
+                PreviewTextInput="textBoxPrice_PreviewTextInput"
+                CommandManager.PreviewExecuted="textBoxPrice_PreviewExecuted"/>
             <ComboBox x:Name="ImperialUnit" Width="100" Margin="4"/>
         </StackPanel>
     </StackPanel>
