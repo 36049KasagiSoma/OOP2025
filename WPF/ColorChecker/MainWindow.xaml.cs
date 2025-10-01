@@ -21,24 +21,158 @@ namespace ColorChecker {
     /// MainWindow.xaml の相互作用ロジック
     /// </summary>
     public partial class MainWindow : Window {
+        // 設定データ
+        private SettingData settingData;
+
+        // border関連
+        List<Border> stockBorder;                   // Preview用のBorderリスト
+        private Border selectedBorder;              // 選択中のBorder
+        private int rowCount = 6;                   // Borderの行数
+        private int columnCount = 5;                // Borderの列数
+
+        // ファイルパス
+        public const string settingFilePath = "setting.bin"; // 設定ファイルのパス
+        private const string stockFilePath = "stocks.bin";   // ストックデータファイルのパス
+
+        // フラグ
+        private bool isUpdating = false;            // コンボボックス更新中フラグ
+        private bool activeComboBoxEvent = true;    // コンボボックスイベント有効フラグ
+
         public MainWindow() {
+            LoadSaveData();                     // 設定データの読み込み
+            InitializeComponent();              // コンポーネントの初期化
+            slider_ValueChanged(null, null);    // スライダーの初期値設定
+            colorComboBox.ItemsSource = MakeBrushesDictionary();    // コンボボックスの初期化
+            setupPreview();                     // Preview用のBorderを生成
+        }
+
+        // ===== イベント関係 =====
+        // カラースライダーの値変化時のイベント
+        private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            Color color = Color.FromRgb((byte)redSlider.Value, (byte)greenSlider.Value, (byte)blueSlider.Value);
+            colorPreview.Background = new SolidColorBrush(color);
+            if (!isUpdating) { // コンボボックスの更新中は選択解除しない
+                colorComboBox.SelectedIndex = -1;
+                colorComboBox_SetColor(color);
+            }
+            updateTextBox();
+        }
+
+        // STOCKボタン押下時のイベント
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            if (selectedBorder == null) {
+                MessageBox.Show("色を設定する枠を選択してください。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+            selectedBorder.Background = colorPreview.Background;
+            SolidColorBrush brush = (SolidColorBrush)selectedBorder.Background;
+            updateBorderToolTip(selectedBorder);
+
+        }
+
+        // コンボボックスの選択変更時のイベント
+        private void colorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (colorComboBox.SelectedItem == null) return; // 選択解除時は何もしない
+            if (!activeComboBoxEvent) return; // イベント無効時は何もしない
+            isUpdating = true; // スライダーのイベントで選択解除されないようにロックする。
+            // 選択された色をプレビューに反映
+            var selectItem = (KeyValuePair<string, Brush>)((ComboBox)sender).SelectedItem;
+            SolidColorBrush brush = (SolidColorBrush)selectItem.Value;
+            Color mycolor = brush.Color;
+            colorPreview.Background = new SolidColorBrush(mycolor);
+            // スライダーの値を更新
+            redSlider.Value = mycolor.R;
+            greenSlider.Value = mycolor.G;
+            blueSlider.Value = mycolor.B;
+            updateTextBox();
+            isUpdating = false; // ロックの解除
+        }
+
+        // 10進数コードのTextBoxでEnterキー押下時のイベント
+        private void color10code_PreviewKeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Enter) {
+                string[] rgb = color10code.Text.Split(',');
+
+                // 3つに分割できなかった場合はエラー
+                if (rgb.Length != 3) {
+                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+
+                    return;
+                }
+
+                // それぞれの値をbyte(0～255)に変換できなかった場合はエラー
+                if (byte.TryParse(rgb[0], out byte r) &&
+                    byte.TryParse(rgb[1], out byte g) &&
+                    byte.TryParse(rgb[2], out byte b)) {
+                    isUpdating = true;
+                    colorPreview.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
+                    redSlider.Value = r;
+                    greenSlider.Value = g;
+                    blueSlider.Value = b;
+                    colorComboBox.SelectedIndex = -1;
+                    isUpdating = false;
+                } else {
+                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        // 16進数コードのTextBoxでEnterキー押下時のイベント
+        private void color16code_PreviewKeyDown(object sender, KeyEventArgs e) {
+            if (e.Key == Key.Enter) {
+                string hex = color16code.Text.Trim();
+                // 先頭に#がなければ付与
+                if (!hex.StartsWith("#")) {
+                    color16code.Text = "#" + hex;
+                    hex = "#" + hex;
+                }
+
+                // #RRGGBB形式でなければエラー
+                if (!Regex.IsMatch(hex, @"^#[0-9a-fA-F]{6}$")) {
+                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                isUpdating = true;
+                // 16進数コードをColorに変換してプレビューに反映
+                object obj = ColorConverter.ConvertFromString(hex);
+                var color = (Color)obj;
+                colorPreview.Background = new SolidColorBrush(color);
+                redSlider.Value = color.R;
+                greenSlider.Value = color.G;
+                blueSlider.Value = color.B;
+                colorComboBox.SelectedIndex = -1;
+                isUpdating = false;
+            }
+        }
+
+        // コピー用ボタン押下時のイベント
+        private void Button_10Code_Copy_Click(object sender, RoutedEventArgs e)
+            => Clipboard.SetText(color10code.Text);
+        private void Button_16Code_Copy_Click(object sender, RoutedEventArgs e)
+            => Clipboard.SetText(color16code.Text);
+
+        // ウィンドウ終了時のイベント
+        private void Window_Closed(object sender, EventArgs e) {
+            SaveColors();
+        }
+
+        // メニューイベント（About、Setting）
+        private void About_MenuItem_Click(object sender, RoutedEventArgs e) {
+            Window about = new AboutWindow();
+            about.ShowDialog();
+        }
+        private void Setting_MenuItem_Click(object sender, RoutedEventArgs e) {
+            Window setting = new SettingWindow();
+            setting.ShowDialog();
             LoadSaveData();
-            InitializeComponent();
-            slider_ValueChanged(null, null);
-            colorComboBox.ItemsSource = MakeBrushesDictionary();
+            SaveColors();
+            stockGrid.Children.Clear();
+            stockGrid.RowDefinitions.Clear();
+            stockGrid.ColumnDefinitions.Clear();
             setupPreview();
         }
 
-        List<Border> stockBorder;           // Preview用のBorderリスト
-        private bool isUpdating = false;    // コンボボックス更新中フラグ
-        private bool activeComboBoxEvent = true;    // コンボボックスイベント有効フラグ
-        private Border selectedBorder;      // 選択中のBorder
-        private int rowCount = 6;           // Borderの行数
-        private int columnCount = 5;        // Borderの列数
-        private SettingData settingData;    // 設定データ
-        public const string settingFilePath = "setting.bin"; // 設定ファイルのパス
-        private static string stockFilePath = "stocks.bin";  // ストックデータファイルのパス
-
+        // ===== メソッド関係 =====
         /// <summary>
         /// 設定データを読み込みます。
         /// </summary>
@@ -50,14 +184,25 @@ namespace ColorChecker {
             }
         }
 
-        // Preview用のBorderを生成
+        /// <summary>
+        /// Borderの色を保存します。
+        /// </summary>
+        private void SaveColors() {
+            // Borderの色をColor配列に変換して保存  
+            Color[] brush = stockBorder.Select(b => ((SolidColorBrush)b.Background).Color).ToArray();
+            ObjectSaveAndLoad.SaveItem(stockFilePath, brush);
+        }
+
+        /// <summary>
+        /// プレビュー用のBorderを生成します。
+        /// </summary>
         private void setupPreview() {
 
             // Gridの行列を設定
             for (int i = 0; i < rowCount; i++) {
                 stockGrid.RowDefinitions.Add(new RowDefinition());
             }
-            for(int j = 0; j < columnCount; j++) {
+            for (int j = 0; j < columnCount; j++) {
                 stockGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
@@ -345,51 +490,14 @@ namespace ColorChecker {
             return "";
         }
 
-        // カラースライダーの値変化時のイベント
-        private void slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
-            Color color = Color.FromRgb((byte)redSlider.Value, (byte)greenSlider.Value, (byte)blueSlider.Value);
-            colorPreview.Background = new SolidColorBrush(color);
-            if (!isUpdating) { // コンボボックスの更新中は選択解除しない
-                colorComboBox.SelectedIndex = -1;
-                colorComboBox_SetColor(color);
-            }
-            updateTextBox();
-        }
-
-        // STOCKボタン押下時のイベント
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            if (selectedBorder == null) {
-                MessageBox.Show("色を設定する枠を選択してください。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-            selectedBorder.Background = colorPreview.Background;
-            SolidColorBrush brush = (SolidColorBrush)selectedBorder.Background;
-            updateBorderToolTip(selectedBorder);
-
-        }
-
-        // コンボボックスの選択変更時のイベント
-        private void colorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (colorComboBox.SelectedItem == null) return; // 選択解除時は何もしない
-            if (!activeComboBoxEvent) return; // イベント無効時は何もしない
-            isUpdating = true; // スライダーのイベントで選択解除されないようにロックする。
-            // 選択された色をプレビューに反映
-            var selectItem = (KeyValuePair<string, Brush>)((ComboBox)sender).SelectedItem;
-            SolidColorBrush brush = (SolidColorBrush)selectItem.Value;
-            Color mycolor = brush.Color;
-            colorPreview.Background = new SolidColorBrush(mycolor);
-            // スライダーの値を更新
-            redSlider.Value = mycolor.R;
-            greenSlider.Value = mycolor.G;
-            blueSlider.Value = mycolor.B;
-            updateTextBox();
-            isUpdating = false; // ロックの解除
-        }
-
+        /// <summary>
+        /// 指定した色に対応するコンボボックスの項目を選択します。
+        /// コンボボックスのイベントは一時的に無効化されます。
+        /// </summary>
         private void colorComboBox_SetColor(Color color) {
             string colorName = getColorName(color);
             if (colorName != "") {
-                
+
                 activeComboBoxEvent = false;
                 colorComboBox.SelectedItem = MakeBrushesDictionary().FirstOrDefault(x => x.Key == colorName.Trim());
                 activeComboBoxEvent = true;
@@ -415,97 +523,6 @@ namespace ColorChecker {
                 }
             }
             return dict;
-        }
-
-        // 10進数コードのTextBoxでEnterキー押下時のイベント
-        private void color10code_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Enter) {
-                string[] rgb = color10code.Text.Split(',');
-
-                // 3つに分割できなかった場合はエラー
-                if (rgb.Length != 3) {
-                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                    return;
-                }
-
-                // それぞれの値をbyte(0～255)に変換できなかった場合はエラー
-                if (byte.TryParse(rgb[0], out byte r) &&
-                    byte.TryParse(rgb[1], out byte g) &&
-                    byte.TryParse(rgb[2], out byte b)) {
-                    isUpdating = true;
-                    colorPreview.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
-                    redSlider.Value = r;
-                    greenSlider.Value = g;
-                    blueSlider.Value = b;
-                    colorComboBox.SelectedIndex = -1;
-                    isUpdating = false;
-                } else {
-                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        // 16進数コードのTextBoxでEnterキー押下時のイベント
-        private void color16code_PreviewKeyDown(object sender, KeyEventArgs e) {
-            if (e.Key == Key.Enter) {
-                string hex = color16code.Text.Trim();
-                // 先頭に#がなければ付与
-                if (!hex.StartsWith("#")) {
-                    color16code.Text = "#" + hex;
-                    hex = "#" + hex;
-                }
-
-                // #RRGGBB形式でなければエラー
-                if (!Regex.IsMatch(hex, @"^#[0-9a-fA-F]{6}$")) {
-                    MessageBox.Show("不正な数値形式です。", "形式エラー", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                isUpdating = true;
-                // 16進数コードをColorに変換してプレビューに反映
-                object obj = ColorConverter.ConvertFromString(hex);
-                var color = (Color)obj;
-                colorPreview.Background = new SolidColorBrush(color);
-                redSlider.Value = color.R;
-                greenSlider.Value = color.G;
-                blueSlider.Value = color.B;
-                colorComboBox.SelectedIndex = -1;
-                isUpdating = false;
-            }
-        }
-
-        // コピー用ボタン押下時のイベント
-        private void Button_10Code_Copy_Click(object sender, RoutedEventArgs e)
-            => Clipboard.SetText(color10code.Text);
-        private void Button_16Code_Copy_Click(object sender, RoutedEventArgs e)
-            => Clipboard.SetText(color16code.Text);
-
-        // ウィンドウ終了時のイベント
-        private void Window_Closed(object sender, EventArgs e) {
-            SaveColors();
-        }
-
-        // 色のファイル保存
-        private void SaveColors() {
-            // Borderの色をColor配列に変換して保存  
-            Color[] brush = stockBorder.Select(b => ((SolidColorBrush)b.Background).Color).ToArray();
-            ObjectSaveAndLoad.SaveItem(stockFilePath, brush);
-        }
-
-        // メニューイベント（About、Setting）
-        private void About_MenuItem_Click(object sender, RoutedEventArgs e) {
-            Window about = new AboutWindow();
-            about.ShowDialog();
-        }
-        private void Setting_MenuItem_Click(object sender, RoutedEventArgs e) {
-            Window setting = new SettingWindow();
-            setting.ShowDialog();
-            LoadSaveData();
-            SaveColors();
-            stockGrid.Children.Clear();
-            stockGrid.RowDefinitions.Clear();
-            stockGrid.ColumnDefinitions.Clear();
-            setupPreview();
         }
     }
 }
