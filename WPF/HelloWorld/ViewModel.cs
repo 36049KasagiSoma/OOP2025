@@ -10,16 +10,29 @@ using System.Windows;
 namespace HelloWorld {
     class ViewModel:BindableBase {
         public ViewModel() {
-            ChangeMessageCommand = new DelegateCommand(() => {
-                GreetingMessage = "Nuwaaaaa";
+            ChangeMessageCommand = new DelegateCommand<string>((par) => {
+                GreetingMessage = par;
             });
         }
 
         private string _greetingMessage = "HelloWorld";
         public string GreetingMessage {
             get => _greetingMessage;
-            set => SetProperty(ref _greetingMessage,value);
+            set {
+                if(SetProperty(ref _greetingMessage, value)) {
+                    CanChangeMessage = false;
+                }
+            }
         }
-        public DelegateCommand ChangeMessageCommand { get; }
+
+        private bool _canChangeMessage = true;
+        public bool CanChangeMessage {
+            get => _canChangeMessage;
+            set => SetProperty(ref _canChangeMessage, value);
+        }
+
+        public string NewMessage1 { get;} ="Guhe";
+        public string NewMessage2 { get;} = "Nuwaaa";
+        public DelegateCommand<string> ChangeMessageCommand { get; }
     }
 }
