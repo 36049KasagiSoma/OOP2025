@@ -8,31 +8,25 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace HelloWorld {
-    class ViewModel:BindableBase {
+    class ViewModel : BindableBase {
         public ViewModel() {
-            ChangeMessageCommand = new DelegateCommand<string>((par) => {
-                GreetingMessage = par;
-            });
+            ChangeMessageCommand = new DelegateCommand<string>(
+                (par) => GreetingMessage = par,
+                (par) => GreetingMessage != par).
+                ObservesProperty(() => GreetingMessage);
+
+
         }
 
         private string _greetingMessage = "HelloWorld";
         public string GreetingMessage {
             get => _greetingMessage;
-            set {
-                if(SetProperty(ref _greetingMessage, value)) {
-                    CanChangeMessage = false;
-                }
-            }
+            set => SetProperty(ref _greetingMessage, value);
+
         }
 
-        private bool _canChangeMessage = true;
-        public bool CanChangeMessage {
-            get => _canChangeMessage;
-            set => SetProperty(ref _canChangeMessage, value);
-        }
-
-        public string NewMessage1 { get;} ="Guhe";
-        public string NewMessage2 { get;} = "Nuwaaa";
+        public string NewMessage1 { get; } = "Guhe";
+        public string NewMessage2 { get; } = "Nuwaaa";
         public DelegateCommand<string> ChangeMessageCommand { get; }
     }
 }
