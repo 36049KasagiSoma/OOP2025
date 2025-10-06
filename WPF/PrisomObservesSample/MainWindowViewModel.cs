@@ -13,19 +13,19 @@ namespace PrisomObservesSample {
         public string Input1 {
             get => _input1; set {
                 SetProperty(ref _input1, value);
-                SumCommand.RaiseCanExecuteChanged();
             }
         }
         public string Input2 {
             get => _input2; set {
                 SetProperty(ref _input2, value);
-                SumCommand.RaiseCanExecuteChanged();
             }
         }
         public string Result { get => _result; set => SetProperty(ref _result, value); }
 
         public MainWindowViewModel() {
-            SumCommand = new DelegateCommand(ExcuteSum, CanExcuteSum);
+            SumCommand = new DelegateCommand(ExcuteSum, CanExcuteSum)
+                .ObservesProperty(()=>Input1)
+                .ObservesProperty(()=>Input2);
         }
 
         private bool CanExcuteSum() {

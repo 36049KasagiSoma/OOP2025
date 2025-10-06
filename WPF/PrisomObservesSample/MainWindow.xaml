@@ -25,11 +25,11 @@
         <!-- 入力1 -->
         <TextBox Grid.Row="0" Grid.Column="0" Height="30" Margin="5"
                  FontSize="18"
-                 Text="{Binding Input1}"/>
+                 Text="{Binding Input1, UpdateSourceTrigger=PropertyChanged}"/>
         <!-- 入力2 -->
         <TextBox Grid.Row="0" Grid.Column="2" Height="30" Margin="5"
                  FontSize="18"
-                 Text="{Binding Input2}"/>
+                 Text="{Binding Input2, UpdateSourceTrigger=PropertyChanged}"/>
         <!-- 結果 -->
         <TextBlock Grid.Row="0" Grid.Column="4" Height="30" Margin="5"
                    FontSize="18"
