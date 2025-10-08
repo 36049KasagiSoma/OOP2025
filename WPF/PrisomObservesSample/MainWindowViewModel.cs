@@ -37,6 +37,7 @@ namespace PrisomObservesSample {
             if (int.TryParse(Input1, out int in1) && int.TryParse(Input2, out int in2)) {
                 Result = (in1 + in2).ToString();
             } else {
+                // 以下は入力チェックのため、実行されないはず
                 Result = "?";
                 new Thread(() => {
                     for (int i = 0; i < 1000; i++) {
