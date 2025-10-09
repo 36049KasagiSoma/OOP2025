@@ -3,30 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace SampleUnitConverter {
-    class MainWindowViewModel : ViewModel {
+    class MainWindowViewModel : BindableBase {
         private double metricValue = 0;
         private double imperialValue = 0;
 
         public double MetricValue {
             get => metricValue;
-            set {
-                this.metricValue = value;
-                this.OnPropertyChanged();
-            }
+            set => SetProperty(ref metricValue, value);
+
         }
         public double ImperialValue {
             get => imperialValue;
-            set {
-                this.imperialValue = value;
-                this.OnPropertyChanged();
-            }
+            set => SetProperty(ref imperialValue, value);
         }
 
-        public ICommand ImperialUnitToMetric { get; private set; }
-        public ICommand MetricToImperialUnit { get; private set; }
+        public DelegateCommand ImperialUnitToMetric { get; private set; }
+        public DelegateCommand MetricToImperialUnit { get; private set; }
 
         public MetricUnit? CurrentMetricUnit { get; set; }
         public ImperialUnit? CurrentInperialUnit { get; set; }
