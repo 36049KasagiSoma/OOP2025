@@ -79,6 +79,7 @@ namespace Sample {
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+            // 保存処理
             //using (var connection = new SQLiteConnection(App.databacePath)) {
             //    connection.CreateTable<Person>();
             //    foreach (Person p in _persons) {
