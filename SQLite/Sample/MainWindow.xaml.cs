@@ -57,6 +57,10 @@ namespace Sample {
             };
 
             _persons.Add(person);
+            using (var connection = new SQLiteConnection(App.databacePath)) {
+                connection.CreateTable<Person>();
+                connection.Insert(person);
+            }
         }
 
         private void ReadButton_Click(object sender, RoutedEventArgs e) {
@@ -72,7 +76,7 @@ namespace Sample {
 
         private void ReadDatabace() {
             _persons.Clear();
-            foreach(Person p in GetPersons()) {
+            foreach (Person p in GetPersons()) {
                 _persons.Add(p);
             }
             PersonListView.ItemsSource = _persons;
@@ -83,13 +87,62 @@ namespace Sample {
             //using (var connection = new SQLiteConnection(App.databacePath)) {
             //    connection.CreateTable<Person>();
             //    foreach (Person p in _persons) {
-            //        if(connection.Find<Person>(p.Id) is null) {
+            //        if (connection.Find<Person>(p.Id) is null) {
             //            connection.Insert(p);
             //        } else {
             //            connection.Update(p);
             //        }
             //    }
             //}
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e) {
+            var item = PersonListView.SelectedItem as Person;
+            if (item is null) return;
+            using (var connection = new SQLiteConnection(App.databacePath)) {
+                connection.CreateTable<Person>();
+                connection.Delete(item); // 削除
+
+                ReadDatabace();
+            }
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e) {
+            if (PersonListView.SelectedItem is null) return;
+            var person = new Person {
+                Id = ((Person)PersonListView.SelectedItem).Id,
+                Name = NameTextBox.Text,
+                Phone = PhoneTextBox.Text
+            };
+
+            using (var connection = new SQLiteConnection(App.databacePath)) {
+                connection.CreateTable<Person>();
+                connection.Update(person);
+            }
+            NameTextBox.Text = string.Empty;
+            PhoneTextBox.Text = string.Empty;
+            ReadDatabace();
+        }
+
+        // フィルタリング機能
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+            if(string.IsNullOrEmpty(SearchTextBox.Text)) {
+                PersonListView.ItemsSource = _persons;
+                return;
+            }
+            var tmp = new List<Person>(_persons);
+            var filterList = tmp.Where(p => p.Name is not null && p.Name.Contains(SearchTextBox.Text));
+            PersonListView.ItemsSource = filterList;
+        }
+
+        private void PersonListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            var p = PersonListView.SelectedItem as Person;
+            if (p is null) return;
+            if(NameTextBox.Text.Length > 0 || PhoneTextBox.Text.Length > 0) {
+                // ここに上書き確認
+            }
+            NameTextBox.Text= p.Name;
+            PhoneTextBox.Text= p.Phone;
         }
     }
 }
