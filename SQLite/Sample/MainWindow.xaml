@@ -5,13 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sample"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="300">
+        Closing="Window_Closing"
+        Title="MainWindow" Width="300" SizeToContent="Height">
     <Grid>
         <StackPanel Margin="10">
             <TextBox x:Name="NameTextBox"/>
             <TextBox x:Name="PhoneTextBox"/>
-            <Button  x:Name="SaveButton" Click="SaveButton_Click" Content="保存"/>
+            <Button x:Name="SaveButton" Click="SaveButton_Click" Content="保存"/>
+            <Button x:Name="ReadButton" Click="ReadButton_Click" Content="取得"/>
+            <ListView x:Name="PersonListView" Margin="0,5,0,0" Height="600">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Id}"/>
+                            <TextBlock Text="{Binding Name}" FontSize="15"/>
+                            <TextBlock Text="{Binding Phone}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
     </Grid>
-    
+
 </Window>

@@ -7,6 +7,9 @@ namespace Sample {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
+        const string databaceName = "Persons.db";
+        static readonly string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        public static readonly string databacePath = System.IO.Path.Combine(folderPath, databaceName);
     }
 
 }
