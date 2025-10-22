@@ -6,6 +6,10 @@ using System.Drawing;
 using System.IO;
 using System.Security.AccessControl;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Unicode;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,18 +20,20 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 
 namespace CustomerApp {
     public partial class MainWindow : Window {
         private ICollection<Customer> _customers = new ObservableCollection<Customer>();
-
+        private Customer? _selectCus = null;
+        private int selectIndex = -1;
         public MainWindow() {
             InitializeComponent();
             ReadDatabace();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+        private byte[]? getViewImageToByteArray() {
             byte[]? byteArray = null;
             if (CustomerImageView.Source is not null) {
                 BitmapEncoder encoder = new JpegBitmapEncoder();
@@ -38,6 +44,11 @@ namespace CustomerApp {
                     byteArray = ms.ToArray();
                 }
             }
+            return byteArray;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            byte[]? byteArray = getViewImageToByteArray();
 
             var customer = new Customer {
                 Name = NameTextBox.Text,
@@ -54,22 +65,34 @@ namespace CustomerApp {
             ResetField();
         }
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
-            var item = CustomerListView.SelectedItem as Customer;
+            var item = CustomerListView.SelectedItems;
             if (item is null) return;
+            if (MessageBox.Show($"{item.Count}件の選択された要素を削除しますか?", "確認", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
             using (var connection = new SQLiteConnection(App.databacePath)) {
                 connection.CreateTable<Customer>();
-                connection.Delete(item); // 削除
-
-                ReadDatabace();
+                foreach (var customer in item) {
+                    var cus = customer as Customer;
+                    if (cus != null) {
+                        connection.Delete(cus); // 削除
+                    }
+                }
             }
+            ResetField();
+            ReadDatabace();
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e) {
             if (CustomerListView.SelectedItem is null) return;
+            var cus = (CustomerListView.SelectedItem as Customer) ?? new Customer();
+            int targetId = cus.Id;
+            byte[]? byteArray = getViewImageToByteArray();
+
             var customer = new Customer {
-                Id = ((Customer)CustomerListView.SelectedItem).Id,
+                Id = targetId,
                 Name = NameTextBox.Text,
-                Phone = PhoneTextBox.Text
+                Phone = PhoneTextBox.Text,
+                Address = AddressTextBox.Text,
+                Picture = byteArray
             };
 
             using (var connection = new SQLiteConnection(App.databacePath)) {
@@ -83,8 +106,11 @@ namespace CustomerApp {
         private void ResetField() {
             NameTextBox.Text = string.Empty;
             PhoneTextBox.Text = string.Empty;
+            AddressTextBox.Text = string.Empty;
             ImagePathTextBox.Text = string.Empty;
             CustomerImageView.Source = null;
+            _selectCus = null;
+            selectIndex = -1;
         }
 
         private void ReadDatabace() {
@@ -103,15 +129,11 @@ namespace CustomerApp {
         }
 
         private void ImageSelectButton_Click(object sender, RoutedEventArgs e) {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            string? path = ShowOpenFileDiarog("画像ファイル(*.png,*.jpg,*.jpeg)|*.png;*.jpg;*.jpeg");
 
-            openFileDialog.Title = "ファイル選択ダイアログ";
-            openFileDialog.Filter = "画像ファイル(*.png,*.jpg,*.jpeg)|*.png;*.jpg;*.jpeg";
-
-            //ファイル選択ダイアログを開く
-            if (openFileDialog.ShowDialog() == true) {
-                CustomerImageView.Source = new BitmapImage(new Uri(openFileDialog.FileName));
-                ImagePathTextBox.Text = openFileDialog.FileName;
+            if (path is not null) {
+                CustomerImageView.Source = new BitmapImage(new Uri(path));
+                ImagePathTextBox.Text = path;
             }
 
         }
@@ -127,17 +149,33 @@ namespace CustomerApp {
         }
 
         private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            string t = NameTextBox.Text + PhoneTextBox.Text + AddressTextBox.Text;
-            if (t != string.Empty && CustomerImageView.Source != null &&
-                MessageBox.Show("フィールドに値が入力されています。上書きしますか?", "確認", MessageBoxButton.YesNo, MessageBoxImage.Information)
-                != MessageBoxResult.OK) return;
+            if (CustomerListView.SelectedItems.Count > 1) return;
+
             Customer? c = CustomerListView.SelectedItem as Customer;
+            Customer old = new Customer {
+                Name = NameTextBox.Text,
+                Phone = PhoneTextBox.Text,
+                Address = AddressTextBox.Text,
+                Picture = getViewImageToByteArray(),
+            };
             if (c is not null) {
+                if (_selectCus != null && !_selectCus.EqualsParam(old)) {
+                   bool isReturn = MessageBox.Show("フィールドの値が変更されています。新しく選択した要素で上書きしますか?", "確認", MessageBoxButton.YesNo, MessageBoxImage.Information)
+                        == MessageBoxResult.Yes;
+                    if (!isReturn) {
+                        CustomerListView.SelectedIndex = selectIndex;
+                        return;
+                    }
+
+                }
                 SetParam(c);
+                _selectCus = c;
+                selectIndex = CustomerListView.SelectedIndex;
             }
         }
 
         private void SetParam(Customer c) {
+            ResetField();
             if (c == null) return;
             NameTextBox.Text = c.Name;
             PhoneTextBox.Text = c.Phone;
@@ -147,13 +185,102 @@ namespace CustomerApp {
                 using (MemoryStream stream = new MemoryStream(c.Picture)) {
                     image.BeginInit();
                     image.StreamSource = stream;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
                     image.EndInit();
+                    image.Freeze();
                 }
-
-                // なぜか更新されない。なぜ？                      
                 CustomerImageView.Source = image;
             }
         }
 
+        private void JsonExp_Click(object sender, RoutedEventArgs e) {
+            string? path = ShowSaveFileDiarog("JSONファイル(*.json)|*.json|すべてのファイル (*.*)|*.*");
+            if (path == null) return;
+            var opt = new JsonSerializerOptions {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                WriteIndented = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            string jsonText = JsonSerializer.Serialize(_customers, opt);
+            File.WriteAllText(path, jsonText);
+        }
+
+        private void DbExp_Click(object sender, RoutedEventArgs e) {
+            string? path = ShowSaveFileDiarog("DBファイル(*.db)|*.db|すべてのファイル (*.*)|*.*");
+            if (path == null) return;
+            File.Copy(App.databacePath, path, true);
+        }
+
+        private string? ShowSaveFileDiarog(string filter) {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+
+            saveFileDialog.Title = "ファイル保存ダイアログ";
+            saveFileDialog.Filter = filter;
+
+
+            //ファイル選択ダイアログを開く
+            if (saveFileDialog.ShowDialog() == true) {
+                return saveFileDialog.FileName;
+            }
+            return null;
+        }
+        private string? ShowOpenFileDiarog(string filter) {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.Title = "ファイル選択ダイアログ";
+            openFileDialog.Filter = filter;
+
+
+            //ファイル選択ダイアログを開く
+            if (openFileDialog.ShowDialog() == true) {
+                return openFileDialog.FileName;
+            }
+            return null;
+        }
+
+        private void FileInp_Click(object sender, RoutedEventArgs e) {
+            string? path = ShowOpenFileDiarog("すべてのファイル(*.*)|*.*|JSONファイル(*.json)|*.json|DBファイル(*.db)|*.db");
+            try {
+                if (path is not null) {
+                    string exp = path.Substring(path.LastIndexOf(".") + 1).ToLower();
+                    var Customers = new List<Customer>();
+                    List<Customer>? cusList = null;
+                    switch (exp) {
+                        case "json":
+                            var text = File.ReadAllText(path);
+                            var opt = new JsonSerializerOptions {
+                                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                                WriteIndented = true,
+                                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                            };
+                            cusList = JsonSerializer.Deserialize<List<Customer>>(text, opt);
+                            break;
+                        case "db":
+                            using (var connection = new SQLiteConnection(path)) {
+                                connection.CreateTable<Customer>();
+                                cusList = connection.Table<Customer>().ToList();
+                            }
+                            break;
+                    }
+                    if (cusList is null || cusList.Count == 0) throw new Exception("顧客リストが存在しません。");
+                    using (var connection = new SQLiteConnection(App.databacePath)) {
+                        connection.CreateTable<Customer>();
+                        foreach (Customer cs in cusList) {
+                            Customer customer = new Customer { // Idを新しく振る
+                                Name = cs.Name,
+                                Phone = cs.Phone,
+                                Address = cs.Address,
+                                Picture = cs.Picture,
+                            };
+                            _customers.Add(customer);
+                            connection.Insert(customer);
+                        }
+                        CustomerListView.ItemsSource = _customers;
+                    }
+                }
+            } catch (Exception ex) {
+                MessageBox.Show("インポート中にエラーが発生しました。\nエラー:" + ex.Message, "インポートエラー", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
     }
 }

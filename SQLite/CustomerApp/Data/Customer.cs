@@ -22,5 +22,20 @@ namespace CustomerApp.Data {
         /// </summary>
         public string Address { get; set; } = string.Empty;
         public byte[]? Picture { get; set; } = null;
+
+        /// <summary>
+        /// Idを除いた等価判定
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool EqualsParam(Object other) {
+            if (other == null) return false;
+            if (other.GetType() != typeof(Customer)) return false;
+            Customer c = (Customer)other;
+            return this.Name == c.Name &&
+                this.Phone == c.Phone &&
+                this.Address == c.Address &&
+                this.Picture == c.Picture;
+        }
     }
 }

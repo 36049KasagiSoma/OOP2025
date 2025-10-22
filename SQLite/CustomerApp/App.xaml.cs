@@ -7,7 +7,7 @@ namespace CustomerApp {
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application {
-        const string databaceName = "Customers.db";
+        const string databaceName = "Customer.db";
         static readonly string folderPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         public static readonly string databacePath = System.IO.Path.Combine(folderPath, databaceName);
     }

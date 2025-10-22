@@ -6,52 +6,65 @@
         xmlns:local="clr-namespace:CustomerApp"
         mc:Ignorable="d"
         Title="顧客管理アプリ" Width="500" Height="400">
-    <Grid >
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.5*"/>
-            <ColumnDefinition Width="2*"/>
-        </Grid.ColumnDefinitions>
-        <ListView x:Name="CustomerListView" Margin="5" Grid.Column="0" SelectionChanged="CustomerListView_SelectionChanged">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="75" Height="75" Source="{Binding Picture}" Margin="5"/>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock Text="{Binding Name}" FontSize="15"/>
-                            <TextBlock Text="{Binding Phone}" />
-                            <TextBlock Text="{Binding Address}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <Grid Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="ファイル(_F)">
+                <MenuItem Header="インポート..." x:Name="FileInp" Click="FileInp_Click"/>
+                <MenuItem Header="エクスポート">
+                    <MenuItem x:Name="JsonExp" Header="Json形式..." Click="JsonExp_Click"/>
+                    <MenuItem x:Name="DbExp" Header="DB形式..." Click="DbExp_Click"/>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*" MinWidth="150"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="2*" MinWidth="200"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="名前" VerticalAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
-            <TextBox x:Name="NameTextBox" VerticalAlignment="Center" FontSize="18"  Grid.Row="0" Grid.Column="1" Margin="5"/>
-            <TextBlock Text="電話番号" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="0"/>
-            <TextBox x:Name="PhoneTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="1"  Margin="5"/>
-            <TextBlock Text="住所" VerticalAlignment="Center" FontSize="18"  Grid.Row="2" Grid.Column="0"/>
-            <TextBox x:Name="AddressTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="2" Grid.Column="1" Margin="5"/>
-            <Button x:Name="ImageSelectButton" Width="50" Content="選択" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Click="ImageSelectButton_Click"/>
-            <TextBox x:Name="ImagePathTextBox" KeyDown="ImagePathTextBox_KeyDown" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="5"/>
-            <Image Margin="15" x:Name="CustomerImageView" Grid.Row="4" Grid.ColumnSpan="2"/>
-            <Button x:Name="DeleteButton" Content="削除" FontSize="18" Margin="5,5,25,5" Grid.Column="0" Grid.Row="5" Click="DeleteButton_Click" HorizontalAlignment="Left"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="5" Margin="5,5,0,0">
-                <Button x:Name="Updatebutton" Content="更新" FontSize="18" Margin="5" Click="UpdateButton_Click"  HorizontalAlignment="Right"/>
-                <Button x:Name="SaveButton" Content="保存" FontSize="18" Margin="5" Click="SaveButton_Click"  HorizontalAlignment="Right"/>
-            </StackPanel>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Cursor="SizeWE"/>
+            <ListView x:Name="CustomerListView" Margin="5" Grid.Column="0" SelectionChanged="CustomerListView_SelectionChanged">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="75" Height="75" Source="{Binding Picture}" Margin="5"/>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding Name}" FontSize="15"/>
+                                <TextBlock Text="{Binding Phone}" />
+                                <TextBlock Text="{Binding Address}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Grid Grid.Column="2" Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="名前" VerticalAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
+                <TextBox x:Name="NameTextBox" VerticalAlignment="Center" FontSize="18"  Grid.Row="0" Grid.Column="1" Margin="5"/>
+                <TextBlock Text="電話番号" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="0"/>
+                <TextBox x:Name="PhoneTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="1"  Margin="5"/>
+                <TextBlock Text="住所" VerticalAlignment="Center" FontSize="18"  Grid.Row="2" Grid.Column="0"/>
+                <TextBox x:Name="AddressTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                <Button x:Name="ImageSelectButton" Width="60" Content="画像選択" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Click="ImageSelectButton_Click"/>
+                <TextBox x:Name="ImagePathTextBox" KeyDown="ImagePathTextBox_KeyDown" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="5"/>
+                <Image Margin="15" x:Name="CustomerImageView" Grid.Row="4" Grid.ColumnSpan="2"/>
+                <Button x:Name="DeleteButton" Content="削除" FontSize="18" Margin="5,5,25,5" Grid.Column="0" Grid.Row="5" Click="DeleteButton_Click" HorizontalAlignment="Left"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="5" Margin="5,5,0,0">
+                    <Button x:Name="Updatebutton" Content="更新" FontSize="18" Margin="5" Click="UpdateButton_Click"  HorizontalAlignment="Right"/>
+                    <Button x:Name="SaveButton" Content="保存" FontSize="18" Margin="5" Click="SaveButton_Click"  HorizontalAlignment="Right"/>
+                </StackPanel>
+            </Grid>
         </Grid>
-    </Grid>
+    </DockPanel>
 </Window>
