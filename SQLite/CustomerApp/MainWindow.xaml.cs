@@ -51,6 +51,12 @@ namespace CustomerApp {
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            if (NameTextBox.Text.Trim() == string.Empty) {
+                NameTextBox.Focus();
+                NameTextBox.SelectAll();
+                MessageBox.Show("名前は必須です。", "入力エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             byte[]? byteArray = getViewImageToByteArray();
 
             var customer = new Customer {
@@ -69,7 +75,7 @@ namespace CustomerApp {
         }
         private void DeleteButton_Click(object sender, RoutedEventArgs e) {
             var item = CustomerListView.SelectedItems;
-            if (item is null) return;
+            if (item is null || item.Count == 0) return;
             if (MessageBox.Show($"{item.Count}件の選択された要素を削除しますか?", "確認", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
             using (var connection = new SQLiteConnection(App.databacePath)) {
                 connection.CreateTable<Customer>();
@@ -86,6 +92,12 @@ namespace CustomerApp {
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e) {
             if (CustomerListView.SelectedItem is null) return;
+            if (NameTextBox.Text.Trim() == string.Empty) {
+                NameTextBox.Focus();
+                NameTextBox.SelectAll();
+                MessageBox.Show("名前は必須です。", "入力エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             var cus = (CustomerListView.SelectedItem as Customer) ?? new Customer();
             int targetId = cus.Id;
             byte[]? byteArray = getViewImageToByteArray();
@@ -165,7 +177,7 @@ namespace CustomerApp {
             };
             if (c is not null) {
                 if (_selectCus != null && (!_selectCus.EqualsParam(old) || isChangeImage)) {
-                   
+
                     bool isReturn = MessageBox.Show("フィールドの値が変更されています。新しく選択した要素で上書きしますか?", "確認", MessageBoxButton.YesNo, MessageBoxImage.Information)
                         == MessageBoxResult.Yes;
                     if (!isReturn) {
@@ -228,7 +240,7 @@ namespace CustomerApp {
 
 
             //ファイル選択ダイアログを開く
-            if (saveFileDialog.ShowDialog() == true) {
+            if (saveFileDialog.ShowDialog() ?? false) {
                 return saveFileDialog.FileName;
             }
             return null;
@@ -241,7 +253,7 @@ namespace CustomerApp {
 
 
             //ファイル選択ダイアログを開く
-            if (openFileDialog.ShowDialog() == true) {
+            if (openFileDialog.ShowDialog() ?? false) {
                 return openFileDialog.FileName;
             }
             return null;
