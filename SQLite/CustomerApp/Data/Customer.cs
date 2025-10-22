@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CustomerApp.Data {
     class Customer {
@@ -24,7 +25,7 @@ namespace CustomerApp.Data {
         public byte[]? Picture { get; set; } = null;
 
         /// <summary>
-        /// Idを除いた等価判定
+        /// IdとPictureを除いた等価判定
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -32,10 +33,10 @@ namespace CustomerApp.Data {
             if (other == null) return false;
             if (other.GetType() != typeof(Customer)) return false;
             Customer c = (Customer)other;
+
             return this.Name == c.Name &&
                 this.Phone == c.Phone &&
-                this.Address == c.Address &&
-                this.Picture == c.Picture;
+                this.Address == c.Address;
         }
     }
 }

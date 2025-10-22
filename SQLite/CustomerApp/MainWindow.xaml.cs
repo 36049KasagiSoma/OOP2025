@@ -28,6 +28,9 @@ namespace CustomerApp {
         private ICollection<Customer> _customers = new ObservableCollection<Customer>();
         private Customer? _selectCus = null;
         private int selectIndex = -1;
+        private bool isUpdate = false;
+        private bool isChangeImage = false;
+
         public MainWindow() {
             InitializeComponent();
             ReadDatabace();
@@ -111,6 +114,7 @@ namespace CustomerApp {
             CustomerImageView.Source = null;
             _selectCus = null;
             selectIndex = -1;
+            isChangeImage = false;
         }
 
         private void ReadDatabace() {
@@ -134,6 +138,7 @@ namespace CustomerApp {
             if (path is not null) {
                 CustomerImageView.Source = new BitmapImage(new Uri(path));
                 ImagePathTextBox.Text = path;
+                isChangeImage = true;
             }
 
         }
@@ -149,6 +154,7 @@ namespace CustomerApp {
         }
 
         private void CustomerListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (isUpdate) return;
             if (CustomerListView.SelectedItems.Count > 1) return;
 
             Customer? c = CustomerListView.SelectedItem as Customer;
@@ -156,14 +162,16 @@ namespace CustomerApp {
                 Name = NameTextBox.Text,
                 Phone = PhoneTextBox.Text,
                 Address = AddressTextBox.Text,
-                Picture = getViewImageToByteArray(),
             };
             if (c is not null) {
-                if (_selectCus != null && !_selectCus.EqualsParam(old)) {
-                   bool isReturn = MessageBox.Show("フィールドの値が変更されています。新しく選択した要素で上書きしますか?", "確認", MessageBoxButton.YesNo, MessageBoxImage.Information)
+                if (_selectCus != null && (!_selectCus.EqualsParam(old) || isChangeImage)) {
+                   
+                    bool isReturn = MessageBox.Show("フィールドの値が変更されています。新しく選択した要素で上書きしますか?", "確認", MessageBoxButton.YesNo, MessageBoxImage.Information)
                         == MessageBoxResult.Yes;
                     if (!isReturn) {
+                        isUpdate = true;
                         CustomerListView.SelectedIndex = selectIndex;
+                        isUpdate = false;
                         return;
                     }
 
@@ -171,6 +179,7 @@ namespace CustomerApp {
                 SetParam(c);
                 _selectCus = c;
                 selectIndex = CustomerListView.SelectedIndex;
+                isChangeImage = false;
             }
         }
 
