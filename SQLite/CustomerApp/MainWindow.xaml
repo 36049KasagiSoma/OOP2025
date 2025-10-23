@@ -72,6 +72,9 @@
                     <MenuItem x:Name="DbExp" Header="DB形式..." Click="DbExp_Click"/>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="編集(_E)">
+                <MenuItem Header="フォームのクリア" x:Name="ClearMenuItem" Click="ClearMenuItem_Click"/>
+            </MenuItem>
         </Menu>
         <Grid DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
@@ -112,10 +115,12 @@
                 <TextBlock Text="電話番号" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="0"/>
                 <TextBox x:Name="PhoneTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="1"  Margin="5"/>
                 <TextBlock Text="住所" VerticalAlignment="Center" FontSize="18"  Grid.Row="2" Grid.Column="0"/>
-                <TextBox x:Name="AddressTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                <TextBox x:Name="AddressTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="2" Grid.Column="1" Margin="5" KeyDown="AddressTextBox_KeyDown" ToolTip="郵便番号を入力、[Enter]押下で住所に自動変換します。"/>
                 <Button x:Name="ImageSelectButton" Width="60" Content="画像選択" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Click="ImageSelectButton_Click"/>
                 <TextBox x:Name="ImagePathTextBox" KeyDown="ImagePathTextBox_KeyDown" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="5"/>
-                <Image Margin="15" x:Name="CustomerImageView" Grid.Row="4" Grid.ColumnSpan="2"/>
+                <Border Margin="15"  BorderThickness="1" BorderBrush="Gray" Grid.Row="4" Grid.ColumnSpan="2">
+                    <Image x:Name="CustomerImageView" />
+                </Border>
                 <Button Style="{DynamicResource DeleteButtonStyle}" x:Name="DeleteButton" Content="削除" FontSize="18" Margin="5,5,25,5" Grid.Column="0" Grid.Row="5" Click="DeleteButton_Click" HorizontalAlignment="Left" Background="Red" Foreground="White"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="5" Margin="5,5,0,0">
                     <Button x:Name="Updatebutton" Content="更新" FontSize="18" Margin="5" Click="UpdateButton_Click"  HorizontalAlignment="Right"/>

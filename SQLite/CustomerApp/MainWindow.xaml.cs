@@ -3,12 +3,16 @@ using Microsoft.Win32;
 using SQLite;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Net.Http;
 using System.Security.AccessControl;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Text.Unicode;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,7 +24,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using static System.Net.Mime.MediaTypeNames;
+using System.Xml;
+using System.Xml.Linq;
 
 
 namespace CustomerApp {
@@ -302,6 +307,51 @@ namespace CustomerApp {
             } catch (Exception ex) {
                 MessageBox.Show("インポート中にエラーが発生しました。\nエラー:" + ex.Message, "インポートエラー", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private async void AddressTextBox_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key != Key.Enter) return;
+            AddressTextBox.IsEnabled = false;
+            string value = AddressTextBox.Text;
+            if (Regex.IsMatch(value, @"^〒?\d{3}-?\d{4}$")) { // 郵便番号判定
+                // 数値のみにする。
+                if (value.StartsWith("〒"))
+                    value = value.Substring(1);
+                if (value.Contains("-"))
+                    value = value.Replace("-", "");
+
+                try {
+                    using (var hc = new HttpClient()) {
+
+                        hc.Timeout = TimeSpan.FromSeconds(30); // タイムアウト（30秒）
+
+                        // レスポンス
+                        var res = await hc.GetAsync($"https://zipcloud.ibsnet.co.jp/api/search?zipcode={value}");
+
+                        // 取得できなければ中断
+                        res.EnsureSuccessStatusCode();
+
+                        var jsonStr = await res.Content.ReadAsStringAsync();
+
+                        AddressResponseItem? item = JsonSerializer.Deserialize<AddressResponseItem>(jsonStr);
+                        if (item != null && item.Results != null && item.Results.Count > 0) {
+                            AddressTextBox.Text =
+                                $"{item.Results[0].Address1}{item.Results[0].Address2}{item.Results[0].Address3}";
+                        }
+
+                    }
+                } catch{
+                } finally {
+                    AddressTextBox.IsEnabled = true;
+                    AddressTextBox.Focus();
+                    AddressTextBox.SelectionStart = AddressTextBox.Text.Length;
+                }
+            }
+        }
+
+        private void ClearMenuItem_Click(object sender, RoutedEventArgs e) {
+            ResetField();
+            CustomerListView.SelectedIndex = -1;
         }
     }
 }
