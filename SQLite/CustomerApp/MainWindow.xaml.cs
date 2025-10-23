@@ -56,6 +56,7 @@ namespace CustomerApp {
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            DoTrim();
             if (NameTextBox.Text.Trim() == string.Empty) {
                 NameTextBox.Focus();
                 NameTextBox.SelectAll();
@@ -67,6 +68,7 @@ namespace CustomerApp {
             var customer = new Customer {
                 Name = NameTextBox.Text,
                 Phone = PhoneTextBox.Text,
+                PostCode = PhoneTextBox.Text,
                 Address = AddressTextBox.Text,
                 Picture = byteArray
             };
@@ -96,6 +98,7 @@ namespace CustomerApp {
         }
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e) {
+            DoTrim();
             if (CustomerListView.SelectedItem is null) return;
             if (NameTextBox.Text.Trim() == string.Empty) {
                 NameTextBox.Focus();
@@ -111,6 +114,7 @@ namespace CustomerApp {
                 Id = targetId,
                 Name = NameTextBox.Text,
                 Phone = PhoneTextBox.Text,
+                PostCode = PostCodeTextBox.Text,
                 Address = AddressTextBox.Text,
                 Picture = byteArray
             };
@@ -128,6 +132,7 @@ namespace CustomerApp {
             PhoneTextBox.Text = string.Empty;
             AddressTextBox.Text = string.Empty;
             ImagePathTextBox.Text = string.Empty;
+            PostCodeTextBox.Text = string.Empty;
             CustomerImageView.Source = null;
             _selectCus = null;
             selectIndex = -1;
@@ -178,6 +183,7 @@ namespace CustomerApp {
             Customer old = new Customer {
                 Name = NameTextBox.Text,
                 Phone = PhoneTextBox.Text,
+                PostCode = PostCodeTextBox.Text,
                 Address = AddressTextBox.Text,
             };
             if (c is not null) {
@@ -205,6 +211,7 @@ namespace CustomerApp {
             if (c == null) return;
             NameTextBox.Text = c.Name;
             PhoneTextBox.Text = c.Phone;
+            PostCodeTextBox.Text = c.PostCode;
             AddressTextBox.Text = c.Address;
             if (c.Picture is not null) {
                 BitmapImage image = new BitmapImage();
@@ -295,6 +302,7 @@ namespace CustomerApp {
                             Customer customer = new Customer { // Idを新しく振る
                                 Name = cs.Name,
                                 Phone = cs.Phone,
+                                PostCode = cs.PostCode,
                                 Address = cs.Address,
                                 Picture = cs.Picture,
                             };
@@ -313,6 +321,41 @@ namespace CustomerApp {
             if (e.Key != Key.Enter) return;
             AddressTextBox.IsEnabled = false;
             string value = AddressTextBox.Text;
+            // 半角にする。
+            value = value.ToLower();
+
+            try {
+                using (var hc = new HttpClient()) {
+
+                    hc.Timeout = TimeSpan.FromSeconds(30); // タイムアウト（30秒）
+
+                    // レスポンス
+                    var res = await hc.GetAsync($"https://api.excelapi.org/post/zipcode?address={value}");
+
+                    // 取得できなければ中断
+                    res.EnsureSuccessStatusCode();
+
+                    var str = await res.Content.ReadAsStringAsync();
+                    if (str.StartsWith("ERROR")) return;
+                    PostCodeTextBox.Text = str;
+                }
+            } catch {
+            } finally {
+                AddressTextBox.IsEnabled = true;
+                PostCodeTextBox.Focus();
+                PostCodeTextBox.SelectionStart = PostCodeTextBox.Text.Length;
+            }
+        }
+
+        private void ClearMenuItem_Click(object sender, RoutedEventArgs e) {
+            ResetField();
+            CustomerListView.SelectedIndex = -1;
+        }
+
+        private async void PostCodeTextBox_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key != Key.Enter) return;
+            PostCodeTextBox.IsEnabled = false;
+            string value = PostCodeTextBox.Text;
             if (Regex.IsMatch(value, @"^〒?\d{3}-?\d{4}$")) { // 郵便番号判定
                 // 数値のみにする。
                 if (value.StartsWith("〒"))
@@ -340,18 +383,21 @@ namespace CustomerApp {
                         }
 
                     }
-                } catch{
+                } catch {
                 } finally {
-                    AddressTextBox.IsEnabled = true;
+                    PostCodeTextBox.IsEnabled = true;
                     AddressTextBox.Focus();
                     AddressTextBox.SelectionStart = AddressTextBox.Text.Length;
                 }
             }
         }
 
-        private void ClearMenuItem_Click(object sender, RoutedEventArgs e) {
-            ResetField();
-            CustomerListView.SelectedIndex = -1;
+        // 更新前に整形しておきたい場合にここに記述
+        private void DoTrim() {
+            NameTextBox.Text = NameTextBox.Text.Trim();
+            PhoneTextBox.Text = PhoneTextBox.Text.Trim();
+            PostCodeTextBox.Text = PostCodeTextBox.Text.Replace("〒", "").Replace("-", "").Trim();
+            AddressTextBox.Text = AddressTextBox.Text.Trim();
         }
     }
 }
