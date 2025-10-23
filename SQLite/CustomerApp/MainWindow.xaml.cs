@@ -336,7 +336,8 @@ namespace CustomerApp {
                     res.EnsureSuccessStatusCode();
 
                     var str = await res.Content.ReadAsStringAsync();
-                    if (str.StartsWith("ERROR")) return;
+                    if (str.Trim().ToLower().StartsWith("error") ||
+                        str.Trim() == string.Empty) return;
                     PostCodeTextBox.Text = str;
                 }
             } catch {
