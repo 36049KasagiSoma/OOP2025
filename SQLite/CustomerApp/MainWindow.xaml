@@ -111,22 +111,24 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="名前" VerticalAlignment="Center" FontSize="18" Grid.Row="0" Grid.Column="0"/>
-                <TextBox x:Name="NameTextBox" VerticalAlignment="Center" FontSize="18"  Grid.Row="0" Grid.Column="1" Margin="5"/>
+                <TextBox x:Name="NameTextBox" VerticalAlignment="Center" FontSize="18" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="1" Margin="5"/>
                 <TextBlock Text="電話番号" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="0"/>
-                <TextBox x:Name="PhoneTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="1" Grid.Column="1"  Margin="5"/>
+                <TextBox x:Name="PhoneTextBox" VerticalAlignment="Center" FontSize="18" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="1"  Margin="5"/>
                 <TextBlock Text="郵便番号" VerticalAlignment="Center" FontSize="18"  Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="住所" VerticalAlignment="Center" FontSize="18"  Grid.Row="3" Grid.Column="0"/>
-                <TextBox x:Name="AddressTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="3" Grid.Column="1" Margin="5" KeyDown="AddressTextBox_KeyDown"/>
-                <TextBox x:Name="PostCodeTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="2" Grid.Column="1" Margin="5" KeyDown="PostCodeTextBox_KeyDown"/>
+                <TextBox x:Name="AddressTextBox" VerticalAlignment="Center" FontSize="18" Grid.ColumnSpan="2" Grid.Row="3" Grid.Column="1" Margin="5"/>
+                <TextBox x:Name="PostCodeTextBox" VerticalAlignment="Center" FontSize="18" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                <Button x:Name="ChangeButton" Grid.Row="2" Grid.Column="2" Content="郵便⇔住所" Margin="5" Click="ChangeButton_Click"/>
                 <Button x:Name="ImageSelectButton" Width="60" Content="画像選択" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Click="ImageSelectButton_Click"/>
-                <TextBox x:Name="ImagePathTextBox" KeyDown="ImagePathTextBox_KeyDown" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="5"/>
-                <Border Margin="15"  BorderThickness="0.8" BorderBrush="Gray" Grid.Row="5" Grid.ColumnSpan="2">
+                <TextBox x:Name="ImagePathTextBox"  Grid.ColumnSpan="2" KeyDown="ImagePathTextBox_KeyDown" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1" Margin="5"/>
+                <Border Margin="15"  BorderThickness="0.8" BorderBrush="Gray" Grid.Row="5" Grid.ColumnSpan="3">
                     <Image x:Name="CustomerImageView" />
                 </Border>
                 <Button Style="{DynamicResource DeleteButtonStyle}" x:Name="DeleteButton" Content="削除" FontSize="18" Margin="5,5,25,5" Grid.Column="0" Grid.Row="6" Click="DeleteButton_Click" HorizontalAlignment="Left" Background="Red" Foreground="White"/>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="6" Margin="5,5,0,0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="6" Margin="5,5,0,0">
                     <Button x:Name="Updatebutton" Content="更新" FontSize="18" Margin="5" Click="UpdateButton_Click"  HorizontalAlignment="Right"/>
                     <Button x:Name="SaveButton" Content="保存" FontSize="18" Margin="5" Click="SaveButton_Click"  HorizontalAlignment="Right"/>
                 </StackPanel>

@@ -99,7 +99,10 @@ namespace CustomerApp {
 
         private void UpdateButton_Click(object sender, RoutedEventArgs e) {
             DoTrim();
-            if (CustomerListView.SelectedItem is null) return;
+            if (CustomerListView.SelectedItem is null) {
+                MessageBox.Show("更新対象を選択してください。", "選択エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             if (NameTextBox.Text.Trim() == string.Empty) {
                 NameTextBox.Focus();
                 NameTextBox.SelectAll();
@@ -317,8 +320,7 @@ namespace CustomerApp {
             }
         }
 
-        private async void AddressTextBox_KeyDown(object sender, KeyEventArgs e) {
-            if (e.Key != Key.Enter) return;
+        private async void ToPostCode() {
             AddressTextBox.IsEnabled = false;
             string value = AddressTextBox.Text;
             // 半角にする。
@@ -337,7 +339,7 @@ namespace CustomerApp {
 
                     var str = await res.Content.ReadAsStringAsync();
                     if (str.Trim().ToLower().StartsWith("error") ||
-                        str.Trim() == string.Empty) return;
+                        str.Trim() == string.Empty) throw new Exception("郵便番号の取得に失敗しました。");
                     PostCodeTextBox.Text = str;
                 }
             } catch {
@@ -353,8 +355,7 @@ namespace CustomerApp {
             CustomerListView.SelectedIndex = -1;
         }
 
-        private async void PostCodeTextBox_KeyDown(object sender, KeyEventArgs e) {
-            if (e.Key != Key.Enter) return;
+        private async void ToAddress() {
             PostCodeTextBox.IsEnabled = false;
             string value = PostCodeTextBox.Text;
             if (Regex.IsMatch(value, @"^〒?\d{3}-?\d{4}$")) { // 郵便番号判定
@@ -399,6 +400,16 @@ namespace CustomerApp {
             PhoneTextBox.Text = PhoneTextBox.Text.Trim();
             PostCodeTextBox.Text = PostCodeTextBox.Text.Replace("〒", "").Replace("-", "").Trim();
             AddressTextBox.Text = AddressTextBox.Text.Trim();
+        }
+
+        private void ChangeButton_Click(object sender, RoutedEventArgs e) {
+            ChangeButton.IsEnabled = false;
+            if (PostCodeTextBox.Text.Trim() != "") {
+                ToAddress();
+            } else {
+                ToPostCode();
+            }
+            ChangeButton.IsEnabled = true;
         }
     }
 }
