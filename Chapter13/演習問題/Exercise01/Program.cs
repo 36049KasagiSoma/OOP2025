@@ -32,15 +32,20 @@ namespace Exercise01 {
         }
 
         private static void Exercise1_4() {
-
+            Library.Books.OrderByDescending(b => b.PublishedYear)
+                .ThenByDescending(b => b.Price)
+                .ToList().ForEach(Console.WriteLine);
         }
 
         private static void Exercise1_5() {
-
+            Library.Books.Where(b => b.PublishedYear == 2022)
+                .Join(Library.Categories, b => b.CategoryId, c => c.Id, (b, c) => c.Name)
+                .Distinct()
+                .ToList().ForEach(Console.WriteLine);
         }
 
         private static void Exercise1_6() {
-
+            
         }
 
         private static void Exercise1_7() {

@@ -1,18 +1,13 @@
 ﻿namespace Section01 {
     internal class Program {
         static void Main(string[] args) {
-            var price = Library.Books.Where(b => b.CategoryId == 1).Max(b => b.Price);
-            Console.WriteLine(price);
-            Console.WriteLine();
+           var selected = Library.Books.GroupBy(b => b.PublishedYear)
+                .Select(g=>g.MaxBy(b=>b.Price))
+                .OrderBy(b=>b!.PublishedYear);
 
-            var book = Library.Books.Where(b => b.PublishedYear >= 2021).MinBy(b => b.Price);
-            Console.WriteLine(book);
-            Console.WriteLine();
-
-            var avg = Library.Books.Average(b => b.Price);
-
-            var books = Library.Books.Where(b => b.Price > avg);
-            books.ToList().ForEach(Console.WriteLine);
+            foreach (var b in selected) {
+                Console.WriteLine($"{b!.PublishedYear}年 {b!.Title} ({b!.Price})");
+            }
 
         }
     }
