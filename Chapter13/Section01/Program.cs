@@ -1,14 +1,13 @@
 ﻿namespace Section01 {
     internal class Program {
         static void Main(string[] args) {
-           var selected = Library.Books.GroupBy(b => b.PublishedYear)
-                .Select(g=>g.MaxBy(b=>b.Price))
-                .OrderBy(b=>b!.PublishedYear);
-
-            foreach (var b in selected) {
-                Console.WriteLine($"{b!.PublishedYear}年 {b!.Title} ({b!.Price})");
+            var books = Library.Books
+                             .Join(Library.Categories,
+                                b => b.CategoryId, c => c.Id,
+                                (b, c) => new {b.Title, Category = c, b.PublishedYear});
+            foreach (var b in books) {
+                Console.WriteLine($"{b.Title}, {b.Category}, {b.PublishedYear}");
             }
-
         }
     }
 }

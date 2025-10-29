@@ -34,6 +34,7 @@ namespace Exercise01 {
 
         private static void Exercise1_3() {
             Library.Books.GroupBy(b => b.PublishedYear)
+                .OrderBy(g => g.Key)
                 .Select(x => $"{x.Key}:{x.Count()}")
                 .ToList().ForEach(Console.WriteLine);
         }
@@ -70,10 +71,10 @@ namespace Exercise01 {
 
         private static void Exercise1_8() {
             Library.Categories.GroupJoin(
-                Library.Books, c => c.Id,
-                b => b.CategoryId, (c, b) => new { Category = c.Name, Books = b }
-            ).Where(g => g.Books.Count() >= 4)
-            .ToList().ForEach(g => Console.WriteLine(g.Category));
+                    Library.Books, c => c.Id,
+                    b => b.CategoryId, (c, b) => new { Category = c.Name, Books = b }
+                ).Where(g => g.Books.Count() >= 4)
+                .ToList().ForEach(g => Console.WriteLine(g.Category));
         }
     }
 }
