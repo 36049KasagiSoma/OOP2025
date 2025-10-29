@@ -54,7 +54,7 @@ namespace Exercise01 {
         private static void Exercise1_6() {
             Library.Books.GroupBy(b => b.CategoryId).ToList().ForEach(g => {
                 Console.WriteLine($"# {Library.Categories.Where(c => c.Id == g.Key).First().Name}");
-                g.ToList().ForEach(b => Console.WriteLine($"  {b.Title}"));
+                g.ToList().ForEach(b => Console.WriteLine($"   {b.Title}"));
             });
         }
 
@@ -64,7 +64,7 @@ namespace Exercise01 {
                 .GroupBy(b => b.PublishedYear).ToList()
                 .ForEach(g => {
                     Console.WriteLine($"# {g.Key}");
-                    g.ToList().ForEach(b => Console.WriteLine($"  {b.Title}"));
+                    g.ToList().ForEach(b => Console.WriteLine($"   {b.Title}"));
                 });
         }
 
