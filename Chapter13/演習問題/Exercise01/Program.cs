@@ -53,19 +53,22 @@ namespace Exercise01 {
         }
 
         private static void Exercise1_6() {
-            Library.Books.GroupBy(b => b.CategoryId).ToList().ForEach(g => {
-                Console.WriteLine($"# {Library.Categories.Where(c => c.Id == g.Key).First().Name}");
-                g.ToList().ForEach(b => Console.WriteLine($"   {b.Title}"));
-            });
+            Library.Books.Join(Library.Categories, b => b.CategoryId, c => c.Id, (b, c) => new { Category = c.Name, Book = b })
+                .GroupBy(g => g.Category).OrderBy(g => g.Key)
+                .ToList().ForEach(g => {
+                    Console.WriteLine($"# {g.Key}");
+                    g.ToList().ForEach(b => Console.WriteLine($"   {b.Book.Title}"));
+                });
         }
 
         private static void Exercise1_7() {
-            Library.Books.Where(b => b.CategoryId
-                    == Library.Categories.Where(c => c.Name == "Development").First().Id)
-                .GroupBy(b => b.PublishedYear).ToList()
+            Library.Books
+                .Join(Library.Categories, b => b.CategoryId, c => c.Id, (b, c) => new { Category = c.Name, Book = b })
+                .Where(g => g.Category == "Development")
+                .GroupBy(g => g.Book.PublishedYear).ToList()
                 .ForEach(g => {
                     Console.WriteLine($"# {g.Key}");
-                    g.ToList().ForEach(b => Console.WriteLine($"   {b.Title}"));
+                    g.ToList().ForEach(b => Console.WriteLine($"   {b.Book.Title}"));
                 });
         }
 
