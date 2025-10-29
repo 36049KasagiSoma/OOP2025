@@ -41,7 +41,7 @@ namespace Exercise01 {
         private static void Exercise1_4() {
             Library.Books.OrderByDescending(b => b.PublishedYear)
                 .ThenByDescending(b => b.Price)
-                .ToList().ForEach(b => Console.WriteLine($"{b.PublishedYear} {b.Price}円 {b.Title}"));
+                .ToList().ForEach(b => Console.WriteLine($"{b.PublishedYear}年 {b.Price}円 {b.Title}"));
         }
 
         private static void Exercise1_5() {
