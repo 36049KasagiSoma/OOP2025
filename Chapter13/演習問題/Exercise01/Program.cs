@@ -2,18 +2,25 @@
 namespace Exercise01 {
     internal class Program {
         static void Main(string[] args) {
+            Console.WriteLine("(2)");
             Exercise1_2();
             Console.WriteLine();
+            Console.WriteLine("(3)");
             Exercise1_3();
             Console.WriteLine();
+            Console.WriteLine("(4)");
             Exercise1_4();
             Console.WriteLine();
+            Console.WriteLine("(5)");
             Exercise1_5();
             Console.WriteLine();
+            Console.WriteLine("(6)");
             Exercise1_6();
             Console.WriteLine();
+            Console.WriteLine("(7)");
             Exercise1_7();
             Console.WriteLine();
+            Console.WriteLine("(8)");
             Exercise1_8();
 
             Console.ReadLine();
@@ -34,7 +41,7 @@ namespace Exercise01 {
         private static void Exercise1_4() {
             Library.Books.OrderByDescending(b => b.PublishedYear)
                 .ThenByDescending(b => b.Price)
-                .ToList().ForEach(Console.WriteLine);
+                .ToList().ForEach(b => Console.WriteLine($"{b.PublishedYear} {b.Price}円 {b.Title}"));
         }
 
         private static void Exercise1_5() {
@@ -54,11 +61,11 @@ namespace Exercise01 {
         private static void Exercise1_7() {
             Library.Books.Where(b => b.CategoryId
                     == Library.Categories.Where(c => c.Name == "Development").First().Id)
-                .GroupBy(b => b.PublishedYear).ToList().ForEach(g => {
+                .GroupBy(b => b.PublishedYear).ToList()
+                .ForEach(g => {
                     Console.WriteLine($"# {g.Key}");
                     g.ToList().ForEach(b => Console.WriteLine($"  {b.Title}"));
-                }
-            );
+                });
         }
 
         private static void Exercise1_8() {
