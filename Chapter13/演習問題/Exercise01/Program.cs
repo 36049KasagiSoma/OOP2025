@@ -22,10 +22,7 @@ namespace Exercise01 {
             Console.WriteLine();
             Console.WriteLine("(8)");
             Exercise1_8();
-
             Console.ReadLine();
-
-
         }
 
         private static void Exercise1_2() {
@@ -54,7 +51,8 @@ namespace Exercise01 {
 
         private static void Exercise1_6() {
             Library.Books.Join(Library.Categories, b => b.CategoryId, c => c.Id, (b, c) => new { Category = c.Name, Book = b })
-                .GroupBy(g => g.Category).OrderBy(g => g.Key)
+                .GroupBy(g => g.Category)
+                .OrderBy(g => g.Key)
                 .ToList().ForEach(g => {
                     Console.WriteLine($"# {g.Key}");
                     g.ToList().ForEach(b => Console.WriteLine($"   {b.Book.Title}"));
@@ -65,8 +63,9 @@ namespace Exercise01 {
             Library.Books
                 .Join(Library.Categories, b => b.CategoryId, c => c.Id, (b, c) => new { Category = c.Name, Book = b })
                 .Where(g => g.Category == "Development")
-                .GroupBy(g => g.Book.PublishedYear).ToList()
-                .ForEach(g => {
+                .GroupBy(g => g.Book.PublishedYear)
+                .OrderBy(g => g.Key)
+                .ToList().ForEach(g => {
                     Console.WriteLine($"# {g.Key}");
                     g.ToList().ForEach(b => Console.WriteLine($"   {b.Book.Title}"));
                 });
