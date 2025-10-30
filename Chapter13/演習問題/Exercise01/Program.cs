@@ -82,5 +82,6 @@ namespace Exercise01 {
                 .ToList().ForEach(g => Console.WriteLine(g.Category));
         }
 
+
     }
 }
