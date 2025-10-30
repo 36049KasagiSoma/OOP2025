@@ -1,12 +1,20 @@
 ﻿namespace Section01 {
     internal class Program {
         static void Main(string[] args) {
-            var books = Library.Books
-                             .Join(Library.Categories,
-                                b => b.CategoryId, c => c.Id,
-                                (b, c) => new {b.Title, Category = c, b.PublishedYear});
-            foreach (var b in books) {
-                Console.WriteLine($"{b.Title}, {b.Category}, {b.PublishedYear}");
+            var groups = Library.Categories
+                .GroupJoin(Library.Books,
+                c => c.Id,
+                b => b.CategoryId,
+                (c, b) => new {
+                    Category = c.Name,
+                    Books = b,
+                });
+
+            foreach(var g in groups) {
+                Console.WriteLine(g.Category);
+                foreach (var b in g.Books) {
+                    Console.WriteLine($"    {b.Title} ({b.PublishedYear})");
+                }
             }
         }
     }

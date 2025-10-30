@@ -2,6 +2,7 @@
 namespace Exercise01 {
     internal class Program {
         static void Main(string[] args) {
+            #region メソッドの呼出部分
             Console.WriteLine("(2)");
             Exercise1_2();
             Console.WriteLine();
@@ -23,6 +24,7 @@ namespace Exercise01 {
             Console.WriteLine("(8)");
             Exercise1_8();
             Console.ReadLine();
+            #endregion
         }
 
         private static void Exercise1_2() {
@@ -50,7 +52,8 @@ namespace Exercise01 {
         }
 
         private static void Exercise1_6() {
-            Library.Books.Join(Library.Categories, b => b.CategoryId, c => c.Id, (b, c) => new { Category = c.Name, Book = b })
+            Library.Books
+                .Join(Library.Categories, b => b.CategoryId, c => c.Id, (b, c) => new { Category = c.Name, Book = b })
                 .GroupBy(g => g.Category)
                 .OrderBy(g => g.Key)
                 .ToList().ForEach(g => {
@@ -78,5 +81,6 @@ namespace Exercise01 {
                 ).Where(g => g.Books.Count() >= 4)
                 .ToList().ForEach(g => Console.WriteLine(g.Category));
         }
+
     }
 }
