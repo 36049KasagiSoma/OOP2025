@@ -12,9 +12,11 @@ using System.Windows.Forms;
 namespace Exercise01 {
     public partial class FindKeywordDiarog : Form {
         IFindEvent? findEvent;
-        public FindKeywordDiarog(IFindEvent? events) {
+
+        public FindKeywordDiarog(IFindEvent? events, string keyword ="") {
             InitializeComponent();
             this.findEvent = events;
+            textBox1.Text = keyword;
         }
 
         public void button1_Click(object sender, EventArgs e) {

@@ -42,7 +42,12 @@ namespace Exercise01 {
             switch (keyData) {
                 case Keys.Control | Keys.F:// Ctrl + F
                     if (findDialog == null || findDialog.IsDisposed) {
-                        findDialog = new FindKeywordDiarog(new FindKeyword(textBox1));
+                        if(textBox1.SelectionLength > 0) {
+                            string selectedText = textBox1.Text.Substring(textBox1.SelectionStart, textBox1.SelectionLength);
+                            findDialog = new FindKeywordDiarog(new FindKeyword(textBox1), selectedText);
+                        } else {
+                            findDialog = new FindKeywordDiarog(new FindKeyword(textBox1));
+                        }
                         findDialog.Show(this);
                     } else {
                         findDialog.Activate();
