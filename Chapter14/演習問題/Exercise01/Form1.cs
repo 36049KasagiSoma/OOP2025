@@ -1,3 +1,4 @@
+using System.Text;
 using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
@@ -17,13 +18,16 @@ namespace Exercise01 {
 
         private async void readFile() {
             tssl.Text = "“Ç‚Ýž‚Ý’†...";
-            var text = "";
+            StringBuilder sb=new StringBuilder();
             using (var sr = new StreamReader(textBox2.Text)) {
-                text = await sr.ReadToEndAsync();
+                while(!sr.EndOfStream) {
+                    var line = await sr.ReadLineAsync();
+                    sb.AppendLine(line);
+                }
             }
-            textBox1.Text = text;
+            textBox1.Text = sb.ToString();
             tssl.Text = "";
-            dispStatus(text.Length);
+            dispStatus(sb.ToString().Length);
         }
 
         private void textBox2_KeyDown(object sender, KeyEventArgs e) {
@@ -42,7 +46,7 @@ namespace Exercise01 {
             switch (keyData) {
                 case Keys.Control | Keys.F:// Ctrl + F
                     if (findDialog == null || findDialog.IsDisposed) {
-                        if(textBox1.SelectionLength > 0) {
+                        if (textBox1.SelectionLength > 0) {
                             string selectedText = textBox1.Text.Substring(textBox1.SelectionStart, textBox1.SelectionLength);
                             findDialog = new FindKeywordDiarog(new FindKeyword(textBox1), selectedText);
                         } else {
@@ -54,7 +58,6 @@ namespace Exercise01 {
                         findDialog.Focus();
                     }
                     return true;
-
             }
 
             return base.ProcessCmdKey(ref msg, keyData);

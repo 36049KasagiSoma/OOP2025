@@ -25,53 +25,60 @@
         private void InitializeComponent() {
             statusStrip1 = new StatusStrip();
             tssl = new ToolStripStatusLabel();
+            sttl3 = new ToolStripStatusLabel();
             sttl2 = new ToolStripStatusLabel();
             textBox1 = new TextBox();
             button1 = new Button();
             textBox2 = new TextBox();
             openFileDialog1 = new OpenFileDialog();
-            sttl3 = new ToolStripStatusLabel();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { tssl, sttl3, sttl2 });
-            statusStrip1.Location = new Point(0, 428);
+            statusStrip1.Location = new Point(0, 339);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(800, 22);
+            statusStrip1.Size = new Size(684, 22);
             statusStrip1.TabIndex = 0;
             statusStrip1.Text = "statusStrip1";
             // 
             // tssl
             // 
             tssl.Name = "tssl";
-            tssl.Size = new Size(551, 17);
+            tssl.Size = new Size(531, 17);
             tssl.Spring = true;
             tssl.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // sttl3
+            // 
+            sttl3.Name = "sttl3";
+            sttl3.Size = new Size(101, 17);
+            sttl3.Text = "[Ctrl]+[F]で検索　";
             // 
             // sttl2
             // 
             sttl2.Name = "sttl2";
-            sttl2.Size = new Size(118, 17);
-            sttl2.Text = "toolStripStatusLabel1";
+            sttl2.Size = new Size(37, 17);
+            sttl2.Text = "0文字";
             // 
             // textBox1
             // 
             textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox1.BorderStyle = BorderStyle.None;
             textBox1.HideSelection = false;
             textBox1.Location = new Point(12, 47);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
             textBox1.ScrollBars = ScrollBars.Both;
-            textBox1.Size = new Size(776, 378);
+            textBox1.Size = new Size(660, 289);
             textBox1.TabIndex = 1;
             textBox1.WordWrap = false;
             // 
             // button1
             // 
             button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button1.Location = new Point(727, 8);
+            button1.Location = new Point(611, 8);
             button1.Name = "button1";
             button1.Size = new Size(61, 29);
             button1.TabIndex = 2;
@@ -84,7 +91,7 @@
             textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBox2.Location = new Point(12, 12);
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(709, 23);
+            textBox2.Size = new Size(593, 23);
             textBox2.TabIndex = 3;
             textBox2.KeyDown += textBox2_KeyDown;
             // 
@@ -92,21 +99,16 @@
             // 
             openFileDialog1.FileName = "openFileDialog1";
             // 
-            // sttl3
-            // 
-            sttl3.Name = "sttl3";
-            sttl3.Size = new Size(85, 17);
-            sttl3.Text = "Ctrl+Fで検索　";
-            // 
             // ReadingTextLines
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(684, 361);
             Controls.Add(textBox2);
             Controls.Add(button1);
             Controls.Add(textBox1);
             Controls.Add(statusStrip1);
+            MinimumSize = new Size(700, 400);
             Name = "ReadingTextLines";
             Text = "Form1";
             statusStrip1.ResumeLayout(false);
