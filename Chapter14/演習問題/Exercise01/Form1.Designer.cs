@@ -1,5 +1,5 @@
 ﻿namespace Exercise01 {
-    partial class テキスト読み込み {
+    partial class ReadingTextLines {
         /// <summary>
         ///  Required designer variable.
         /// </summary>
@@ -30,12 +30,13 @@
             button1 = new Button();
             textBox2 = new TextBox();
             openFileDialog1 = new OpenFileDialog();
+            sttl3 = new ToolStripStatusLabel();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { tssl, sttl2 });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { tssl, sttl3, sttl2 });
             statusStrip1.Location = new Point(0, 428);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(800, 22);
@@ -45,7 +46,7 @@
             // tssl
             // 
             tssl.Name = "tssl";
-            tssl.Size = new Size(667, 17);
+            tssl.Size = new Size(551, 17);
             tssl.Spring = true;
             tssl.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -58,6 +59,7 @@
             // textBox1
             // 
             textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox1.HideSelection = false;
             textBox1.Location = new Point(12, 47);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
@@ -90,7 +92,13 @@
             // 
             openFileDialog1.FileName = "openFileDialog1";
             // 
-            // テキスト読み込み
+            // sttl3
+            // 
+            sttl3.Name = "sttl3";
+            sttl3.Size = new Size(85, 17);
+            sttl3.Text = "Ctrl+Fで検索　";
+            // 
+            // ReadingTextLines
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -99,7 +107,7 @@
             Controls.Add(button1);
             Controls.Add(textBox1);
             Controls.Add(statusStrip1);
-            Name = "テキスト読み込み";
+            Name = "ReadingTextLines";
             Text = "Form1";
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
@@ -116,5 +124,6 @@
         private TextBox textBox2;
         private OpenFileDialog openFileDialog1;
         private ToolStripStatusLabel sttl2;
+        private ToolStripStatusLabel sttl3;
     }
 }
