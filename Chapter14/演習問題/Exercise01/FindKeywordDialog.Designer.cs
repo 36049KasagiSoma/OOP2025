@@ -87,6 +87,8 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(textBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "FindKeywordDiarog";
             Text = "検索";
             ResumeLayout(false);
