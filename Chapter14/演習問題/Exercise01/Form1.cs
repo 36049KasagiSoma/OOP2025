@@ -18,14 +18,19 @@ namespace Exercise01 {
 
         private async void readFile() {
             tssl.Text = "ì«Ç›çûÇ›íÜ...";
+            textBox2.Enabled = false;
+            button1.Enabled = false;
             StringBuilder sb=new StringBuilder();
             using (var sr = new StreamReader(textBox2.Text)) {
                 while(!sr.EndOfStream) {
                     var line = await sr.ReadLineAsync();
                     sb.AppendLine(line);
+                    //await Task.Delay(10);
                 }
             }
             textBox1.Text = sb.ToString();
+            textBox2.Enabled = true;
+            button1.Enabled = true;
             tssl.Text = "";
             dispStatus(sb.ToString().Length);
         }
