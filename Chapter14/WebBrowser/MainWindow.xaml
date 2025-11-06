@@ -6,20 +6,18 @@
         xmlns:local="clr-namespace:WebBrowser"
         xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" x:Class="WebBrowser.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="WebBrowser" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- アドレスバー -->
-            <RowDefinition Height="Auto"/>
-            <!--  -->
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>  <!-- アドレスバー -->
+            <RowDefinition Height="Auto"/>  <!--  -->
+            <RowDefinition Height="*"/>     <!--  -->
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0" Margin="5">
-            <ProgressBar x:Name="LoadingProgressBar" Margin="0,2,0,0" Height="2" DockPanel.Dock="Bottom"/>
+            <ProgressBar x:Name="LoadingProgressBar" Margin="0,2,0,0" Height="2" DockPanel.Dock="Bottom" Foreground="#FF0090FF" FontWeight="Light"/>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                <Button Content="戻る" Width="60" Margin="0,0,5,0" Click="BackButton_Click"/>
-                <Button Content="進む" Width="60" Margin="0,0,5,0" Click="ForwordButton_Click"/>
+                <Button x:Name="BackButton" Content="戻る" Width="60" Margin="0,0,5,0" Click="BackButton_Click"/>
+                <Button x:Name="ForwordButton" Content="進む" Width="60" Margin="0,0,5,0" Click="ForwordButton_Click"/>
             </StackPanel>
             <Button Content="移動" Width="60" Click="GoButton_Click" DockPanel.Dock="Right"/>
             <TextBox x:Name="AddressBar" Margin="0,0,5,0" KeyDown="AddressBar_KeyDown"/>
