@@ -41,7 +41,6 @@ namespace WebBrowser {
                 this.Title = $"WebBrowser : {webView.CoreWebView2.DocumentTitle}";
                 UpdateNavigationButtons();
             };
-
             webView.EnsureCoreWebView2Async(null);
         }
 
