@@ -1,0 +1,33 @@
+	private class Counter{
+		private int cnt = 0;
+		Counter(){};
+		void up(int value){
+			cnt += value;
+		}
+		void up(){
+			add(1);
+		}
+		void down(int value){
+			cnt -= value;
+		}
+		void down(){
+			down(1);
+		}
+		int getValue(){
+			return cnt;
+		}
+	}
+
+	private class CountTest{
+		static void upTest(Counter c, int v, int m){
+			for(int i = 0; i < m; i++){
+				c.up(v);
+			}
+		}
+		static void downTest(Counter c, int v, int m){
+			for(int i = 0; i < m; i++){
+				c.down(v);
+			}
+		}
+	}
+}
