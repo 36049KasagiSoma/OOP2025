@@ -1,0 +1,46 @@
+public class Main{
+	public static void main(String[] args){
+		Counter c = new Counter();
+		c.up(5);
+		c.down(2);
+		c.up(3);
+		System.out.println(c.getValue());
+		CountTest.upTest(c, 5, 10);
+		System.out.println(c.getValue());
+		CountTest.downTest(c, 2, 4);
+		System.out.println(c.getValue());
+	}
+
+	private class Counter{
+		private int cnt = 0;
+		Counter(){};
+		void up(int value){
+			cnt += value;
+		}
+		void up(){
+			add(1);
+		}
+		void down(int value){
+			cnt -= value;
+		}
+		void down(){
+			down(1);
+		}
+		int getValue(){
+			return cnt;
+		}
+	}
+
+	private class CountTest{
+		static void upTest(Counter c, int v, int m){
+			for(int i = 0; i < m; i++){
+				c.up(v);
+			}
+		}
+		static void downTest(Counter c, int v, int m){
+			for(int i = 0; i < m; i++){
+				c.down(v);
+			}
+		}
+	}
+}

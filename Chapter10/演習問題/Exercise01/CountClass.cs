@@ -14,13 +14,39 @@ namespace Exercise01 {
 
         public int CountClassStr() {
             int cnt = 0;
-            
-            using(StreamReader reader = new StreamReader(_path)) {
+
+            using (StreamReader reader = new StreamReader(_path)) {
                 string? line;
-                while((line = reader.ReadLine()) != null) {
-                    if(Regex.IsMatch(line, @"\sclass\s")) {
+                while ((line = reader.ReadLine()) != null) {
+                    if (Regex.IsMatch(line, @"\sclass\s")) {
                         cnt++;
                     }
+                }
+            }
+
+            return cnt;
+        }
+
+        public int CountClassStr2() {
+            int cnt = 0;
+
+            string[] line = File.ReadAllLines(_path);
+            foreach (string str in line) {
+                if (Regex.IsMatch(str, @"\sclass\s")) {
+                    cnt++;
+                }
+            }
+
+            return cnt;
+        }
+
+        public int CountClassStr3() {
+            int cnt = 0;
+
+            List<string> line = File.ReadLines(_path).ToList();
+            foreach (string str in line) {
+                if (Regex.IsMatch(str, @"\sclass\s")) {
+                    cnt++;
                 }
             }
 
