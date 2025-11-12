@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LineCounter": {
+      "commandName": "Project",
+      "commandLineArgs": "sample.txt"
+    }
+  }
+}
