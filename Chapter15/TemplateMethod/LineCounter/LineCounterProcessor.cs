@@ -19,7 +19,7 @@ namespace LineCounter {
         protected override void Execute(string line) {
             _cnt += Regex.Matches(line, @$".*{Regex.Escape(_word)}.*").Count;
         }
-        protected override void Terminate() => Console.WriteLine($"{_cnt} 行");
+        protected override void Terminate() => Console.WriteLine($"{_cnt} 個");
 
         public int GetCount() => _cnt;
     }
