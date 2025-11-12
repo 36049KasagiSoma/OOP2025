@@ -13,7 +13,7 @@
                 var size = new FileInfo(file).Length;
                 if (size >= megabyte) {
                     string name = Path.GetFileName(file);
-                    Console.WriteLine($"{size/megabyte,5}MB({size,10}B):{name}");
+                    Console.WriteLine($"{size/megabyte,5} MB({size,10} B):{name}");
                 }
 
             }
