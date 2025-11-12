@@ -17,7 +17,7 @@ namespace LineCounter {
             _word = Console.ReadLine()??string.Empty;
         }
         protected override void Execute(string line) {
-            _cnt += Regex.Matches(line, @$".*{_word}.*").Count();
+            _cnt += Regex.Matches(line, @$".*{Regex.Escape(_word)}.*").Count();
         }
         protected override void Terminate() => Console.WriteLine($"{_cnt} 行");
 
