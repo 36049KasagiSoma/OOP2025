@@ -5,7 +5,7 @@ namespace LineCounter {
         static void Main(string[] args) {
             string filePath;
             do {
-                Console.Write("ファイルパス >");
+                Console.Write("ファイルパス > ");
                 filePath = Console.ReadLine() ?? args[0];
             } while (!File.Exists(filePath));
             TextProcessor.Run<LineCounterProcessor>(filePath);
