@@ -13,7 +13,7 @@ namespace LineCounter {
 
         protected override void Initialize(string fname) {
             _cnt = 0;
-            Console.Write("検索文字列 > ");
+            Console.Write("検索文字列 >");
             _word = Console.ReadLine()??string.Empty;
         }
         protected override void Execute(string line) {
