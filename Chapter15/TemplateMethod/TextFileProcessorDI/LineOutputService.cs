@@ -14,7 +14,7 @@ namespace TextFileProcessorDI {
         public void Execute(string line) {
             _count++;
             if (_count <= _maxCount)
-                Console.WriteLine($"{GetlineNum(_count, _maxCount.ToString().Length)}|{line}");
+                Console.WriteLine($"{GetLineNum(_count, _maxCount.ToString().Length)}|{line}");
         }
 
         public void Initialize(string fname) {
@@ -24,7 +24,7 @@ namespace TextFileProcessorDI {
         public void Terminate() {
         }
 
-        private string GetlineNum(int num, int length) {
+        private string GetLineNum(int num, int length) {
             StringBuilder space = new StringBuilder();
             while (num.ToString().Length + space.ToString().Length < length) {
                 space.Append(' ');
