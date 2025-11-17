@@ -26,10 +26,10 @@ namespace TextFileProcessorDI {
 
         private string GetlineNum(int num, int length) {
             StringBuilder space = new StringBuilder();
-            while (num.ToString().Length + space.Length < length) {
+            while (num.ToString().Length + space.ToString().Length < length) {
                 space.Append(' ');
             }
-            return space + num.ToString();
+            return space.ToString() + num.ToString();
         }
     }
 }
