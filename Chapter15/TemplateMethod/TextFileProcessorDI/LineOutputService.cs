@@ -15,6 +15,9 @@ namespace TextFileProcessorDI {
             _count++;
             if (_count <= _maxCount)
                 Console.WriteLine($"{GetLineNum(_count, _maxCount.ToString().Length)}|{line}");
+            else {
+
+            }
         }
 
         public void Initialize(string fname) {
