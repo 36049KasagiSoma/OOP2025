@@ -8,4 +8,40 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="icons\weather_clear.png" />
+    <None Remove="icons\weather_cloudy.png" />
+    <None Remove="icons\weather_drizzle.png" />
+    <None Remove="icons\weather_fog.png" />
+    <None Remove="icons\weather_rain.png" />
+    <None Remove="icons\weather_shower.png" />
+    <None Remove="icons\weather_snow.png" />
+    <None Remove="icons\weather_snow_shower.png" />
+    <None Remove="icons\weather_sunny.png" />
+    <None Remove="icons\weather_thunderstorm.png" />
+    <None Remove="icons\weather_thunderstorm_hail.png" />
+    <None Remove="icons\weather_unknown.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="icons\weather_clear.png" />
+    <Resource Include="icons\weather_cloudy.png" />
+    <Resource Include="icons\weather_drizzle.png" />
+    <Resource Include="icons\weather_fog.png" />
+    <Resource Include="icons\weather_rain.png" />
+    <Resource Include="icons\weather_shower.png" />
+    <Resource Include="icons\weather_snow.png" />
+    <Resource Include="icons\weather_snow_shower.png" />
+    <Resource Include="icons\weather_sunny.png" />
+    <Resource Include="icons\weather_thunderstorm.png" />
+    <Resource Include="icons\weather_thunderstorm_hail.png" />
+    <Resource Include="icons\weather_unknown.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="japan.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
