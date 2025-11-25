@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation.Peers;
@@ -12,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 
 namespace TenkiApp {
     public partial class MainWindow : Window {
@@ -40,7 +43,8 @@ namespace TenkiApp {
             MapCanvas.MouseLeftButtonUp += MapCanvas_MouseLeftButtonUp;
 
             // 初期表示
-            UpdateCoordinates();
+            //UpdateCoordinates();
+            CmbCity_SelectionChanged(this, null);
         }
 
         private void MapCanvas_SizeChanged(object sender, SizeChangedEventArgs e) {
@@ -49,19 +53,55 @@ namespace TenkiApp {
         }
 
         private void InitializeCities() {
-            cities = new Dictionary<string, CityInfo>
-            {
-                { "札幌", new CityInfo(43.0642, 141.3469) },
-                { "仙台", new CityInfo(38.2682, 140.8694) },
-                { "東京", new CityInfo(35.6762, 139.6503) },
-                { "横浜", new CityInfo(35.4437, 139.6380) },
-                { "名古屋", new CityInfo(35.1815, 136.9066) },
-                { "京都", new CityInfo(35.0116, 135.7681) },
-                { "大阪", new CityInfo(34.6937, 135.5023) },
-                { "神戸", new CityInfo(34.6901, 135.1955) },
-                { "広島", new CityInfo(34.3853, 132.4553) },
-                { "福岡", new CityInfo(33.5904, 130.4017) },
-                { "那覇", new CityInfo(26.2124, 127.6809) }
+            cities = new Dictionary<string, CityInfo>{
+                { "現在位置", new CityInfo(0,0) },
+                { "北海道（札幌）", new CityInfo(43.0642, 141.3469) }, // 北海道・東北
+                { "青森（青森）", new CityInfo(40.8246, 140.7400) },
+                { "岩手（盛岡）", new CityInfo(39.7036, 141.1527) },
+                { "宮城（仙台）", new CityInfo(38.2682, 140.8694) },
+                { "秋田（秋田）", new CityInfo(39.7186, 140.1024) },
+                { "山形（山形）", new CityInfo(38.2404, 140.3633) },
+                { "福島（福島）", new CityInfo(37.7608, 140.4747) },
+                { "茨城（水戸）", new CityInfo(36.3659, 140.4712) }, // 関東
+                { "栃木（宇都宮）", new CityInfo(36.5551, 139.8828) },
+                { "群馬（前橋）", new CityInfo(36.3895, 139.0640) },
+                { "埼玉（さいたま）", new CityInfo(35.8617, 139.6455) },
+                { "千葉（千葉）", new CityInfo(35.6073, 140.1063) },
+                { "東京（東京）", new CityInfo(35.6762, 139.6503) },
+                { "神奈川（横浜）", new CityInfo(35.4437, 139.6380) },
+                { "新潟（新潟）", new CityInfo(37.9161, 139.0364) },// 中部
+                { "富山（富山）", new CityInfo(36.6953, 137.2114) },
+                { "石川（金沢）", new CityInfo(36.5947, 136.6256) },
+                { "福井（福井）", new CityInfo(36.0641, 136.2196) },
+                { "山梨（甲府）", new CityInfo(35.6639, 138.5684) },
+                { "長野（長野）", new CityInfo(36.6513, 138.1810) },
+                { "岐阜（岐阜）", new CityInfo(35.4233, 136.7607) },
+                { "静岡（静岡）", new CityInfo(34.9769, 138.3831) },
+                { "愛知（名古屋）", new CityInfo(35.1815, 136.9066) },
+                { "三重（津）", new CityInfo(34.7303, 136.5086) }, // 近畿
+                { "滋賀（大津）", new CityInfo(35.0045, 135.8686) },
+                { "京都（京都）", new CityInfo(35.0116, 135.7681) },
+                { "大阪（大阪）", new CityInfo(34.6937, 135.5023) },
+                { "兵庫（神戸）", new CityInfo(34.6901, 135.1955) },
+                { "奈良（奈良）", new CityInfo(34.6851, 135.8050) },
+                { "和歌山（和歌山）", new CityInfo(34.2260, 135.1675) },
+                { "鳥取（鳥取）", new CityInfo(35.5039, 134.2377) }, // 中国
+                { "島根（松江）", new CityInfo(35.4681, 133.0484) },
+                { "岡山（岡山）", new CityInfo(34.6554, 133.9195) },
+                { "広島（広島）", new CityInfo(34.3853, 132.4553) },
+                { "山口（山口）", new CityInfo(34.1861, 131.4705) },
+                { "徳島（徳島）", new CityInfo(34.0703, 134.5548) }, // 四国
+                { "香川（高松）", new CityInfo(34.3428, 134.0466) },
+                { "愛媛（松山）", new CityInfo(33.8393, 132.7657) },
+                { "高知（高知）", new CityInfo(33.5597, 133.5311) },
+                { "福岡（福岡）", new CityInfo(33.5904, 130.4017) },  // 九州・沖縄
+                { "佐賀（佐賀）", new CityInfo(33.2635, 130.3008) },
+                { "長崎（長崎）", new CityInfo(32.7503, 129.8777) },
+                { "熊本（熊本）", new CityInfo(32.8031, 130.7079) },
+                { "大分（大分）", new CityInfo(33.2382, 131.6126) },
+                { "宮崎（宮崎）", new CityInfo(31.9077, 131.4202) },
+                { "鹿児島（鹿児島）", new CityInfo(31.5602, 130.5581) },
+                { "沖縄（那覇）", new CityInfo(26.2124, 127.6809) }
             };
         }
 
@@ -336,18 +376,22 @@ namespace TenkiApp {
                 // シングルクリックでドラッグ開始
                 isDragging = true;
                 MapCanvas.CaptureMouse();
-                MapCanvas.Cursor = Cursors.Hand;
+                MapCanvas.Cursor = Cursors.ScrollAll;
             }
 
             e.Handled = true;
         }
 
-        private void CmbCity_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void CmbCity_SelectionChanged(object sender, SelectionChangedEventArgs? e) {
             if (cmbCity.SelectedItem is ComboBoxItem item) {
                 string cityName = item.Content.ToString();
                 if (cities.ContainsKey(cityName)) {
                     selectedCity = cityName;
-                    UpdateCoordinates();
+                    if (cityName == "現在位置") {
+                        UpdateCoordinatesForGenzaiti();
+                    } else {
+                        UpdateCoordinates();
+                    }
                     UpdateMarkerPosition();
                 }
             }
@@ -363,6 +407,61 @@ namespace TenkiApp {
             }
         }
 
+        private async void UpdateCoordinatesForGenzaiti() {
+            var location = await GetCurrentLocationAsync();
+            if (location.HasValue) {
+                txtLatitude.Text = location.Value.latitude.ToString("F4");
+                txtLongitude.Text = location.Value.longitude.ToString("F4");
+                txtCurrentCity.Text = selectedCity;
+                UpdateMarkerPosition();
+                ButtonExtensions.PerformClick(btnGetWeather);
+            }
+        }
+
+        public async Task<(double latitude, double longitude)?> GetCurrentLocationAsync() {
+            try {
+                using var httpClient = new HttpClient();
+
+                // IPベースで位置情報を取得
+                var response = await httpClient.GetFromJsonAsync<IpApiResponse>("http://ip-api.com/json/");
+
+                if (response != null && response.Status == "success") {
+                    return (response.Lat, response.Lon);
+                } else {
+                    MessageBox.Show(
+                        "位置情報の取得に失敗しました。",
+                        "エラー",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    return null;
+                }
+            } catch (Exception ex) {
+                MessageBox.Show(
+                    $"位置情報の取得に失敗しました。\n{ex.Message}",
+                    "エラー",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return null;
+            }
+        }
+
+        // JSONレスポンス用のクラス
+        public class IpApiResponse {
+            [JsonPropertyName("status")]
+            public string Status { get; set; } = "";
+
+            [JsonPropertyName("lat")]
+            public double Lat { get; set; }
+
+            [JsonPropertyName("lon")]
+            public double Lon { get; set; }
+
+            [JsonPropertyName("city")]
+            public string City { get; set; } = "";
+
+            [JsonPropertyName("country")]
+            public string Country { get; set; } = "";
+        }
 
         private async void BtnGetWeather_Click(object sender, RoutedEventArgs e) {
             LoadingOverlay.Visibility = Visibility.Visible;

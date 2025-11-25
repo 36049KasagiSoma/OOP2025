@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="icons\weather_clear.png" />
     <None Remove="icons\weather_cloudy.png" />
@@ -22,7 +21,9 @@
     <None Remove="icons\weather_thunderstorm_hail.png" />
     <None Remove="icons\weather_unknown.png" />
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http.Json" Version="10.0.0" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\weather_clear.png" />
     <Resource Include="icons\weather_cloudy.png" />
@@ -37,11 +38,9 @@
     <Resource Include="icons\weather_thunderstorm_hail.png" />
     <Resource Include="icons\weather_unknown.png" />
   </ItemGroup>
-
   <ItemGroup>
     <None Update="japan.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
