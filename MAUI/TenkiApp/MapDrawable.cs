@@ -219,54 +219,54 @@ public class MapDrawable : IDrawable {
         // 簡易的な日本地図（GeoJSON読み込み失敗時）
         var path = new PathF();
 
-        // 北海道
-        path.MoveTo(160, 20);
-        path.LineTo(200, 15);
-        path.LineTo(220, 25);
-        path.LineTo(215, 45);
-        path.LineTo(210, 55);
-        path.LineTo(190, 60);
-        path.LineTo(170, 50);
-        path.LineTo(165, 35);
-        path.Close();
+        //// 北海道
+        //path.MoveTo(160, 20);
+        //path.LineTo(200, 15);
+        //path.LineTo(220, 25);
+        //path.LineTo(215, 45);
+        //path.LineTo(210, 55);
+        //path.LineTo(190, 60);
+        //path.LineTo(170, 50);
+        //path.LineTo(165, 35);
+        //path.Close();
 
-        // 本州
-        path.MoveTo(185, 80);
-        path.LineTo(195, 85);
-        path.LineTo(200, 95);
-        path.LineTo(205, 110);
-        path.LineTo(200, 130);
-        path.LineTo(195, 145);
-        path.LineTo(190, 160);
-        path.LineTo(195, 175);
-        path.LineTo(200, 185);
-        path.LineTo(195, 200);
-        path.LineTo(185, 210);
-        path.LineTo(175, 215);
-        path.LineTo(160, 220);
-        path.LineTo(145, 225);
-        path.LineTo(130, 228);
-        path.LineTo(115, 230);
-        path.LineTo(100, 228);
-        path.LineTo(90, 220);
-        path.LineTo(85, 205);
-        path.LineTo(90, 190);
-        path.LineTo(100, 180);
-        path.LineTo(110, 175);
-        path.LineTo(125, 170);
-        path.LineTo(140, 165);
-        path.LineTo(150, 155);
-        path.LineTo(155, 145);
-        path.LineTo(160, 130);
-        path.LineTo(165, 115);
-        path.LineTo(170, 100);
-        path.LineTo(175, 90);
-        path.Close();
+        //// 本州
+        //path.MoveTo(185, 80);
+        //path.LineTo(195, 85);
+        //path.LineTo(200, 95);
+        //path.LineTo(205, 110);
+        //path.LineTo(200, 130);
+        //path.LineTo(195, 145);
+        //path.LineTo(190, 160);
+        //path.LineTo(195, 175);
+        //path.LineTo(200, 185);
+        //path.LineTo(195, 200);
+        //path.LineTo(185, 210);
+        //path.LineTo(175, 215);
+        //path.LineTo(160, 220);
+        //path.LineTo(145, 225);
+        //path.LineTo(130, 228);
+        //path.LineTo(115, 230);
+        //path.LineTo(100, 228);
+        //path.LineTo(90, 220);
+        //path.LineTo(85, 205);
+        //path.LineTo(90, 190);
+        //path.LineTo(100, 180);
+        //path.LineTo(110, 175);
+        //path.LineTo(125, 170);
+        //path.LineTo(140, 165);
+        //path.LineTo(150, 155);
+        //path.LineTo(155, 145);
+        //path.LineTo(160, 130);
+        //path.LineTo(165, 115);
+        //path.LineTo(170, 100);
+        //path.LineTo(175, 90);
+        //path.Close();
 
-        canvas.FillColor = Color.FromArgb("#BAE6FD");
-        canvas.FillPath(path);
-        canvas.StrokeColor = Color.FromArgb("#94A3B8");
-        canvas.StrokeSize = 2;
+        //canvas.FillColor = Color.FromArgb("#BAE6FD");
+        //canvas.FillPath(path);
+        //canvas.StrokeColor = Color.FromArgb("#94A3B8");
+        //canvas.StrokeSize = 2;
         canvas.DrawPath(path);
     }
 }
