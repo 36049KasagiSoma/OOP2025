@@ -22,9 +22,9 @@ public partial class MainPage : ContentPage {
         mapDrawable = new MapDrawable();
         MapGraphicsView.Drawable = mapDrawable;
 
-        // ジェスチャーの追加
-        var tapGesture = new TapGestureRecognizer { NumberOfTapsRequired = 2 };
-        tapGesture.Tapped += MapCanvas_DoubleTapped;
+        // MapGraphicsViewではなくMapCanvasにジェスチャーを設定（既存のまま）
+        var tapGesture = new TapGestureRecognizer { NumberOfTapsRequired = 1 }; // 1に変更
+        tapGesture.Tapped += MapCanvas_Tapped; // メソッド名変更
         MapCanvas.GestureRecognizers.Add(tapGesture);
 
         var panGesture = new PanGestureRecognizer();
@@ -35,8 +35,114 @@ public partial class MainPage : ContentPage {
         pinchGesture.PinchUpdated += MapCanvas_PinchUpdated;
         MapCanvas.GestureRecognizers.Add(pinchGesture);
 
+        // GraphicsViewにもタップ処理を追加
+        MapGraphicsView.StartInteraction += MapGraphicsView_StartInteraction; // 追加
+        MapGraphicsView.EndInteraction += MapGraphicsView_EndInteraction; // 追加
+
         // 初期天気取得
         _ = LoadMapAndGetWeatherAsync();
+    }
+
+    private PointF tapStartPoint; // クラスフィールドとして追加
+    private DateTime tapStartTime; // クラスフィールドとして追加
+
+    private void MapGraphicsView_StartInteraction(object sender, TouchEventArgs e) {
+        tapStartPoint = e.Touches.FirstOrDefault();
+        tapStartTime = DateTime.Now;
+    }
+
+    private async void MapGraphicsView_EndInteraction(object sender, TouchEventArgs e) {
+        if (isPanning) return;
+
+        var endPoint = e.Touches.FirstOrDefault();
+        var duration = DateTime.Now - tapStartTime;
+
+        // タップ判定：移動距離が小さく、時間が短い場合
+        if (duration.TotalMilliseconds < 300 &&
+            Math.Abs(endPoint.X - tapStartPoint.X) < 10 &&
+            Math.Abs(endPoint.Y - tapStartPoint.Y) < 10) {
+
+            var (lat, lon) = mapDrawable.ScreenToGeoCoordinates(
+                endPoint.X,
+                endPoint.Y,
+                (float)MapGraphicsView.Width,
+                (float)MapGraphicsView.Height
+            );
+
+            if (lat >= 23.0 && lat <= 46.5 && lon >= 122.0 && lon <= 146.0) {
+                LoadingOverlay.IsVisible = true;
+
+                try {
+                    txtLatitude.Text = lat.ToString("F4");
+                    txtLongitude.Text = lon.ToString("F4");
+
+                    // 地名を取得
+                    string addressName = await GetAddressFromCoordinates(lat, lon); // 追加
+                    selectedCity = addressName; // 変更
+                    txtCurrentCity.Text = selectedCity;
+
+                    cmbCity.SelectedIndex = 0;
+
+                    if (mapDrawable != null) {
+                        mapDrawable.SetMarkerPosition(lat, lon);
+                        MapGraphicsView.Invalidate();
+                    }
+
+                    await GetWeatherData(lat, lon);
+                } finally {
+                    LoadingOverlay.IsVisible = false;
+                }
+            }
+        }
+    }
+
+    private async Task<string> GetAddressFromCoordinates(double latitude, double longitude) {
+        try {
+            using (var client = new HttpClient()) {
+                // User-Agentヘッダーが必須
+                client.DefaultRequestHeaders.Add("User-Agent", "TenkiApp/1.0");
+
+                // OpenStreetMap Nominatim API（逆ジオコーディング）
+                string url = $"https://nominatim.openstreetmap.org/reverse?" +
+                    $"format=json&lat={latitude}&lon={longitude}&accept-language=ja";
+
+                var response = await client.GetStringAsync(url);
+                var data = JsonSerializer.Deserialize<JsonElement>(response);
+
+                if (data.TryGetProperty("address", out var address)) {
+                    string city = "";
+                    string prefecture = "";
+
+                    // 市区町村を取得
+                    if (address.TryGetProperty("city", out var cityProp)) {
+                        city = cityProp.GetString();
+                    } else if (address.TryGetProperty("town", out var townProp)) {
+                        city = townProp.GetString();
+                    } else if (address.TryGetProperty("village", out var villageProp)) {
+                        city = villageProp.GetString();
+                    }
+
+                    // 都道府県を取得
+                    if (address.TryGetProperty("state", out var stateProp)) {
+                        prefecture = stateProp.GetString();
+                    }
+
+                    // 表示用の文字列を作成
+                    if (!string.IsNullOrEmpty(prefecture) && !string.IsNullOrEmpty(city)) {
+                        return $"{prefecture} {city}";
+                    } else if (!string.IsNullOrEmpty(prefecture)) {
+                        return prefecture;
+                    } else if (!string.IsNullOrEmpty(city)) {
+                        return city;
+                    }
+                }
+
+                return "カスタム位置";
+            }
+        } catch (Exception ex) {
+            System.Diagnostics.Debug.WriteLine($"住所取得エラー: {ex.Message}");
+            return "カスタム位置";
+        }
     }
 
     private void InitializeCityPicker() {
@@ -288,13 +394,14 @@ public partial class MainPage : ContentPage {
         }
     }
 
-    private void MapCanvas_DoubleTapped(object sender, EventArgs e) {
+    private async void MapCanvas_Tapped(object sender, EventArgs e) {
+        if (isPanning) return; // パン中は無視
+
         if (e is TappedEventArgs tappedArgs) {
             var position = tappedArgs.GetPosition(MapCanvas);
             if (position.HasValue) {
                 var point = position.Value;
 
-                // 画面座標を緯度経度に変換
                 var (lat, lon) = mapDrawable.ScreenToGeoCoordinates(
                     (float)point.X,
                     (float)point.Y,
@@ -302,21 +409,26 @@ public partial class MainPage : ContentPage {
                     (float)MapCanvas.Height
                 );
 
-                // 日本の範囲内かチェック
                 if (lat >= 23.0 && lat <= 46.5 && lon >= 122.0 && lon <= 146.0) {
-                    txtLatitude.Text = lat.ToString("F4");
-                    txtLongitude.Text = lon.ToString("F4");
-                    selectedCity = "カスタム位置";
-                    txtCurrentCity.Text = selectedCity;
+                    LoadingOverlay.IsVisible = true;
 
-                    cmbCity.SelectedIndex = 0;
+                    try {
+                        txtLatitude.Text = lat.ToString("F4");
+                        txtLongitude.Text = lon.ToString("F4");
+                        selectedCity = "カスタム位置";
+                        txtCurrentCity.Text = selectedCity;
 
-                    if (mapDrawable != null) {
-                        mapDrawable.SetMarkerPosition(lat, lon);
-                        MapGraphicsView.Invalidate();
+                        cmbCity.SelectedIndex = 0;
+
+                        if (mapDrawable != null) {
+                            mapDrawable.SetMarkerPosition(lat, lon);
+                            MapGraphicsView.Invalidate();
+                        }
+
+                        await GetWeatherData(lat, lon);
+                    } finally {
+                        LoadingOverlay.IsVisible = false;
                     }
-
-                    _ = GetWeatherData(lat, lon);
                 }
             }
         }
