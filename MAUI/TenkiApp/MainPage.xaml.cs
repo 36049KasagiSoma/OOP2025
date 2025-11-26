@@ -77,7 +77,7 @@ public partial class MainPage : ContentPage {
                     txtLongitude.Text = lon.ToString("F4");
 
                     // 地名を取得
-                    string addressName = await GetAddressFromCoordinates(lat, lon); // 追加
+                    string addressName = await GetAddressFromCoordinates(lat, lon);
                     selectedCity = addressName; // 変更
                     txtCurrentCity.Text = selectedCity;
 
@@ -196,7 +196,7 @@ public partial class MainPage : ContentPage {
         cmbCity.Items.Add("鹿児島（鹿児島）");
         cmbCity.Items.Add("沖縄（那覇）");
 
-        cmbCity.SelectedIndex = 14; // 東京をデフォルトに
+        cmbCity.SelectedIndex = 1;
     }
 
     private async Task LoadMapAndGetWeatherAsync() {
@@ -311,7 +311,10 @@ public partial class MainPage : ContentPage {
             if (location != null) {
                 txtLatitude.Text = location.Latitude.ToString("F4");
                 txtLongitude.Text = location.Longitude.ToString("F4");
-                txtCurrentCity.Text = "現在位置";
+
+                // 地名を取得
+                string addressName = await GetAddressFromCoordinates(location.Latitude, location.Longitude);
+                txtCurrentCity.Text = addressName;
 
                 if (mapDrawable != null) {
                     mapDrawable.SetMarkerPosition(location.Latitude, location.Longitude);
@@ -354,8 +357,8 @@ public partial class MainPage : ContentPage {
             var current = weatherData.GetProperty("current");
             txtTemperature.Text = $"{current.GetProperty("temperature_2m").GetDouble():F1}°C";
             txtHumidity.Text = $"{current.GetProperty("relative_humidity_2m").GetInt32()}%";
-            txtWindSpeed.Text = $"{current.GetProperty("wind_speed_10m").GetDouble():F1} km/h";
-            txtPressure.Text = $"{current.GetProperty("surface_pressure").GetDouble():F0} hPa";
+            txtWindSpeed.Text = $"{current.GetProperty("wind_speed_10m").GetDouble():F1}";
+            txtPressure.Text = $"{current.GetProperty("surface_pressure").GetDouble():F0}";
 
             var weatherCode = current.GetProperty("weather_code").GetInt32();
             txtWeatherDescription.Text = GetWeatherDescription(weatherCode);

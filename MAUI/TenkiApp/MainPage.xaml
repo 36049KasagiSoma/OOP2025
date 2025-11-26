@@ -2,12 +2,11 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="TenkiApp.MainPage"
-             Title="天気予報アプリ"
-             BackgroundColor="#F5F7FA">
+             Title="天気予報アプリ">
 
     <ContentPage.Resources>
         <Style x:Key="ModernButton" TargetType="Button">
-            <Setter Property="BackgroundColor" Value="#4A90E2" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ButtonBackground}, Dark={StaticResource ButtonBackgroundDark}}" />
             <Setter Property="TextColor" Value="White" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontAttributes" Value="Bold" />
@@ -16,7 +15,7 @@
         </Style>
 
         <Style x:Key="CardFrame" TargetType="Border">
-            <Setter Property="BackgroundColor" Value="White" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CardBackground}, Dark={StaticResource CardBackgroundDark}}" />
             <Setter Property="StrokeShape" Value="RoundRectangle 12" />
             <Setter Property="Padding" Value="20" />
             <Setter Property="Margin" Value="10" />
@@ -28,7 +27,7 @@
         </Style>
     </ContentPage.Resources>
 
-    <Grid>
+    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundColor}, Dark={StaticResource BackgroundColorDark}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -41,7 +40,7 @@
 
         <!-- ヘッダー部分 -->
         <Border Grid.Row="0" Grid.Column="0" 
-                BackgroundColor="White" 
+                BackgroundColor="{AppThemeBinding Light={StaticResource CardBackground}, Dark={StaticResource CardBackgroundDark}}" 
                 StrokeShape="Rectangle" 
                 Padding="20" 
                 Stroke="Transparent"
@@ -58,7 +57,10 @@
 
                 <HorizontalStackLayout Grid.Column="0" Spacing="10">
                     <Label Text="📍" FontSize="24" VerticalOptions="Center" />
-                    <Label Text="都市:" FontSize="16" VerticalOptions="Center" />
+                    <Label Text="都市:" 
+                           FontSize="16" 
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
                     <Picker x:Name="cmbCity" 
                             WidthRequest="180" 
                             FontSize="14"
@@ -68,13 +70,19 @@
                 <HorizontalStackLayout Grid.Column="1" 
                                        Spacing="10" 
                                        HorizontalOptions="Center">
-                    <Label Text="緯度:" FontSize="14" VerticalOptions="Center" />
+                    <Label Text="緯度:" 
+                           FontSize="14" 
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
                     <Entry x:Name="txtLatitude" 
                            WidthRequest="110" 
                            Text="35.6762" 
                            IsReadOnly="True"
                            FontSize="14" />
-                    <Label Text="経度:" FontSize="14" VerticalOptions="Center" />
+                    <Label Text="経度:" 
+                           FontSize="14" 
+                           VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
                     <Entry x:Name="txtLongitude" 
                            WidthRequest="110" 
                            Text="139.6503" 
@@ -105,19 +113,19 @@
 
                         <VerticalStackLayout Grid.Column="0">
                             <Label x:Name="txtCurrentCity" 
-                                   Text="東京" 
+                                   Text="--" 
                                    FontSize="32" 
                                    FontAttributes="Bold" 
-                                   TextColor="#1F2937" />
+                                   TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
                             <Label x:Name="txtCurrentDate" 
                                    Text="2024年11月20日" 
                                    FontSize="16" 
-                                   TextColor="#6B7280" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource TextSecondaryDark}}" 
                                    Margin="0,5,0,0" />
                             <Label x:Name="txtWeatherDescription" 
                                    Text="晴れ" 
                                    FontSize="18" 
-                                   TextColor="#4B5563" 
+                                   TextColor="{AppThemeBinding Light=#4B5563, Dark={StaticResource TextSecondaryDark}}" 
                                    Margin="0,10,0,0" />
                         </VerticalStackLayout>
 
@@ -142,7 +150,7 @@
                                 <VerticalStackLayout>
                                     <Label Text="最高" 
                                            FontSize="12" 
-                                           TextColor="#6B7280" />
+                                           TextColor="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource TextSecondaryDark}}" />
                                     <Label x:Name="txtMaxTemp" 
                                            Text="--°C" 
                                            FontSize="18" 
@@ -151,7 +159,7 @@
                                 <VerticalStackLayout>
                                     <Label Text="最低" 
                                            FontSize="12" 
-                                           TextColor="#6B7280" />
+                                           TextColor="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource TextSecondaryDark}}" />
                                     <Label x:Name="txtMinTemp" 
                                            Text="--°C" 
                                            FontSize="18" 
@@ -174,12 +182,14 @@
                     <Border Grid.Column="0" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout>
                             <Label Text="💧" FontSize="24" Margin="0,0,0,10" />
-                            <Label Text="湿度" FontSize="14" TextColor="#6B7280" />
+                            <Label Text="湿度" 
+                                   FontSize="14" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource TextSecondaryDark}}" />
                             <Label x:Name="txtHumidity" 
                                    Text="--%"  
                                    FontSize="24" 
                                    FontAttributes="Bold" 
-                                   TextColor="#1F2937" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" 
                                    Margin="0,5,0,0" />
                         </VerticalStackLayout>
                     </Border>
@@ -187,12 +197,14 @@
                     <Border Grid.Column="1" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout>
                             <Label Text="💨" FontSize="24" Margin="0,0,0,10" />
-                            <Label Text="風速" FontSize="14" TextColor="#6B7280" />
+                            <Label Text="風速 (km/h)" 
+                                   FontSize="14" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource TextSecondaryDark}}" />
                             <Label x:Name="txtWindSpeed" 
-                                   Text="-- km/h" 
+                                   Text="--" 
                                    FontSize="24" 
                                    FontAttributes="Bold" 
-                                   TextColor="#1F2937" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" 
                                    Margin="0,5,0,0" />
                         </VerticalStackLayout>
                     </Border>
@@ -200,12 +212,14 @@
                     <Border Grid.Column="2" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout>
                             <Label Text="☔" FontSize="24" Margin="0,0,0,10" />
-                            <Label Text="降水確率" FontSize="14" TextColor="#6B7280" />
+                            <Label Text="降水確率" 
+                                   FontSize="14" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource TextSecondaryDark}}" />
                             <Label x:Name="txtPrecipitation" 
                                    Text="--%"  
                                    FontSize="24" 
                                    FontAttributes="Bold" 
-                                   TextColor="#1F2937" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" 
                                    Margin="0,5,0,0" />
                         </VerticalStackLayout>
                     </Border>
@@ -213,12 +227,14 @@
                     <Border Grid.Column="3" Style="{StaticResource CardFrame}">
                         <VerticalStackLayout>
                             <Label Text="🌡️" FontSize="24" Margin="0,0,0,10" />
-                            <Label Text="気圧" FontSize="14" TextColor="#6B7280" />
+                            <Label Text="気圧 (hPa)" 
+                                   FontSize="14" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextSecondary}, Dark={StaticResource TextSecondaryDark}}" />
                             <Label x:Name="txtPressure" 
-                                   Text="-- hPa" 
+                                   Text="--" 
                                    FontSize="24" 
                                    FontAttributes="Bold" 
-                                   TextColor="#1F2937" 
+                                   TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" 
                                    Margin="0,5,0,0" />
                         </VerticalStackLayout>
                     </Border>
@@ -230,7 +246,7 @@
                         <Label Text="📅 7日間の予報" 
                                FontSize="20" 
                                FontAttributes="Bold" 
-                               TextColor="#1F2937" 
+                               TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" 
                                Margin="0,0,0,20" />
                         <CollectionView x:Name="lstForecast">
                             <CollectionView.ItemTemplate>
@@ -293,8 +309,8 @@
         <Border Grid.Row="0" 
                 Grid.Column="1" 
                 Grid.RowSpan="2" 
-                BackgroundColor="White" 
-                Stroke="#E5E7EB"
+                BackgroundColor="{AppThemeBinding Light={StaticResource CardBackground}, Dark={StaticResource CardBackgroundDark}}" 
+                Stroke="{AppThemeBinding Light={StaticResource BorderColor}, Dark={StaticResource BorderColorDark}}"
                 StrokeThickness="1"
                 StrokeShape="Rectangle"
                 Padding="0">
@@ -305,7 +321,7 @@
                 </Grid.RowDefinitions>
 
                 <Border Grid.Row="0" 
-                        BackgroundColor="#F9FAFB" 
+                        BackgroundColor="{AppThemeBinding Light={StaticResource CardBackground}, Dark={StaticResource CardBackgroundDark}}" 
                         Padding="20,15" 
                         Stroke="#E5E7EB"
                         StrokeThickness="1"
@@ -313,12 +329,13 @@
                     <Label Text="🗾 日本地図" 
                            FontSize="18" 
                            FontAttributes="Bold" 
-                           TextColor="#1F2937" />
+                           TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
                 </Border>
 
+                <!-- MapCanvas の背景色 -->
                 <AbsoluteLayout Grid.Row="1" 
-                                x:Name="MapCanvas" 
-                                BackgroundColor="#E0F2FE">
+                        x:Name="MapCanvas" 
+                        BackgroundColor="{AppThemeBinding Light={StaticResource MapBackground}, Dark={StaticResource MapBackgroundDark}}">
                     <GraphicsView x:Name="MapGraphicsView"
                                   AbsoluteLayout.LayoutBounds="0,0,1,1"
                                   AbsoluteLayout.LayoutFlags="All"
@@ -347,7 +364,8 @@
                     <Label Text="読み込み中..." 
                            FontSize="16" 
                            Margin="0,20,0,0" 
-                           HorizontalOptions="Center" />
+                           HorizontalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource TextPrimary}, Dark={StaticResource TextPrimaryDark}}" />
                 </VerticalStackLayout>
             </Border>
         </Grid>

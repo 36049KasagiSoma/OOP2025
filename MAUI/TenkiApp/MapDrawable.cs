@@ -124,7 +124,9 @@ public class MapDrawable : IDrawable {
     }
 
     public void Draw(ICanvas canvas, RectF dirtyRect) {
-        canvas.FillColor = Color.FromArgb("#E0F2FE");
+        var isDarkMode = Application.Current?.RequestedTheme == AppTheme.Dark;
+
+        canvas.FillColor = isDarkMode ? Color.FromArgb("#1E3A8A") : Color.FromArgb("#E0F2FE");
         canvas.FillRectangle(dirtyRect);
 
         if (!mapLoaded || polygons.Count == 0) {
@@ -158,8 +160,8 @@ public class MapDrawable : IDrawable {
         }
 
         // ポリゴンを描画（正規化座標から実座標へ変換）
-        canvas.FillColor = Color.FromArgb("#BAE6FD");
-        canvas.StrokeColor = Color.FromArgb("#94A3B8");
+        canvas.FillColor = isDarkMode ? Color.FromArgb("#3B82F6") : Color.FromArgb("#BAE6FD");
+        canvas.StrokeColor = isDarkMode ? Color.FromArgb("#60A5FA") : Color.FromArgb("#94A3B8");
         canvas.StrokeSize = 0.5f;
 
         lock (lockObj) {
