@@ -350,7 +350,7 @@
               x:Name="LoadingOverlay" 
               BackgroundColor="#80000000" 
               IsVisible="False">
-            <Border BackgroundColor="White" 
+            <Border BackgroundColor="{AppThemeBinding Light={StaticResource CardBackground}, Dark={StaticResource CardBackgroundDark}}"  
                     StrokeShape="RoundRectangle 10" 
                     WidthRequest="200" 
                     HeightRequest="150" 
